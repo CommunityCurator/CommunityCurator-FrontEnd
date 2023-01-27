@@ -13,8 +13,12 @@ Team Silver - Spring 2022
 
 ## Requirements
 ```
-	* React.js
+	* node.js
+	* npm
 ```
 
-## Running
-
+## Running Commands
+```
+npm install
+npm start
+```
