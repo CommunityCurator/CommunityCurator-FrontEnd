@@ -1,4 +1,4 @@
-# Community Curator
+# CommunityCurator-FrontEnd
 
 Team Silver - Spring 2022
 
