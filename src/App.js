@@ -1,24 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+/***************************************************************************************
+*    Title: React Website Tutorial
+*    Author: Brian Design
+*    Date: 08/10/2020
+*    Availability: https://github.com/briancodex/react-website-v1/tree/starter
+***************************************************************************************/
+
+import React from 'react'
+import './App.css'
+import Navbar from './components/Navbar'
+import {BrowserRouter as Router, Routes, Route} from 'react-router-dom'
+import Home from './components/pages/Home'
+import Groups from './components/pages/Groups'
+import Events from './components/pages/Events'
+import SignIn from './components/pages/SignIn'
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+    <Router>
+      <Navbar />
+      <Routes>
+        <Route exact path='/' element={<Home/>} />
+        <Route exact path='/groups' element={<Groups/>} />
+        <Route exact path='/events' element={<Events/>} />
+        <Route exact path='/sign-in' element={<SignIn/>} />
+      </Routes>
+    </Router>
+    </>
   );
 }
 
