@@ -18,6 +18,12 @@
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
   }
+  .auth-form-container {
+    padding: 5rem;
+    border: 1px solid white;
+    border-radius: 10px;
+    margin: 0.5rem;
+  }
 }
 
 .App-header {
@@ -54,7 +60,7 @@
 .home,
 .groups,
 .events,
-.sign-in {
+.login {
   display: flex;
   height: 90vh;
   align-items: center;
@@ -80,7 +86,7 @@
   font-size: 100px;
 }
 
-.sign-in {
+.login {
   background-image: url('public/images/background1.jpg');
   background-position: center;
   background-size: cover;
@@ -88,3 +94,30 @@
   color: #fff;
   font-size: 100px;
 }
+
+.auth-form-container, .login-form, .register-form {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  text-align: left;
+  padding: 0.25rem 0.25rem;
+}
+
+input {
+  margin: 0.5rem 0;
+  padding: 1rem;
+  border: 1px solid black;
+  border-radius: 10px;
+}
+
+button {
+  border: none;
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  color: black;
+}
+

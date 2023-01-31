@@ -32,7 +32,7 @@ function Cards() {
               src="/images/gaming.jpg"
               text='Join Community Curator'
               label='Register'
-              path='/sign-in'
+              path='/login'
             />
           </ul>
           

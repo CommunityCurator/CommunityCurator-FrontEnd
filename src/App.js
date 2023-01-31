@@ -12,7 +12,7 @@ import {BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 import Home from './components/pages/Home'
 import Groups from './components/pages/Groups'
 import Events from './components/pages/Events'
-import SignIn from './components/pages/SignIn'
+import Login from './components/pages/Login'
 
 function App() {
   return (
@@ -23,7 +23,7 @@ function App() {
         <Route exact path='/' element={<Home/>} />
         <Route exact path='/groups' element={<Groups/>} />
         <Route exact path='/events' element={<Events/>} />
-        <Route exact path='/sign-in' element={<SignIn/>} />
+        <Route exact path='/login' element={<Login/>} />
       </Routes>
     </Router>
     </>
