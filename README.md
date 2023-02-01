@@ -22,3 +22,8 @@ Team Silver - Spring 2022
 npm install
 npm start
 ```
+## Tailwind instalation for styling 
+## https://tailwindcss.com/docs/guides/create-react-app
+
+npm install -D tailwindcss
+npx tailwindcss init

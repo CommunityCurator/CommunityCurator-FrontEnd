@@ -10,9 +10,10 @@ import './App.css'
 import Navbar from './components/Navbar'
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 import Home from './components/pages/Home'
-import Groups from './components/pages/Groups'
+//import Groups from './components/pages/Groups'
 import Events from './components/pages/Events'
 import Login from './components/pages/Login'
+import Groups from './components/pages/Groups'
 
 function App() {
   return (
