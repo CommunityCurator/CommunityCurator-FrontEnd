@@ -14,7 +14,7 @@ function Groups(){
         },
         {
             groupName: "Yoga", 
-            description: "Communityu of yogis",
+            description: "Community of yogis",
             img: "./images/yoga.jpg",
         },
         {

@@ -4,7 +4,7 @@
 *    Date: 08/10/2020
 *    Availability: https://github.com/briancodex/react-website-v1/tree/starter
 ***************************************************************************************/
-
+import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react'
 import './App.css'
 import Navbar from './components/Navbar'
@@ -13,7 +13,9 @@ import Home from './components/pages/Home'
 //import Groups from './components/pages/Groups'
 import Events from './components/pages/Events'
 import Login from './components/pages/Login'
+import Signup from './components/pages/Signup'
 import Groups from './components/pages/Groups'
+
 
 function App() {
   return (
@@ -25,6 +27,7 @@ function App() {
         <Route exact path='/groups' element={<Groups/>} />
         <Route exact path='/events' element={<Events/>} />
         <Route exact path='/login' element={<Login/>} />
+        <Route exact path='/signup' element={<Signup/>} />
       </Routes>
     </Router>
     </>

@@ -16,7 +16,7 @@ export default function Login() {
     <form className="w-full max-w-sm" >
       <div className="md:flex md:items-center mb-6">
         <div className="md:w-1/3">
-          <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="inline-full-name">
+          <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="email">
             Email
           </label>
         </div>
@@ -26,7 +26,7 @@ export default function Login() {
       </div>
       <div className="md:flex md:items-center mb-6">
         <div className="md:w-1/3">
-          <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="inline-password">
+          <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="password">
             Password
           </label>
         </div>
@@ -51,6 +51,15 @@ export default function Login() {
           </button>
         </div>
       </div>
+
+      <div className=" block mx-auto md:flex md:items-center mb-6">
+        <div className="md:w-1/3"></div>
+          <label className="md:w-2/3 block text-gray-500 font-bold">
+              <p className="text-sm">
+                Don't have an account? Register <a href='/signup'><u>here</u></a>
+              </p>
+          </label>
+        </div>
   </form>
   </div>
     </>
