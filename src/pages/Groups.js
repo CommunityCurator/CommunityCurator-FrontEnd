@@ -1,6 +1,6 @@
 import React from 'react'
-import '../../App.css'
-import Group from '../Group'
+import '../App.css'
+import Group from '../components/Group'
 import { useEffect, useState } from "react";
 
 

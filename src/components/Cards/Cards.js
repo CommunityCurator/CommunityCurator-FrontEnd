@@ -7,7 +7,7 @@
 
 import React from 'react';
 import './Cards.css';
-import CardItem from './CardItem';
+import CardItem from '../CardItem/CardItem';
 
 function Cards() {
   return (

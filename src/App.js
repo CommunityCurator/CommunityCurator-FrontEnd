@@ -7,14 +7,14 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react'
 import './App.css'
-import Navbar from './components/Navbar'
+import Navbar from './components/Navbar/Navbar'
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom'
-import Home from './components/pages/Home'
+import Home from './pages/Home'
 //import Groups from './components/pages/Groups'
-import Events from './components/pages/Events'
-import Login from './components/pages/Login'
-import Signup from './components/pages/Signup'
-import Groups from './components/pages/Groups'
+import Events from './pages/Events'
+import Login from './pages/Login'
+import Signup from './pages/Signup'
+import Groups from './pages/Groups'
 
 
 function App() {
