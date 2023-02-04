@@ -5,6 +5,11 @@ import Cards from '../../components/Cards/Cards'
 import Footer from '../../components/Footer/Footer'
 import { Button } from '../../components/Button/Button'
 import CircularProgress from '@mui/material/CircularProgress';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
+import Stack from '@mui/material/Stack';
+
 
 
 const Home = () => {
@@ -12,6 +17,7 @@ const Home = () => {
 	const [open, setOpen] = useState(false)
 	const [geoLocation, setGeoLocation] = useState(null)
   const [cityLoading, setCityLoading] = useState(false)
+  const [geoError, setGeoError] = useState(false)
 
 	const showPosition = (position) => {
 		fetch(`http://api.openweathermap.org/geo/1.0/reverse?lat=${position.coords.latitude}&lon=${position.coords.longitude}&limit=5&appid=${process.env.REACT_APP_OPEN_WEATHER_API_KEY}`)
@@ -48,8 +54,37 @@ const Home = () => {
 		} 
 	},[]);
 
+
+  useEffect(() => {
+    fetch('http://127.0.0.1:8000/api/groups/')
+    .then(response => {
+      if(response.status > 400) {
+       setGeoError(true)
+       return;
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log(data)
+    })
+  },[])
+
   return (
 		<>
+      <Snackbar
+        anchorOrigin={{'horizontal' : 'center', 'vertical' : 'top'}}
+        open={geoError}
+        autoHideDuration={5000}
+        onClose={() => setGeoError(false)}
+        // action={action}
+      >
+        <Stack sx={{ width: '100%' }} spacing={2}>
+          <Alert svariant="filled" onClose={() => setGeoError(false)} severity="error">
+            <AlertTitle>Error</AlertTitle>
+            404 Categories not found
+          </Alert>
+        </Stack>
+      </Snackbar>
 		  <div className='home-container'>
         <video src='/video/meetup.mp4' autoPlay loop muted />
         <div className='home-jumbo'>
