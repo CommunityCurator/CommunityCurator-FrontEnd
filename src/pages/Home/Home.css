@@ -1,0 +1,104 @@
+/***************************************************************************************
+*    Title: React Website Tutorial
+*    Author: Brian Design
+*    Date: 08/10/2020
+*    Availability: https://www.youtube.com/watch?v=I2UBjN5ER4s
+*                  https://github.com/briancodex/react-website-v1/tree/starter
+***************************************************************************************/
+
+.home-container {
+  /* background: url('../../../public/images/background.jpg') center center/cover no-repeat; */
+  height: 40vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-shadow: inset 0 0 0 1000px rgba(0, 0, 0, 0.2);
+  object-fit: contain;
+}
+
+
+.home-container video {
+  object-fit: cover;
+  width: 100%;
+  position: relative;
+  z-index: -1;
+  height: 100%;
+}
+
+.home-container > p {
+  margin-top: 8px;
+  color: #fff;
+  font-size: 32px;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande',
+    'Lucida Sans', Arial, sans-serif;
+}
+
+.home-jumbo {
+  position: absolute;
+}
+
+.home-slogan {
+  margin-top: 50px;
+  display: flex;
+  justify-content: center;
+  font-size: 1.5em;
+}
+
+.home-jumbo > h1 {
+  color: #fff;
+  font-size: 50px;
+  margin-top: 0px;
+}
+
+.home-city-container {
+  margin-top: 5%;
+  margin-left: 5%;
+  font-size: 1.5em;
+}
+
+.home-city-name {
+  text-decoration: underline;
+  color: teal
+}
+
+.home-section-btns {
+  margin-top: 32px;
+  display: flex;  
+  justify-content: center;
+  gap: 2rem;
+}
+
+.home-section-btns .btn {
+  margin: 6px;
+}
+
+
+@media screen and (max-width: 960px) {
+  .home-jumbo > h1 {
+    font-size: 70px;
+    margin-top: -150px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .home-jumbo > h1 {
+    font-size: 50px;
+    margin-top: -100px;
+  }
+
+  .home-jumbo> p {
+    font-size: 30px;
+  }
+
+  .btn-mobile {
+    display: block;
+    text-decoration: none;
+  }
+
+  .btn {
+    width: 100%;
+  }
+}
+
