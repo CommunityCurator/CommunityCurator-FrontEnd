@@ -17,7 +17,7 @@ const Home = () => {
 	const [open, setOpen] = useState(false)
 	const [geoLocation, setGeoLocation] = useState(null)
   const [cityLoading, setCityLoading] = useState(false)
-  const [geoError, setGeoError] = useState(false)
+  const [alertError, setAlertError] = useState(false)
 
 	const showPosition = (position) => {
 		fetch(`http://api.openweathermap.org/geo/1.0/reverse?lat=${position.coords.latitude}&lon=${position.coords.longitude}&limit=5&appid=${process.env.REACT_APP_OPEN_WEATHER_API_KEY}`)
@@ -59,7 +59,21 @@ const Home = () => {
     fetch('http://127.0.0.1:8000/api/groups/')
     .then(response => {
       if(response.status > 400) {
-       setGeoError(true)
+       setAlertError(true)
+       return;
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log(data)
+    })
+  },[])
+
+  useEffect(() => {
+    fetch('http://127.0.0.1:8000/api/categories/')
+    .then(response => {
+      if(response.status > 400) {
+       setAlertError(true)
        return;
       }
       return response.json();
@@ -73,15 +87,15 @@ const Home = () => {
 		<>
       <Snackbar
         anchorOrigin={{'horizontal' : 'center', 'vertical' : 'top'}}
-        open={geoError}
+        open={alertError}
         autoHideDuration={5000}
-        onClose={() => setGeoError(false)}
+        onClose={() => setAlertError(false)}
         // action={action}
       >
         <Stack sx={{ width: '100%' }} spacing={2}>
-          <Alert svariant="filled" onClose={() => setGeoError(false)} severity="error">
+          <Alert svariant="filled" onClose={() => setAlertError(false)} severity="error">
             <AlertTitle>Error</AlertTitle>
-            404 Categories not found
+            404 network fetch call error
           </Alert>
         </Stack>
       </Snackbar>
