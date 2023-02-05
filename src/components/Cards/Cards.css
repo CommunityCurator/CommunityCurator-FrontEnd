@@ -10,11 +10,6 @@
     background: #fff;
   }
   
-  /* example */
-  h1 {
-    text-align: center;
-  }
-  
   .cards__container {
     display: flex;
     flex-flow: column;
