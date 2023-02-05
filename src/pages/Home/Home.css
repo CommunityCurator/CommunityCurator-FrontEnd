@@ -6,7 +6,7 @@
 *                  https://github.com/briancodex/react-website-v1/tree/starter
 ***************************************************************************************/
 
-.home-container {
+.home-container-jumbo {
   /* background: url('../../../public/images/background.jpg') center center/cover no-repeat; */
   height: 40vh;
   width: 100%;
@@ -19,7 +19,7 @@
 }
 
 
-.home-container video {
+.home-container-jumbo video {
   object-fit: cover;
   width: 100%;
   position: relative;
@@ -27,51 +27,57 @@
   height: 100%;
 }
 
-.home-container > p {
+/* .home-container > p {
   margin-top: 8px;
   color: #fff;
   font-size: 32px;
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande',
     'Lucida Sans', Arial, sans-serif;
-}
+} */
 
-.home-jumbo {
+.home-container-jumbo-start {
   position: absolute;
 }
 
-.home-slogan {
-  margin-top: 50px;
-  display: flex;
-  justify-content: center;
-  font-size: 1.5em;
-}
-
-.home-jumbo > h1 {
+.home-container-jumbo-start > h1 {
   color: #fff;
   font-size: 50px;
   margin-top: 0px;
 }
 
-.home-city-container {
-  margin-top: 5%;
-  margin-left: 5%;
-  font-size: 1.5em;
-}
-
-.home-city-name {
-  text-decoration: underline;
-  color: teal
-}
-
-.home-section-btns {
+.home-container-jumbo-start-btns {
   margin-top: 32px;
   display: flex;  
   justify-content: center;
   gap: 2rem;
 }
 
-.home-section-btns .btn {
+.home-container-jumbo-start-btns .btn {
   margin: 6px;
+}
+
+.home-container-slogan {
+  margin-top: 50px;
+  display: flex;
+  justify-content: center;
+  font-size: 1.5em;
+}
+
+.home-container-city {
+  margin-top: 5%;
+  margin-left: 5%;
+  font-size: 1.5em;
+}
+
+.home-container-city-name {
+  text-decoration: underline;
+  color: teal
+}
+
+.home-container-category-title {
+  margin-top: 2%;
+  margin-left: 5%;
+  font-size: 1.3rem;
 }
 
 
@@ -83,12 +89,12 @@
 }
 
 @media screen and (max-width: 768px) {
-  .home-jumbo > h1 {
+  .home-container-jumbo-start > h1 {
     font-size: 50px;
     margin-top: -100px;
   }
 
-  .home-jumbo> p {
+  .home-container-jumbo-start > p {
     font-size: 30px;
   }
 
