@@ -11,6 +11,19 @@ Team Silver - Spring 2022
   - jdlavinder - Joel Lavinder - jlavi001@odu.edu
   - slahj001 - Sam Lahjiri - slahj001@odu.edu
 
+## Development Push/Merge Instructions
+Adding/changing code
+ - Create a separate branch for working
+        git branch <branch-name>
+ - Add in your code and make edits in your branch
+ - Maintain your branch with regular pulls from master
+        git pull
+ - When edits are final and code is working, merge master into your branch
+ - Ensure everything is working
+ - Verify with the team that a pull from your branch works on their end
+ - Merge to main
+        git merge <alias>/<branch>
+
 ## Requirements
 ```
 	* node.js
