@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import '../App.css'
-
+import Modal from 'react-responsive-modal';
+import ReactModal from 'react-modal';
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -62,6 +63,8 @@ export default function Login() {
         </div>
     </form>
   </div>
+<ReactModal isOpen={false}> <p>got Here</p></ReactModal>
+  
     </>
   );
 
