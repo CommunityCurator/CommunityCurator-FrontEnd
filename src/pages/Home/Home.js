@@ -35,60 +35,60 @@ console.log('home props',props)
 	}
 
   const [isOpen, setIsOpen] = useState(props.IsLogin)
-	// useEffect(() => {
-	// 	/* get user's location */
-	// 	if (navigator.geolocation) {
-	// 		setCityLoading(true)
-	// 		navigator.permissions
-	// 		.query({ name: "geolocation" })
-	// 		.then(data => {
-	// 			if (data.state === 'granted') {
-	// 				navigator.geolocation.watchPosition(showPosition);
-	// 			} else if (data.state === 'prompt') {
-	// 				navigator.geolocation.watchPosition(showPosition);
-	// 			} else if (data.state === 'denied') {
-	// 				setCityLoading(false)
-	// 			}
-	// 			data.onchange = () => {
-	// 				if(data.state === 'denied') {
-	// 					setCityLoading(false)
-	// 				} else if (data.state === 'granted') {
-	// 					navigator.geolocation.watchPosition(showPosition);
-	// 				}
-	// 			 };
-	// 		})
+	useEffect(() => {
+		/* get user's location */
+		if (navigator.geolocation) {
+			setCityLoading(true)
+			navigator.permissions
+			.query({ name: "geolocation" })
+			.then(data => {
+				if (data.state === 'granted') {
+					navigator.geolocation.watchPosition(showPosition);
+				} else if (data.state === 'prompt') {
+					navigator.geolocation.watchPosition(showPosition);
+				} else if (data.state === 'denied') {
+					setCityLoading(false)
+				}
+				data.onchange = () => {
+					if(data.state === 'denied') {
+						setCityLoading(false)
+					} else if (data.state === 'granted') {
+						navigator.geolocation.watchPosition(showPosition);
+					}
+				 };
+			})
 
-	// 	} 
-	// },[]);
+		} 
+	},[]);
 
 
-	// useEffect(() => {
-	// 	fetch('http://127.0.0.1:8000/api/groups/')
-	// 	.then(response => {
-	// 		if(response.status > 400) {
-	// 		 setAlertError(true)
-	// 		 return;
-	// 		}
-	// 		return response.json();
-	// 	})
-	// 	.then(data => {
-	// 		console.log(data)
-	// 	})
-	// },[])
+	useEffect(() => {
+		fetch('http://127.0.0.1:8000/api/groups/')
+		.then(response => {
+			if(response.status > 400) {
+			 setAlertError(true)
+			 return;
+			}
+			return response.json();
+		})
+		.then(data => {
+			console.log(data)
+		})
+	},[])
 
-	// useEffect(() => {
-	// 	fetch('http://127.0.0.1:8000/api/categories/')
-	// 	.then(response => {
-	// 		if(response.status > 400) {
-	// 		 setAlertError(true)
-	// 		 return;
-	// 		}
-	// 		return response.json();
-	// 	})
-	// 	.then(data => {
-	// 		setCategories(data.categories)
-	// 	})
-	// },[])
+	useEffect(() => {
+		fetch('http://127.0.0.1:8000/api/categories/')
+		.then(response => {
+			if(response.status > 400) {
+			 setAlertError(true)
+			 return;
+			}
+			return response.json();
+		})
+		.then(data => {
+			setCategories(data.categories)
+		})
+	},[])
 
 	return (
 		<>
