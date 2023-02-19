@@ -23,10 +23,10 @@ function App() {
     <Router>
       <Navbar />
       <Routes>
-        <Route exact path='/' element={<Home/>} />
+        <Route exact path='/' element={<Home IsLogin={false}/>} />
         <Route exact path='/groups' element={<Groups/>} />
         <Route exact path='/events' element={<Events/>} />
-        <Route exact path='/login' element={<Login/>} />
+        <Route exact path='/login' element={<Home IsLogin={true}/>} />
         <Route exact path='/signup' element={<Signup/>} />
       </Routes>
     </Router>

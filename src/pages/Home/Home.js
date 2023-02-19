@@ -15,8 +15,8 @@ import Modal from "react-responsive-modal";
 import ReactModal from 'react-modal';
 
 
-const Home = () => {
-
+const Home = (props) => {
+console.log('home props',props)
 	const [open, setOpen] = useState(false)
 	const [geoLocation, setGeoLocation] = useState(null)
 	const [cityLoading, setCityLoading] = useState(false)
@@ -34,35 +34,7 @@ const Home = () => {
 			});
 	}
 
-  const [modalSign, setModalSign] = useState(false)
-  const [modalLogin, setModalLogin] = useState(false)
-const onOpenModal = (isClicked) => {
-  if(isClicked !== true){return;}
-  console.log('openModal');
-  setModalSign(true);
-};
-
-const onOpenModalLogin = (isClicked) => {
-if(isClicked !== true){return;}
-  console.log('openModallogin');
-  setModalLogin (true );
-};
-
-const onCloseModal = () => {
-  setModalSign(false);
-};
-
-const onCloseModalclose = () => {
-  setModalLogin (false);
-};
-
-useEffect(()=>{
-  onOpenModal();
-  onOpenModalLogin();
-  onCloseModal();
-  onCloseModalclose();
-},[])
-
+  const [isOpen, setIsOpen] = useState(props.IsLogin)
 	// useEffect(() => {
 	// 	/* get user's location */
 	// 	if (navigator.geolocation) {
@@ -117,12 +89,19 @@ useEffect(()=>{
 	// 		setCategories(data.categories)
 	// 	})
 	// },[])
-console.log(modalSign);
-console.log (modalLogin);
+
 	return (
 		<>
-                <ReactModal isOpen={false}> <p>got Here</p>
+                <ReactModal isOpen={props.IsLogin}>
+                <br />
+                  <br />
+                  <br />
+                  <br />
+                  <br />
+                  <br />
+                  <br />
                 <div align="center">
+                 
       <form className="m-2 py-8 px-8 w-full max-w-sm" >
         <div className="md:flex md:items-center mb-6">
           <div className="md:w-1/3">
