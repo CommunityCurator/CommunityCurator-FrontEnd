@@ -8,6 +8,8 @@ function Group(){
     const [group, setGroup] = useState();
     const [notFound, setNotFound] = useState();
     const {id} = useParams();
+    const [categories, setCategories] = useState();
+
 
     useEffect(() => {
         const url = 'http://localhost:8000/api/groups/' + id;
@@ -20,11 +22,10 @@ function Group(){
         })
         .then((data) => {
             setGroup(data.group);
+            setCategories(data.group.categories);
         })
     });
-
-
-
+      
     return (
         <>
             {notFound ? <p>The group with id {id} was not found</p> : null}
@@ -33,6 +34,11 @@ function Group(){
                     <h1>Group name: {group.groupName}</h1>
                     <h2>Located in {group.city}, {group.state}</h2> 
                     <p>Description: {group.description}</p> 
+                    <p>Categories:</p>
+                    {categories ? categories.map((category) => {
+                        return (<>#{category.name} </> )
+                    }) : null}
+                    
                 </div>                    
                     
                     : null }
