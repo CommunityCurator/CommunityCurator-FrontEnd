@@ -27,11 +27,11 @@ function Group(){
 
     return (
         <>
-            {notFound ? <p>The customer with id {id} was not found</p> : null}
+            {notFound ? <p>The group with id {id} was not found</p> : null}
             {group ? 
                 <div>
                     <h1>Group name: {group.groupName}</h1>
-                    <h2>Located in {group.city}</h2> 
+                    <h2>Located in {group.city}, {group.state}</h2> 
                     <p>Description: {group.description}</p> 
                 </div>                    
                     

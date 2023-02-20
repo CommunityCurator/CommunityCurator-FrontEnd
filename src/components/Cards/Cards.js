@@ -12,18 +12,24 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import Avatar from '@mui/material/Avatar';
 
 
 function Cards(props) {
   return (
     <Card variant="outlined">
       <CardContent>
+        <Avatar 
+          src={props.image} 
+          sx={{ width: 56, height: 56 }}
+        />
+
         <Typography sx={{ fontSize: 18 }} color="text.secondary" gutterBottom>
           {props.groupName}
         </Typography>
       
         <Typography sx={{ mb: 1.5 }} color="text.secondary">
-        {props.city}
+        {props.city}, {props.state}
         </Typography>
       </CardContent>
     </Card>
