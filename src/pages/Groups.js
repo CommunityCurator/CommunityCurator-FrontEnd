@@ -53,12 +53,14 @@ export default function Groups(){
 
   return(
     <>
+    <h5>Groups registered on community curator</h5>
     <Grid style={{width: '80%', margin: '0px auto'}} container spacing={2}>
     {list ? list.map((group) => {
       return (
-        <Grid item xs={3}>
+        <Grid item xs={3} >
             <Link to={"/groups/" + group.id}>
-              <Cards groupName={group.groupName} city={group.city}/>
+              <Cards groupName={group.groupName} city={group.city} state={group.state}
+                     image={group.image}/>
             </Link>
         </Grid>
 
