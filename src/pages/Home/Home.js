@@ -33,7 +33,17 @@ console.log('home props',props)
 				setCityLoading(false)
 			});
 	}
-
+	const customStyles = {
+		content: {
+		  top: '50%',
+		  left: '50%',
+		  right: 'auto',
+		  bottom: 'auto',
+		  marginRight: '-50%',
+		  transform: 'translate(-50%, -50%)',
+		},
+	  };
+	  
   const [isOpen, setIsOpen] = useState(props.IsLogin)
 	useEffect(() => {
 		/* get user's location */
@@ -92,7 +102,7 @@ console.log('home props',props)
 
 	return (
 		<>
-                <ReactModal isOpen={props.IsLogin}>
+                <ReactModal  style={customStyles} isOpen={props.IsLogin}>
                 <br />
                   <br />
                   <br />

@@ -2,7 +2,7 @@ import React from 'react'
 import '../App.css'
 import Group from '../components/Group'
 import { useEffect, useState } from "react";
-
+import Comments from "../components/comments/Comments";
 
 function Groups(){
   const [groupList, setgroupList] = useState(
@@ -26,12 +26,18 @@ function Groups(){
   );
 
     return(
+      <div>
       <div className="flex flex-wrap justify center">
         {groupList.map((group) => {
             return (<Group groupName={group.groupName} description={group.description} img={group.img} /> ) ;
         })}
+      
       </div>
-
+      <Comments
+        commentsUrl="http://localhost:3004/comments"
+        currentUserId="1"
+      />
+      </div>
     );
 
   
