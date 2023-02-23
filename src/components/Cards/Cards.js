@@ -6,39 +6,34 @@
 ***************************************************************************************/
 
 import React from 'react';
-import './Cards.css';
-import CardItem from '../CardItem/CardItem';
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import Avatar from '@mui/material/Avatar';
 
-function Cards() {
+
+function Cards(props) {
   return (
-    <div className='cards'>
-      <h1>Explore local groups and events</h1>
-      <div className='cards__container'>
-        <div className='cards__wrapper'>
-          <ul className='cards__items'>
-            <CardItem
-              src="/images/paint.jpg"
-              text='Explore groups'
-              label='hobby'
-              path='/groups'
-            />
-            <CardItem
-              src="/images/event.jpg"
-              text='Explore events'
-              label='events'
-              path='/events'
-            />
-            <CardItem
-              src="/images/gaming.jpg"
-              text='Join Community Curator'
-              label='Register'
-              path='/login'
-            />
-          </ul>
-          
-        </div>
-      </div>
-    </div>
+    <Card variant="outlined">
+      <CardContent>
+        <Avatar 
+          src={props.image} 
+          sx={{ width: 56, height: 56 }}
+        />
+
+        <Typography sx={{ fontSize: 18 }} color="text.secondary" gutterBottom>
+          {props.groupName}
+        </Typography>
+      
+        <Typography sx={{ mb: 1.5 }} color="text.secondary">
+        {props.city}, {props.state}
+        </Typography>
+      </CardContent>
+    </Card>
+
   );
 }
 

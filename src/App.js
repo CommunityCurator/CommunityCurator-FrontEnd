@@ -8,9 +8,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react'
 import './App.css'
 import Navbar from './components/Navbar/Navbar'
+import Group from './components/Group'
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 import Home from './pages/Home/Home'
-//import Groups from './components/pages/Groups'
 import Events from './pages/Events'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
@@ -25,6 +25,7 @@ function App() {
       <Routes>
         <Route exact path='/' element={<Home IsLogin={false}/>} />
         <Route exact path='/groups' element={<Groups/>} />
+        <Route exact path='/groups/:id' element={<Group/>} />
         <Route exact path='/events' element={<Events/>} />
         <Route exact path='/login' element={<Home IsLogin={true}/>} />
         <Route exact path='/signup' element={<Signup/>} />

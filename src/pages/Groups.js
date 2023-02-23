@@ -1,36 +1,79 @@
 import React from 'react'
 import '../App.css'
-import Group from '../components/Group'
 import { useEffect, useState } from "react";
 import Comments from "../components/comments/Comments";
+import { json, Link } from 'react-router-dom';
+import AddGroup from '../components/AddGroup';
+import Cards from '../components/Cards/Cards';
+import CircularProgress from '@mui/material/CircularProgress';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
+import Stack from '@mui/material/Stack';
+import Grid from '@mui/material/Grid';
 
-function Groups(){
-  const [groupList, setgroupList] = useState(
-    [
-        {
-            groupName: "Chess club",
-            description: "Join if you like play chess",
-            img: "./images/chess.jpg",
-        },
-        {
-            groupName: "Yoga", 
-            description: "Community of yogis",
-            img: "./images/yoga.jpg",
-        },
-        {
-            groupName: "Guitar lessons", 
-            description: "Classes for everyone",
-            img: "./images/guitar.jpg",
-        },
-    ]
-  );
 
-    return(
+export default function Groups(){
+  const [list, setList] = useState();
+  const url = 'http://localhost:8000/api/groups/';
+
+  useEffect(() => {
+    fetch(url)
+      .then((response) => 
+        response.json()
+      )
+      .then((data) => {
+        console.log(data);
+        setList(data.groups);
+      })
+
+  }, []);
+
+  function newGroup(name, city, description){
+    const data = {groupName: name, city: city, description: description};
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+    .then((response) => {
+      if(!response.ok){
+        throw new Error("Something went wrong");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      //assume the add was succesful
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+  }
+
+  return(
+    <>
+    <h5>Groups registered on community curator</h5>
+    <Grid style={{width: '80%', margin: '0px auto'}} container spacing={2}>
+    {list ? list.map((group) => {
+      return (
+        <Grid item xs={3} >
+            <Link to={"/groups/" + group.id}>
+              <Cards groupName={group.groupName} city={group.city} state={group.state}
+                     image={group.image}/>
+            </Link>
+        </Grid>
+
+      )
+    }) : null}
+    </Grid>
+    <AddGroup newGroup={newGroup}/>
       <div>
       <div className="flex flex-wrap justify center">
-        {groupList.map((group) => {
-            return (<Group groupName={group.groupName} description={group.description} img={group.img} /> ) ;
-        })}
+        {list ? list.map((group) => {
+            return (<group groupName={group.groupName} description={group.description} img={group.img} /> ) ;
+        }):null}
       
       </div>
       <Comments
@@ -38,9 +81,9 @@ function Groups(){
         currentUserId="1"
       />
       </div>
-    );
+    </>
+  );
 
   
 }
 
-export default Groups;
