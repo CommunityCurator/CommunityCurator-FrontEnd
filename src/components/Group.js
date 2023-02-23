@@ -31,7 +31,7 @@ function Group(){
             {notFound ? <p>The group with id {id} was not found</p> : null}
             {group ? 
                 <div>
-                    <h1>Group name: {group.groupName}</h1>
+                    <h1>Group name: {group.group_name}</h1>
                     <h2>Located in {group.city}, {group.state}</h2> 
                     <p>Description: {group.description}</p> 
                     <p>Categories:</p>
