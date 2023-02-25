@@ -13,10 +13,10 @@ const GroupCard = (props) => {
   const {city, group_name, description} = props.group
  
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card sx={{ maxWidth: 280 }}>
       <CardMedia
         component="img"
-        height="194"
+        height="100"
         image="https://www.wtcpl.org/wp-content/plugins/wp-media-folder/assets/images/default.png"
         alt="Paella dish"
       />
