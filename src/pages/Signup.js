@@ -11,6 +11,30 @@ export default function Signup() {
     const totalPagesCount = prompt?.length || 0;
     // numbered by pages. for exampe { 1: [{"key" : "value"}], 2:["key": "value"], 3: []}
     const [pagesAnswers, setPagesAnswers] = useState({});
+
+    function newUser(props){
+        const url = 'http://localhost:8000/api/users/';
+        const data = {first_name: props[1].first_name, last_name: props[1].last_name, user_name: props[1].user_name, email: props[1].email, password: props[1].password, city: props[2].city, state: props[2].state, bio:'', image: '', created_at:''};
+        fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        })
+        .then((response) => {
+          if(!response.ok){
+            throw new Error("Something went wrong");
+          }
+          return response.json();
+        })
+        .then((data) => {
+            console.log("Success");
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+      }
   
     const prevButton = () => {
       if (index > 1) {
@@ -24,6 +48,9 @@ export default function Signup() {
       } else {
         // clear the form on submit
         setPagesAnswers({});
+        //setSubmitted(true);
+        console.log(pagesAnswers);
+        newUser(pagesAnswers);
         setSubmitted(true);
       }
     }
@@ -36,6 +63,8 @@ export default function Signup() {
       setIndex(1);
       setSubmitted(false);
     }
+
+    
   
     return (
       <div className="App">
@@ -52,7 +81,7 @@ export default function Signup() {
               submitted ?
               <Card>
                 <Card.Body>
-                  <p>Your answers have been submitted!</p>
+                  <p>Registration complete</p>
                 </Card.Body>
                 
               </Card> :
