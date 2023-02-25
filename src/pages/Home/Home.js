@@ -205,9 +205,9 @@ const Home = () => {
       	open={pageLoading}
 				style={{opacity: '.8', backgroundColor: 'black'}}			
       >	
-			<div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
-				<CircularProgress color="secondary" style={{width: '120px', height: '120px'}} />
-				<p style={{fontSize: '2.5em', color: 'white', marginTop: '20px'}}>Loading</p>
+			<div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', marginTop: '-70px'}}>
+				<CircularProgress color="secondary" style={{width: '100px', height: '100px'}} />
+				<p style={{fontSize: '2.3em', color: 'white', marginTop: '10px'}}>Loading</p>
 			</div>
 			</Backdrop>
 		</>

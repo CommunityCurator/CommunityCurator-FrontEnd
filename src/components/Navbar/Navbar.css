@@ -81,6 +81,16 @@
   .menu-icon {
     display: none;
   }
+
+  .login-fields {
+    padding: 0px 15px
+  }
+
+  .login-button {
+    width: 80% !important;
+    border-radius: 20px !important;
+    font-size: 1.1em !important; 
+  }
   
   @media screen and (max-width: 960px) {
     .NavbarItems {
