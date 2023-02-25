@@ -9,6 +9,7 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import Stack from '@mui/material/Stack';
+import Backdrop from '@mui/material/Backdrop';
 import CategoryCard from '../../components/CategoryCard/CatgegoryCard'
 import GroupCard from '../../components/GroupCard/GroupCard'
 import Grid from '@mui/material/Grid';
@@ -22,6 +23,8 @@ const Home = () => {
 	const [alertError, setAlertError] = useState(false)
 	const [categories, setCategories] = useState([])
 	const [groups, setGroups] = useState([])
+	const [pageLoading, setPageLoading] = useState(false);
+
 
 	const showPosition = (position) => {
 		fetch(`http://api.openweathermap.org/geo/1.0/reverse?lat=${position.coords.latitude}&lon=${position.coords.longitude}&limit=5&appid=${process.env.REACT_APP_OPEN_WEATHER_API_KEY}`)
@@ -94,6 +97,14 @@ const Home = () => {
 			setCategories(tempArray)
 		})
 	},[])
+
+	useEffect(() => {
+		if(categories.length > 0 && groups.length > 0) {
+			setPageLoading(false)
+		} else {
+			setPageLoading(true)
+		}
+	})
 
 	return (
 		<>
@@ -188,9 +199,17 @@ const Home = () => {
 				</>
 			): ''}
 
-			{/* <Footer />  */}
-
 			</div>
+			<Backdrop
+      	sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+      	open={pageLoading}
+				style={{opacity: '.8', backgroundColor: 'black'}}			
+      >	
+			<div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
+				<CircularProgress color="secondary" style={{width: '140px', height: '140px'}} />
+				<p style={{fontSize: '2.5em', color: 'white'}}>Loading</p>
+			</div>
+			</Backdrop>
 		</>
 	 );
 }
