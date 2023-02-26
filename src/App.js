@@ -15,6 +15,7 @@ import Events from './pages/Events'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
 import Groups from './pages/Groups'
+import ShowPage from './pages/ShowPage';
 
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
         <Route exact path='/events' element={<Events/>} />
         <Route exact path='/login' element={<Login/>} />
         <Route exact path='/signup' element={<Signup/>} />
+        <Route exact path='/user/:id' element={<ShowPage/>} />
       </Routes>
     </Router>
     </>
