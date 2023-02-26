@@ -59,7 +59,7 @@ export default function Groups(){
       return (
         <Grid item xs={3} >
             <Link to={"/groups/" + group.id}>
-              <Cards groupName={group.groupName} city={group.city} state={group.state}
+              <Cards groupName={group.group_name} city={group.city} state={group.state}
                      image={group.image}/>
             </Link>
         </Grid>
