@@ -15,7 +15,8 @@ import Events from './pages/Events'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
 import Groups from './pages/Groups'
-import ShowPage from './pages/ShowPage';
+import ShowPage from './pages/ShowPage/ShowPage';
+
 
 
 function App() {
