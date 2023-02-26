@@ -13,6 +13,9 @@
 - Deal with any merge conflicts at this time
 - Continue these steps until the feature is brought to completion 
 
+# !!Warning!!
+DO NOT use -f or --force with commands: PUSH, PULL, FETCH
+
 # Pull Requests
 When a branch is ready to be merged into the master branch, open a [pull request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests) on GitHub to alert others that it is ready and requires review
 
