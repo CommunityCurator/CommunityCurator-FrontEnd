@@ -33,10 +33,10 @@ export default function ShowPage () {
 		})
 	},[])
 
-  function newGroup(name, city, state, description, category){
-    const userId = parseInt(localStorage.getItem('currentUser'))
+  function newGroup(name, city, state, description){
     const url = 'http://localhost:8000/api/groups/';
-    const data = {group_name: name, city: city, state: state, description: description, category: category, users: userId};
+    const data = {group_name: name, city: city, state: state, description: description};
+    //need to figure out how to add categories and user
     fetch(url, {
       method: 'POST',
       headers: {

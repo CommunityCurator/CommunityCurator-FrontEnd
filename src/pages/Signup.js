@@ -1,83 +1,113 @@
-import React, { useState } from 'react'
-import '../App.css';
+
+import MultiStepProgressBar from "../components/RegistrationStepper/MultiStepProgressBar";
+import { Container, Row, Col, Card, Button } from "react-bootstrap";
+import { useState, useEffect } from "react";
+import StepForm from "../components/RegistrationStepper/StepForm";
+import { prompt } from "../components/RegistrationStepper/prompt";
 
 export default function Signup() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [index, setIndex] = useState(1);
+    const [submitted, setSubmitted] = useState(false);
+    const totalPagesCount = prompt?.length || 0;
+    // numbered by pages. for exampe { 1: [{"key" : "value"}], 2:["key": "value"], 3: []}
+    const [pagesAnswers, setPagesAnswers] = useState({});
+
+    function newUser(props){
+        const url = 'http://localhost:8000/api/users/';
+        const data = {first_name: props[1].first_name, last_name: props[1].last_name, user_name: props[1].user_name, email: props[1].email, password: props[1].password, city: props[2].city, state: props[2].state, bio:'', image: '', created_at:''};
+        fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        })
+        .then((response) => {
+          if(!response.ok){
+            throw new Error("Something went wrong");
+          }
+          return response.json();
+        })
+        .then((data) => {
+            console.log("Success");
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+      }
   
-    const handleSubmit = (e) => {
-      e.preventDefault();
-      console.log(email);
+    const prevButton = () => {
+      if (index > 1) {
+        setIndex(prevIndex => prevIndex - 1);
+      }
     }
   
-    return(
-    <>
-    <div align="center">
-        <form className="m-2 py-8 px-8 w-full max-w-lg">
-            <div className="flex flex-wrap -mx-3 mb-1">
-                <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                    <label className="block text-gray-500 font-bold md:text-left mb-1 md:mb-0 pr-4" for="firstname">
-                        First Name
-                    </label>
-                    <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-first-name" type="text" placeholder="First Name" />
-                </div>
-                <div className="w-full md:w-1/2 px-3">
-                    <label className="block text-gray-500 font-bold md:text-left mb-1 md:mb-0 pr-4" for="lasttname">
-                        Last Name
-                    </label>
-                    <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="text" placeholder="Last Name" />
-                </div>
-            </div>
-            <div className="flex flex-wrap -mx-3 mb-1">
-                <div className="w-full px-3">
-                    <label className="block text-gray-500 font-bold md:text-left mb-1 md:mb-0 pr-4" for="password">
-                        Password
-                    </label>
-                    <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-password" type="password" placeholder="******************" />
-                     <p className="text-gray-600 text-xs italic md:text-left">At least 8 characters</p>
-                </div>
-            </div>
-            <div className="flex flex-wrap -mx-3 mb-2">
-                <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
-                    <label className="block text-gray-500 font-bold md:text-left mb-1 md:mb-0 pr-4" for="city">
-                        City
-                    </label>
-                    <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-city" type="text" placeholder="City" />
-                </div>
-                <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
-                    <label className="block text-gray-500 font-bold md:text-left mb-1 md:mb-0 pr-4" for="state">
-                        State
-                    </label>
-                    <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state" type="text" placeholder="State" />
-                </div>
-                 <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
-                    <label className="block text-gray-500 font-bold md:text-left mb-1 md:mb-0 pr-4" for="zip">
-                        Zip
-                    </label>
-                    <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-zip" type="text" placeholder="Zip code"/>
-                </div>
-            </div>
+    const nextButton = () => {
+      if (index - 3) {
+        setIndex(prevIndex => prevIndex + 1);
+      } else {
+        // clear the form on submit
+        setPagesAnswers({});
+        //setSubmitted(true);
+        console.log(pagesAnswers);
+        newUser(pagesAnswers);
+        setSubmitted(true);
+      }
+    }
+  
+    const onPageAnswerUpdate = (step, answersObj) => {
+      setPagesAnswers({...pagesAnswers, [step]: answersObj});
+    }
+  
+    const handleStart = () => {
+      setIndex(1);
+      setSubmitted(false);
+    }
 
-            <div className="py-3 px-3 md:flex md:items-center">
-                <div className="md:w-1/3"></div>
-                <div className="md:w-1/3">
-                    <button className="shadow bg-blue-500 hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded" type="button">
-                        Register
+    
+  
+    return (
+      <div className="App">
+        <Container className="h-100">
+          <Row className="m-5">
+            <Col className="align-self-center">
+              <MultiStepProgressBar
+                step={index}
+                />
+            </Col>
+          </Row>
+          <Row>
+            {
+              submitted ?
+              <Card>
+                <Card.Body>
+                  <p>Registration complete</p>
+                </Card.Body>
+                
+              </Card> :
+            <Card>
+              <Card.Body>
+                <StepForm
+                  list={prompt}
+                  step={index}
+                  onPageUpdate={onPageAnswerUpdate}
+                  pagesAnswers={pagesAnswers}
+                  />
+              </Card.Body>
+              <Card.Footer className="d-flex justify-content-between">
+                <button 
+                    className="shadow bg-blue-500 hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded" 
+                    onClick={prevButton} disabled={index === 1}>Previous
+                </button>
+                <button 
+                    className="shadow bg-blue-500 hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded" 
+                    onClick={nextButton}>{index === totalPagesCount ? 'Submit' : 'Next'}
                     </button>
-                </div>
-            </div>
-            <div className=" block mx-auto md:flex md:items-center mb-6">
-                <div className="md:w-1/3 "></div>
-                <label className="md:w-2/3 block text-gray-500 font-bold">
-                    <p className="text-sm">
-                        Already have an account? <a href='/login'><u>Log in</u></a>
-                    </p>
-                </label>
-             </div>
-             
-        </form>
-    </div>
-
-</>
-);
+              </Card.Footer>
+            </Card>
+          }
+          </Row>
+        </Container>
+      </div>
+    );
 }
