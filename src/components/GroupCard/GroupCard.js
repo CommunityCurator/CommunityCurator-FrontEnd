@@ -10,14 +10,14 @@ import Typography from '@mui/material/Typography';
 
 const GroupCard = (props) => {
 
-  const {city, group_name, description} = props.group
+  const {city, group_name, description, image} = props.group
  
   return (
     <Card sx={{ maxWidth: 280 }}>
       <CardMedia
         component="img"
         height="100"
-        image="https://www.wtcpl.org/wp-content/plugins/wp-media-folder/assets/images/default.png"
+        image={image}
         alt="Paella dish"
       />
        <CardHeader
