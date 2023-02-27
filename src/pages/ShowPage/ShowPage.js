@@ -18,7 +18,7 @@ export default function ShowPage () {
 
   useEffect(() => {
     const userId = parseInt(localStorage.getItem('currentUser'))
-		fetch(`http://127.0.0.1:8000/api/users/${userId}`)
+		fetch(`http://127.0.0.1:8000/api/user/${userId}`)
 		.then(response => {
 			if(response.status >= 400) {
 			 setAlertError(true)  
