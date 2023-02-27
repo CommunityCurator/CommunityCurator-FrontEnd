@@ -10,6 +10,7 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import MyGroupCard from '../../components/MyGroupCard/MyGroupCard';
+import AddGroup from '../../components/AddGroup';
 
 export default function ShowPage () {
 
@@ -18,7 +19,7 @@ export default function ShowPage () {
 
   useEffect(() => {
     const userId = parseInt(localStorage.getItem('currentUser'))
-		fetch(`http://127.0.0.1:8000/api/users/${userId}`)
+		fetch(`http://127.0.0.1:8000/api/user/${userId}`)
 		.then(response => {
 			if(response.status >= 400) {
 			 setAlertError(true)  
@@ -30,6 +31,33 @@ export default function ShowPage () {
       setUserInfo(data.user)
 		})
 	},[])
+
+  function newGroup(name, city, state, description, category){
+    const userId = parseInt(localStorage.getItem('currentUser'))
+    const url = 'http://localhost:8000/api/groups/';
+    const data = {group_name: name, city: city, state: state, description: description, category: category, users: userId};
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+    .then((response) => {
+      if(!response.ok){
+        console.log(data);
+        throw new Error("Something went wrong");
+        
+      }
+      return response.json();
+    })
+    .then((data) => {
+      //assume the add was succesful
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+  }
 
     return (
         <>
@@ -64,7 +92,7 @@ export default function ShowPage () {
                     <TextField type="search" style={{width: '100%'}} label="Search Groups" id="outlined-basic" variant="outlined" />
                     <div style={{height: '1.5em'}}></div>
                     <div>
-                      <Button style={{width: '100%'}} size="large" variant="outlined">Create new group</Button>
+                      <AddGroup newGroup={newGroup}/>
                     </div>  
                     <div style={{height: '1.5em'}}></div>  
                     <Typography variant="h5" gutterBottom>

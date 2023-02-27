@@ -28,28 +28,7 @@ export default function Groups(){
 
   }, []);
 
-  function newGroup(name, city, description){
-    const data = {groupName: name, city: city, description: description};
-    fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    })
-    .then((response) => {
-      if(!response.ok){
-        throw new Error("Something went wrong");
-      }
-      return response.json();
-    })
-    .then((data) => {
-      //assume the add was succesful
-    })
-    .catch((e) => {
-      console.log(e);
-    });
-  }
+
 
   return(
     <>
@@ -67,7 +46,6 @@ export default function Groups(){
       )
     }) : null}
     </Grid>
-    <AddGroup newGroup={newGroup}/>
     </>
   );
 }
