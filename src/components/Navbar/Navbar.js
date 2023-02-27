@@ -226,7 +226,7 @@ function Navbar() {
             Login
           </ColorButton>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Not a member? <span style={{color: '#0d6efd'}}><a href='#'>Signup</a></span>
+            Not a member? <span style={{color: '#0d6efd'}}><a href='/signup'>Signup</a></span>
           </Typography>
         </Box>
         </Modal>

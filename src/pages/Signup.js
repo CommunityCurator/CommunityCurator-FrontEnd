@@ -4,6 +4,7 @@ import { Container, Row, Col, Card, Button } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import StepForm from "../components/RegistrationStepper/StepForm";
 import { prompt } from "../components/RegistrationStepper/prompt";
+import { useNavigate } from 'react-router-dom';
 
 export default function Signup() {
     const [index, setIndex] = useState(1);
@@ -11,6 +12,7 @@ export default function Signup() {
     const totalPagesCount = prompt?.length || 0;
     // numbered by pages. for exampe { 1: [{"key" : "value"}], 2:["key": "value"], 3: []}
     const [pagesAnswers, setPagesAnswers] = useState({});
+    const navigate = useNavigate();
 
     function newUser(props){
         const url = 'http://localhost:8000/api/users/';
@@ -28,8 +30,12 @@ export default function Signup() {
           }
           return response.json();
         })
-        .then((data) => {
-            console.log("Success");
+        .then(data => {
+          if(data.user.id) {
+            localStorage.setItem('currentUser', data.user.id)
+            let url = `/user/${data.user.id}`
+            navigate(url)
+          }
         })
         .catch((e) => {
           console.log(e);
