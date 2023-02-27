@@ -11,6 +11,7 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import MyGroupCard from '../../components/MyGroupCard/MyGroupCard';
 import AddGroup from '../../components/AddGroup';
+import { Link } from 'react-router-dom';
 
 export default function ShowPage () {
 
@@ -103,7 +104,11 @@ export default function ShowPage () {
                       {userInfo.groups.length > 0 ? (
                         userInfo.groups.map(group => {
                           return (
-                            <MyGroupCard group={group}></MyGroupCard>
+                            <Grid >
+                              <Link to={"/groups/" + group.id}>
+                                <MyGroupCard group={group}></MyGroupCard>
+                              </Link>
+                            </Grid>
                           )
                         })) : ''}
                     </div>

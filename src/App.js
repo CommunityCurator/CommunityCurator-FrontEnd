@@ -16,6 +16,7 @@ import Login from './pages/Login'
 import Signup from './pages/Signup'
 import Groups from './pages/Groups'
 import ShowPage from './pages/ShowPage/ShowPage';
+import GroupPage from './pages/GroupPage/GroupPage';
 
 
 
@@ -27,7 +28,7 @@ function App() {
       <Routes>
         <Route exact path='/' element={<Home/>} />
         <Route exact path='/groups' element={<Groups/>} />
-        <Route exact path='/groups/:id' element={<Group/>} />
+        <Route exact path='/groups/:id' element={<GroupPage/>} />
         <Route exact path='/events' element={<Events/>} />
         <Route exact path='/login' element={<Login/>} />
         <Route exact path='/signup' element={<Signup/>} />
