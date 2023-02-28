@@ -10,7 +10,7 @@ import CardMedia from '@mui/material/CardMedia';
 
 const MyGroupCard = (props) => {
 
-  const {city, group_name, description} = props.group
+  const {city, group_name, description, image} = props.group
   
   return (
     <>
@@ -20,8 +20,7 @@ const MyGroupCard = (props) => {
         <CardMedia
           component="img"
           sx={{ width: 151 }}
-          image="https://www.wtcpl.org/wp-content/plugins/wp-media-folder/assets/images/default.png"
-          alt="Live from space album cover"
+          image={image}
         />
         <div style={{display: 'flex', alignItems: 'center', marginLeft: '10%'}}>
           <Typography sx={{ fontSize: 20 }} color="text.secondary" gutterBottom>
