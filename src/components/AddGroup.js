@@ -17,8 +17,8 @@ export default function AddGroup(props){
 
     return(
         <>
-        <button onClick={handleShow} className="m-2 px-4 py-1 text-sm text-blue-600 font-semibold border border-purple-200 hover:text-white hover:bg-blue-600 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2">
-            Create new group
+        <button style={{width: '100%', background: 'purple'}} onClick={handleShow} className="m-2 px-4 py-1 text-sm text-white font-semibold border border-purple-200 hover:text-white hover:bg-purple-600 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-offset-2">
+            + Create new group 
         </button>
 
         <Modal
