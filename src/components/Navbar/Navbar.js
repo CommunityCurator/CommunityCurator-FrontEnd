@@ -17,6 +17,11 @@ import Stack from '@mui/material/Stack';
 import { purple } from '@mui/material/colors';
 import { styled } from '@mui/material/styles';
 import { useForm, Controller } from "react-hook-form";
+import { useNavigate } from 'react-router-dom';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
+
 
 import './Navbar.css';
 
@@ -31,11 +36,13 @@ function Navbar() {
   const watchEmail = watch('emailValue')
   const watchPassword = watch('passwordValue')
 
-
+  /* State */
   const [click, setClick] = useState(false);
   const [button, setButton] = useState(true);
   const [loginModal, setLoginModal] = useState(false);
-  
+  const [alertError, setAlertError] = useState(false)
+  const [isUser, setIsUser] = useState(null)
+  const navigate = useNavigate();
 
   const handleClick = () => setClick(!click);
   const closeMobileMenu = () => setClick(false);
@@ -51,6 +58,10 @@ function Navbar() {
   useEffect(() =>{
     showButton();
   }, []);
+
+  useEffect(() => {
+    setIsUser(localStorage.getItem('currentUser'))
+  })
 
   window.addEventListener('resize', showButton);
 
@@ -76,12 +87,54 @@ function Navbar() {
   }));
 
   const handleLogin = () => {
-    console.log(watchEmail, watchPassword)
-  
+    fetch(`http://127.0.0.1:8000/login/`, {
+      method:"POST",
+      headers: {
+        "Content-type":"application/json",
+        "Accept":"application/json"
+      },
+      body: JSON.stringify({
+        email: watchEmail,
+        password: watchPassword
+      })
+    }).then(response => {
+			if(response.status >= 400) {
+			 setAlertError(true)
+			 return;
+			}
+			return response.json();
+		}).then(data => {
+      if(data.user.id) {
+        localStorage.setItem('currentUser', data.user.id)
+        let url = `/user/${data.user.id}`
+        setLoginModal(false)
+        navigate(url)
+      }
+    })
+  }
+
+  const handleLogOut = () => {
+    localStorage.clear()
+    setIsUser(null)
+    navigate('/')
   }
 
   return (
     <>
+    	<Snackbar
+				anchorOrigin={{'horizontal' : 'center', 'vertical' : 'top'}}
+				open={alertError}
+				autoHideDuration={5000}
+				onClose={() => setAlertError(false)}
+				// action={action}
+			>
+				<Stack sx={{ width: '100%' }} spacing={2}>
+					<Alert svariant="filled" onClose={() => setAlertError(false)} severity="error">
+						<AlertTitle>Error</AlertTitle>
+              Invalid Email and Password Combination
+					</Alert>
+				</Stack>
+			</Snackbar>
      <nav className='navbar'>
         <div className='navbar-container'>
             <Link to="/" className='navbar-logo' onClick={closeMobileMenu}>
@@ -106,16 +159,30 @@ function Navbar() {
                         Events
                     </Link>
                 </li>
-                <li>
+                {/* <li>
                     <div className='nav-links-mobile' onClick={() => setLoginModal(true)}>
                         Log in
                     </div>
-                </li>
+                </li> */}
             </ul>
+
+            {isUser ? (
+              <Button 
+                className='nav-links-mobile' 
+                style={{color: 'white', fontFamily: 'PT Sans', fontSize: '1.1rem', border: '1px solid white'}} 
+                onClick={handleLogOut}
+              >
+                Log Out
+              </Button>
+            ): (
+              <Button 
+                className='nav-links-mobile' 
+                style={{color: 'white', fontFamily: 'PT Sans', fontSize: '1.1rem', border: '1px solid white'}} 
+                onClick={() => setLoginModal(true)} variant="outlined">
+                Login
+              </Button>
+            )}
             
-            <Button className='nav-links-mobile' style={{color: 'white', fontFamily: 'PT Sans', fontSize: '1.1rem', border: '1px solid white'}} onClick={() => setLoginModal(true)} variant="outlined">
-              Login
-            </Button>
             {/* {button && <Button nClick={() => setLoginModal(true)} buttonStyle='btn--outline'>Log in</Button>} */}
         </div>
         <Modal
@@ -146,11 +213,18 @@ function Navbar() {
                 render={({ field: { onChange, value} }) => (
                   <TextField onChange={onChange} value={value} required fullWidth id="filled-basic" label="Password" variant="filled" />
                 )}
-            />
+              />
             </form>
           </div>
           <div style={{height: '2em'}}></div>
-          <ColorButton onClick={handleLogin} className='login-button' size="large" variant="contained">Login</ColorButton>
+          <ColorButton 
+            onClick={handleLogin} 
+            className='login-button' 
+            size="large" 
+            variant="contained"
+          >
+            Login
+          </ColorButton>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             Not a member? <span style={{color: '#0d6efd'}}><a href='#'>Signup</a></span>
           </Typography>

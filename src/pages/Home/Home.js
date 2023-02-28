@@ -13,6 +13,7 @@ import Backdrop from '@mui/material/Backdrop';
 import CategoryCard from '../../components/CategoryCard/CatgegoryCard'
 import GroupCard from '../../components/GroupCard/GroupCard'
 import Grid from '@mui/material/Grid';
+import { Link } from 'react-router-dom';
 
 
 const Home = () => {
@@ -191,9 +192,11 @@ const Home = () => {
 						{groups.map(group => {
 							return (
 								<Grid item xs={3}>
+								  <Link to={"/groups/" + group.id}>
 									<GroupCard group={group}></GroupCard>
+								  </Link>
 								</Grid>
-							)
+							  )
 						})}
 					</Grid>
 				</>

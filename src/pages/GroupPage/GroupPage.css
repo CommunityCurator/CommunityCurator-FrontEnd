@@ -1,0 +1,10 @@
+.image-right-top {
+  float: right;
+}
+
+.welcome-header {
+  position: relative;
+  top: 18px;
+  left: 10px;
+}
+

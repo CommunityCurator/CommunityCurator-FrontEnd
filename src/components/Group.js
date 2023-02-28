@@ -12,7 +12,7 @@ function Group(){
 
 
     useEffect(() => {
-        const url = 'http://localhost:8000/api/groups/' + id;
+        const url = 'http://localhost:8000/api/group/' + id;
         fetch(url)
         .then((response) => {
             if(response.status === 404){
