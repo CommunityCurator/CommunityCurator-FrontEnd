@@ -98,9 +98,22 @@ export const prompt = [
     {
       section: 3,
       items: [
+
         {
-          label: 'Placeholder to prompt user to indicate interests',
-          type: 'information'
+          label: 'Click to choose categories you are interested in',
+          type: 'select',
+          value: 'category',
+          options: [ 
+            'Winter',
+            'Learning',
+            'Hobby',
+            'Dance',
+            'Sports',
+            'Music',
+            'Beach',
+            'Film',
+            'Programming'
+          ]
         }
       ]
     }
