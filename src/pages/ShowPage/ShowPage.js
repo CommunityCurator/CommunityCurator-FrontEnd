@@ -11,6 +11,7 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import MyGroupCard from '../../components/MyGroupCard/MyGroupCard';
 import AddGroup from '../../components/AddGroup';
+import SearchByCity from './SearchByCity';
 import { Link } from 'react-router-dom';
 
 export default function ShowPage () {
@@ -90,7 +91,7 @@ export default function ShowPage () {
                       Groups
                     </Typography>
                     <div style={{height: '1.5em'}}></div>
-                    <TextField type="search" style={{width: '100%'}} label="Search Groups" id="outlined-basic" variant="outlined" />
+                    <SearchByCity/>
                     <div style={{height: '1.5em'}}></div>
                     <div>
                       <AddGroup newGroup={newGroup}/>
