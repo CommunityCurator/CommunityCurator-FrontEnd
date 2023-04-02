@@ -10,9 +10,13 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import MyGroupCard from '../../components/MyGroupCard/MyGroupCard';
+import CategoryCard from '../../components/CategoryCard/CatgegoryCard';
 import AddGroup from '../../components/AddGroup';
 import SearchByCity from './SearchByCity';
 import { Link } from 'react-router-dom';
+
+
+
 
 export default function ShowPage () {
 
@@ -60,7 +64,6 @@ export default function ShowPage () {
       console.log(e);
     });
   }
-
     return (
         <>
           <Snackbar
@@ -81,21 +84,25 @@ export default function ShowPage () {
                 <>
                   <div className="welcome-header">
                   <Typography variant="h4" gutterBottom>
-                    Welcome {userInfo.first_name} {userInfo.last_name}
+                    Welcome {userInfo.first_name} {userInfo.last_name}!
                   </Typography>
                 </div>
+
                 <div style={{height: '3em'}}></div>
                 <Grid style={{marginLeft: '2em'}} container spacing={2}>
                   <Grid item xs={3}>
-                    <Typography variant="h5" gutterBottom>
-                      Groups
+                    <Typography variant="h7" gutterBottom>
+                      Have an idea for a new group? Add it here!
                     </Typography>
+                    
                     <div style={{height: '1.5em'}}></div>
                     <SearchByCity/>
                     <div style={{height: '1.5em'}}></div>
+
                     <div>
                       <AddGroup newGroup={newGroup}/>
-                    </div>  
+                    </div> 
+
                     <div style={{height: '1.5em'}}></div>  
                     <Typography variant="h5" gutterBottom>
                       Your Groups
@@ -113,6 +120,23 @@ export default function ShowPage () {
                           )
                         })) : ''}
                     </div>
+
+                    <div style={{height: '1.5em'}}></div>  
+                    <Typography variant="h5" gutterBottom>
+                      Your Interests
+                    </Typography>  
+                    <div style={{height: '1.5em'}}></div> 
+                    <div style={{display: 'flex', flexDirection: 'column'}}>
+                      {userInfo.categories.length > 0 ? (
+                        userInfo.categories.map(category => {
+                          return (
+                            <Grid item xs={7}>
+										          <CategoryCard name={category.name} />
+									          </Grid>
+                          )
+                        })) : ''}
+                    </div>
+                    
                   </Grid>
                   <Grid item xs={9}>
                    
