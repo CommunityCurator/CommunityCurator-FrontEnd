@@ -10,6 +10,9 @@ import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Grid';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 
 
 export default function Groups(){
@@ -28,25 +31,31 @@ export default function Groups(){
 
   }, []);
 
-
-
   return(
     <>
-    <h5>Groups registered on community curator</h5>
-    <Grid style={{width: '80%', margin: '0px auto'}} container spacing={2}>
-    {list ? list.map((group) => {
-      return (
-        <Grid item xs={3} >
-            <Link to={"/groups/" + group.id}>
-              <Cards groupName={group.group_name} city={group.city} state={group.state}
-                     image={group.image}/>
-            </Link>
-        </Grid>
+    <div style={{height: '0.5em'}}></div>
+    <TextField type="search" style={{width: '25%', float: 'right'} } label="Search Groups by Name or Interests" id="outlined-basic" variant="outlined" />
+    <div style={{height: '3.8em'}}></div>  
+    <Button variant="contained" style={{width: '25%', float: 'right'}}>Search</Button>
 
-      )
-    }) : null}
+    <Grid style={{width: '80%', margin: '0px auto'}} container spacing={2}>        
+      <Typography variant="h5" gutterBottom>
+        Groups
+      </Typography>        
+    </Grid>
+    
+    <Grid style={{width: '80%', margin: '0px auto'}} container spacing={2}>
+      {list ? list.map((group) => {
+        return (
+          <Grid item xs={3}>
+              <Link to={"/groups/" + group.id}>
+                <Cards groupName={group.group_name} city={group.city} state={group.state}
+                      image={group.image}/>
+              </Link>
+          </Grid>
+        )
+      }) : null}
     </Grid>
     </>
   );
 }
-
