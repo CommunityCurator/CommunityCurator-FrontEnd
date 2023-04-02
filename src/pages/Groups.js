@@ -13,6 +13,7 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import SearchByCity from './ShowPage/SearchByCity';
 
 
 export default function Groups(){
@@ -34,9 +35,9 @@ export default function Groups(){
   return(
     <>
     <div style={{height: '0.5em'}}></div>
-    <TextField type="search" style={{width: '25%', float: 'right'} } label="Search Groups by Name or Interests" id="outlined-basic" variant="outlined" />
+    <SearchByCity />
     <div style={{height: '3.8em'}}></div>  
-    <Button variant="contained" style={{width: '25%', float: 'right'}}>Search</Button>
+  
 
     <Grid style={{width: '80%', margin: '0px auto'}} container spacing={2}>        
       <Typography variant="h5" gutterBottom>
