@@ -65,7 +65,7 @@ export default function GroupPage () {
                             </Grid>
                           </> )
                     }) : null}
-                <JoinGroupButton userID={userId} groupId={id}/>
+                <JoinGroupButton userId={userId} groupId={id}/>
             </Typography>
           
         

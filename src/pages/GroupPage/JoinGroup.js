@@ -1,12 +1,31 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 
 function JoinGroup(props) {
   const [isJoined, setIsJoined] = useState(false);
+  const groupId = props.groupId;
+  const userId = props.userId;
+  const data = {groupId: groupId, userId: userId};
 
-  const handleJoinClick = () => {{
-    console.log(props);
-      };
+  const handleJoinClick = () => {
+    const url = 'http://localhost:8000/api/user/'+userId+'/groups/'+groupId;
+    console.log(url);
+    fetch(url, {
+      method:'POST',
+      headers:{
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+    .then((response) =>{
+      if(!response.ok){
+        console.log(data);
+        throw new Error("Something went wrong");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log('Successful');
+    });
   }
 
   return (
