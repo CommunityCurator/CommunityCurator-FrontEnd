@@ -13,6 +13,7 @@ import MyGroupCard from '../../components/MyGroupCard/MyGroupCard';
 import AddGroup from '../../components/AddGroup';
 import { useParams, Link } from 'react-router-dom';
 import CategoryCard from '../../components/CategoryCard/CatgegoryCard'
+import JoinGroupButton from './JoinGroup';
 
 export default function GroupPage () {
 
@@ -38,6 +39,9 @@ export default function GroupPage () {
       })
   });
 
+  const userId = localStorage.getItem('currentUser');
+
+
   return (
     <>
       {group ? 
@@ -61,6 +65,7 @@ export default function GroupPage () {
                             </Grid>
                           </> )
                     }) : null}
+                <JoinGroupButton userID={userId} groupId={id}/>
             </Typography>
           
         
