@@ -144,6 +144,11 @@ function Navbar() {
                 <i className={click ? 'fas fa-times' : 'fas fa-bars'} />
             </div>
             <ul className={click ? 'nav-menu active ' : 'nav-menu'}>
+                <li className='nav-item'>
+                    <Link to='/' className='nav-links' onClick={closeMobileMenu}>
+                        Home
+                    </Link>
+                </li>
                 {isUser ? (
                   <li className='nav-item'>
                     <Link to={`/user/${parseInt(localStorage.getItem('currentUser'))}`} className='nav-links' onClick={closeMobileMenu}>
@@ -151,11 +156,6 @@ function Navbar() {
                     </Link>
                   </li>
                 ): ''}
-                <li className='nav-item'>
-                    <Link to='/' className='nav-links' onClick={closeMobileMenu}>
-                        Home
-                    </Link>
-                </li>
                 <li className='nav-item'>
                     <Link to='/groups' className='nav-links' onClick={closeMobileMenu}>
                         Groups

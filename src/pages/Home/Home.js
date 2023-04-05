@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import '../../App.css'
 import './Home.css'
-import Cards from '../../components/Cards/Cards'
 import Footer from '../../components/Footer/Footer'
 import { Button } from '../../components/Button/Button'
 import CircularProgress from '@mui/material/CircularProgress';
@@ -19,7 +18,6 @@ import { Link } from 'react-router-dom';
 const Home = () => {
 
 	const [open, setOpen] = useState(false)
-	const [geoLocation, setGeoLocation] = useState(null)
 	const [cityLoading, setCityLoading] = useState(false)
 	const [alertError, setAlertError] = useState(false)
 	const [categories, setCategories] = useState(null)
@@ -31,35 +29,39 @@ const Home = () => {
 		fetch(`http://api.openweathermap.org/geo/1.0/reverse?lat=${position.coords.latitude}&lon=${position.coords.longitude}&limit=5&appid=${process.env.REACT_APP_OPEN_WEATHER_API_KEY}`)
 			.then(res => res.json())
 			.then(result => {
-				setGeoLocation(result[0].name)
+				localStorage.setItem('location', result[0].name)
+				// setGeoLocation(result[0].name)
 				setCityLoading(false)
 			});
 	}
 
 	useEffect(() => {
 		/* get user's location */
-		if (navigator.geolocation) {
-			setCityLoading(true)
-			navigator.permissions
-			.query({ name: "geolocation" })
-			.then(data => {
-				if (data.state === 'granted') {
-					navigator.geolocation.watchPosition(showPosition);
-				} else if (data.state === 'prompt') {
-					navigator.geolocation.watchPosition(showPosition);
-				} else if (data.state === 'denied') {
-					setCityLoading(false)
-				}
-				data.onchange = () => {
-					if(data.state === 'denied') {
-						setCityLoading(false)
-					} else if (data.state === 'granted') {
+		if(!localStorage.getItem('location')) {
+			if (navigator.geolocation) {
+				setCityLoading(true)
+				navigator.permissions
+				.query({ name: "geolocation" })
+				.then(data => {
+					if (data.state === 'granted') {
 						navigator.geolocation.watchPosition(showPosition);
+					} else if (data.state === 'prompt') {
+						navigator.geolocation.watchPosition(showPosition);
+					} else if (data.state === 'denied') {
+						setCityLoading(false)
 					}
-				 };
-			})
-
-		} 
+					data.onchange = () => {
+						if(data.state === 'denied') {
+							setCityLoading(false)
+						} else if (data.state === 'granted') {
+							navigator.geolocation.watchPosition(showPosition);
+						}
+					 };
+				})
+	
+			} 
+		}
+		
 	},[]);
 
 
@@ -74,14 +76,32 @@ const Home = () => {
 		})
 		.then(data => {
 			const tempArray = []
-			for(let i = 0; i < data.groups.length; i++) {
-				if(geoLocation === data.groups[i].city) {
+			let counter = 0
+			if(localStorage.getItem('location')) {
+				for(let i = 0; i < data.groups.length; i++) {
+					if(localStorage.getItem('location') === data.groups[i].city) {
+						tempArray.push(data.groups[i])
+						counter++
+					}
+	
+					if(counter === 4) {
+						setGroups(tempArray)
+						return
+					}
+	
+				}
+			} else {
+				for(let i = 0; i < 4; i++) {
 					tempArray.push(data.groups[i])
 				}
 			}
-			setGroups(tempArray)
+			
+			if(!pageLoading) {
+				setGroups(tempArray)
+			}
+		
 		})
-	},[geoLocation])
+	},[groups])
 
 	useEffect(() => {
 		fetch('http://127.0.0.1:8000/api/categories/')
@@ -99,7 +119,7 @@ const Home = () => {
 			}
 			setCategories(tempArray)
 		})
-	},[])
+	},[categories])
 
 	useEffect(() => {
 		if(categories && groups) {
@@ -154,21 +174,24 @@ const Home = () => {
 				</div>
 
 			
-			{geoLocation || cityLoading ? (
+			{localStorage.getItem('location') || cityLoading ? (
 				<div className="home-container-city">
 					Happening in  
-						{!geoLocation ? (
+						{!localStorage.getItem('location') ? (
 							<CircularProgress color="secondary" style={{marginLeft: '10px'}}/>
 						)   : ' '} 
 					
-					<span className='home-container-city-name'>{geoLocation}</span>
+					<span className='home-container-city-name'>{localStorage.getItem('location')}</span>
 				</div>
 			): ''}
 
 			{categories ? (
 				<>
 					<div className="home-container-category-title">
-						<p>Popular interest categories in the area</p>
+						{localStorage.getItem('location') ? (
+							<p>Interest categories in the area</p>
+						): (<p>Interest categories</p>)}
+						
 					</div>
 
 					<Grid style={{width: '80%', margin: '0px auto'}} container spacing={2}>
@@ -186,7 +209,10 @@ const Home = () => {
 			{groups ? (
 				<>
 					<div className="home-container-category-title">
-						<p>Groups in {geoLocation}</p>
+						{localStorage.getItem('location') ? (
+								<p>Groups in {localStorage.getItem('location')}</p>
+						): <p>Groups</p>}
+						
 					</div>
 
 					<Grid style={{width: '80%', margin: '0px auto'}} container spacing={2}>
