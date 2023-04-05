@@ -22,8 +22,8 @@ const Home = () => {
 	const [geoLocation, setGeoLocation] = useState(null)
 	const [cityLoading, setCityLoading] = useState(false)
 	const [alertError, setAlertError] = useState(false)
-	const [categories, setCategories] = useState([])
-	const [groups, setGroups] = useState([])
+	const [categories, setCategories] = useState(null)
+	const [groups, setGroups] = useState(null)
 	const [pageLoading, setPageLoading] = useState(false);
 
 
@@ -74,12 +74,14 @@ const Home = () => {
 		})
 		.then(data => {
 			const tempArray = []
-			for(let i = 0; i < 4; i++) {
-				tempArray.push(data.groups[i])
+			for(let i = 0; i < data.groups.length; i++) {
+				if(geoLocation === data.groups[i].city) {
+					tempArray.push(data.groups[i])
+				}
 			}
 			setGroups(tempArray)
 		})
-	},[])
+	},[geoLocation])
 
 	useEffect(() => {
 		fetch('http://127.0.0.1:8000/api/categories/')
@@ -100,7 +102,7 @@ const Home = () => {
 	},[])
 
 	useEffect(() => {
-		if(categories.length > 0 && groups.length > 0) {
+		if(categories && groups) {
 			setPageLoading(false)
 		} else {
 			setPageLoading(true)
@@ -155,7 +157,7 @@ const Home = () => {
 			{geoLocation || cityLoading ? (
 				<div className="home-container-city">
 					Happening in  
-						{cityLoading ? (
+						{!geoLocation ? (
 							<CircularProgress color="secondary" style={{marginLeft: '10px'}}/>
 						)   : ' '} 
 					
@@ -163,13 +165,13 @@ const Home = () => {
 				</div>
 			): ''}
 
-			{categories.length > 0 ? ( 
+			{categories ? (
 				<>
 					<div className="home-container-category-title">
 						<p>Popular interest categories in the area</p>
 					</div>
-				
-						<Grid style={{width: '80%', margin: '0px auto'}} container spacing={2}>
+
+					<Grid style={{width: '80%', margin: '0px auto'}} container spacing={2}>
 							{categories.map(category => {
 								return (
 									<Grid item xs={3}>
@@ -178,11 +180,10 @@ const Home = () => {
 								)
 								})}
 						</Grid>
-				
 				</>
-			): ''}
+			) : ''}
 
-			{groups.length > 0 ? (
+			{groups ? (
 				<>
 					<div className="home-container-category-title">
 						<p>Groups in {geoLocation}</p>
