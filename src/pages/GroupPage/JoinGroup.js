@@ -25,15 +25,14 @@ function JoinGroup(props) {
     .then((data) => {
       setListGroups(data.groups);
       console.log(data.groups);
+      const found = (data.groups.some(g => String(g.id) === String(groupId)));
+      console.log(groupId);
+      console.log(found);
+      if(found){
+        setIsJoined(true);
+      }
     });   
   }, []);
-
-  console.log(listGroups);
-  const found = (listGroups != null) && (listGroups.some(g => g.id === groupId));
-  console.log(found);
-  if(found){
-    setIsJoined(true);
-  }
 
   const handleJoinClick = () => {
       const url = 'http://localhost:8000/api/user/'+userId+'/groups/'+groupId;
