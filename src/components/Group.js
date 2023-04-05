@@ -24,7 +24,7 @@ function Group(){
             setGroup(data.group);
             setCategories(data.group.categories);
         })
-    });
+    },[]);
       
     return (
         <>
