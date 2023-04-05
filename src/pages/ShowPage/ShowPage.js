@@ -45,7 +45,9 @@ export default function ShowPage () {
 
   useEffect(() => {
     setLoadGroups(true)
-		fetch('http://127.0.0.1:8000/api/groups/')
+    const userId = parseInt(localStorage.getItem('currentUser'))
+    const location = localStorage.getItem('location')
+		fetch(`http://127.0.0.1:8000/api/groups/${location}/${userId}`)
 		.then(response => {
 			if(response.status > 400) {
 			 setAlertError(true)
@@ -54,31 +56,9 @@ export default function ShowPage () {
 			return response.json();
 		})
 		.then(data => {
-			const tempArray = []
-			let counter = 0
-			if(localStorage.getItem('location')) {
-				for(let i = 0; i < data.groups.length; i++) {
-					if(localStorage.getItem('location') === data.groups[i].city) {
-						tempArray.push(data.groups[i])
-						counter++
-					}
-	
-					if(counter === 3) {
-						setGroups(tempArray)
-            setLoadGroups(false)
-						return
-					}
-	
-				}
-			} else {
-				for(let i = 0; i < 4; i++) {
-					tempArray.push(data.groups[i])
-				}
-			}
-			
-      setGroups(tempArray)
-      setLoadGroups(false)
-		
+      const arr = data.group_city_user.slice(0,4);
+      setGroups(arr)
+          setLoadGroups(false)
 		})
 	},[groups])
 
@@ -227,7 +207,7 @@ export default function ShowPage () {
                 <Grid item xs={8}>
                   <div style={{height: '50px'}}></div>  
                   <Typography variant="h5" gutterBottom style={{marginBottom: '.8em'}}>
-                    Recommend groups in the area
+                    Recommend groups in your area
                   </Typography>  
                   
                   {loadGroups && !groups ? (
@@ -242,7 +222,7 @@ export default function ShowPage () {
                     {groups ? (
                       groups.map(group => {  
                         return (
-                          <Grid item xs={4}>
+                          <Grid item xs={3}>
                             <Link to={"/groups/" + group.id}>
                             <RecommendGroupCard group={group}></RecommendGroupCard>
                             </Link>
@@ -255,7 +235,7 @@ export default function ShowPage () {
                   
                   <div style={{height: '50px'}}></div>  
                   <Typography variant="h5" gutterBottom style={{marginBottom: '.8em'}}>
-                    Recommend events in the area
+                    Recommend events in your area.
                   </Typography>  
 
                   {loadEvents && !events ? (
@@ -272,7 +252,7 @@ export default function ShowPage () {
                         if(index !== 3) {
                           return (
                             <Grid item xs={3} style={{cursor: 'pointer'}}>
-                              <a href={`${event.url}`}>
+                              <a target="_blank" href={`${event.url}`}>
                               <EventCard event={event}></EventCard>
                               </a>
                             </Grid>
