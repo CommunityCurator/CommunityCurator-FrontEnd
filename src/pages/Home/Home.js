@@ -30,6 +30,8 @@ const Home = () => {
 			.then(res => res.json())
 			.then(result => {
 				localStorage.setItem('location', result[0].name)
+				localStorage.setItem('lat', position.coords.latitude)
+				localStorage.setItem('lon', position.coords.longitude)
 				// setGeoLocation(result[0].name)
 				setCityLoading(false)
 			});
