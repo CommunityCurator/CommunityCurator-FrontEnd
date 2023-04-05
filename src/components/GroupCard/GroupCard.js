@@ -13,12 +13,11 @@ const GroupCard = (props) => {
   const {city, group_name, description, image} = props.group
  
   return (
-    <Card sx={{ maxWidth: 280 }}>
+    <Card sx={{ maxWidth: 280, height: 350 }}>
       <CardMedia
         component="img"
         height="100"
         image={image}
-        alt="Paella dish"
       />
        <CardHeader
         title={group_name}
