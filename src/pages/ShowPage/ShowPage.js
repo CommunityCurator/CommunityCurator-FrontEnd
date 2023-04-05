@@ -155,15 +155,15 @@ export default function ShowPage () {
                 </div>
 
                 <div style={{height: '3em'}}></div>
-
-                  <Typography variant="h7" gutterBottom>
-                    Have an idea for a new group? Add it here!
-                  </Typography>
                   
                   <div style={{height: '1.5em'}}></div>
                   <SearchByCity/>
                   <div style={{height: '1.5em'}}></div>
 
+                  <Typography variant="h7" gutterBottom>
+                    Have an idea for a new group? Add it here!
+                  </Typography>
+                  <div style={{height: '.5em'}}></div>
                   <div>
                     <AddGroup newGroup={newGroup}/>
                   </div> 
