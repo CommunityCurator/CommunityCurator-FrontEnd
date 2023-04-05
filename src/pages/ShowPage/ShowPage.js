@@ -195,9 +195,9 @@ export default function ShowPage () {
                     {userInfo.categories.length > 0 ? (
                       userInfo.categories.map(category => {
                         return (
-                          <Grid item xs={7}>
+                         
                             <CategoryCard name={category.name} />
-                          </Grid>
+                      
                         )
                       })) : ''}
                   </div>

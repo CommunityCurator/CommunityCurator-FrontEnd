@@ -11,9 +11,9 @@ const CategoryCard = (props) => {
 
   return (
     <>
-      <Card variant="outlined">
+      <Card variant="outlined" style={{marginTop: '1em'}}>
       <CardContent>
-        <Typography sx={{ fontSize: 18 }} color="text.secondary" gutterBottom>
+        <Typography style={{textAlign: 'center'}} sx={{ fontSize: 18 }} color="text.secondary" gutterBottom>
           {props.name}
         </Typography>
         {/* <Typography variant="h5" component="div">
