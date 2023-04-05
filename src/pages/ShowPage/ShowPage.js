@@ -148,14 +148,14 @@ export default function ShowPage () {
 
                   <div style={{height: '3em'}}></div>
 
-                    <Typography variant="h7" gutterBottom>
-                      Have an idea for a new group? Add it here!
-                    </Typography>
+                    
                     
                     <div style={{height: '1.5em'}}></div>
                     <SearchByCity/>
                     <div style={{height: '1.5em'}}></div>
-
+                    <Typography variant="h7" gutterBottom>
+                      Have an idea for a new group? Add it here!
+                    </Typography>
                     <div>
                       <AddGroup newGroup={newGroup}/>
                     </div> 
@@ -199,7 +199,7 @@ export default function ShowPage () {
                   <Grid item xs={7}>
                   <div style={{height: '50px'}}></div>  
                     <Typography variant="h5" gutterBottom style={{marginBottom: '.8em'}}>
-                      Recommend Groups in the area
+                      Recommended Groups in Your Area
                     </Typography>  
                     
                     {loadGroups && !groups ? (
