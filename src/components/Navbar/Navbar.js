@@ -144,6 +144,13 @@ function Navbar() {
                 <i className={click ? 'fas fa-times' : 'fas fa-bars'} />
             </div>
             <ul className={click ? 'nav-menu active ' : 'nav-menu'}>
+                {isUser ? (
+                  <li className='nav-item'>
+                    <Link to={`/user/${parseInt(localStorage.getItem('currentUser'))}`} className='nav-links' onClick={closeMobileMenu}>
+                        Profile
+                    </Link>
+                  </li>
+                ): ''}
                 <li className='nav-item'>
                     <Link to='/' className='nav-links' onClick={closeMobileMenu}>
                         Home
