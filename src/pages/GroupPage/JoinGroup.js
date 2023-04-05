@@ -1,10 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 function JoinGroup(props) {
   const [isJoined, setIsJoined] = useState(false);
   const groupId = props.groupId;
   const userId = props.userId;
   const data = {groupId: groupId, userId: userId};
+  const [listGroups, setListGroups] = useState();
+
+  useEffect(() => {
+    const url = 'http://localhost:8000/api/user/'+userId+'/groups/';
+    fetch(url, {
+      method:'GET',
+      headers:{
+      'Content-Type': 'application/json'
+      },
+    })
+    .then((response) =>{
+      if(!response.ok){
+        throw new Error("Something went wrong");  
+      }
+      return response.json();
+    })
+    .then((data) => {
+      setListGroups(data.groups);
+      console.log(data.groups);
+      const found = (data.groups.some(g => String(g.id) === String(groupId)));
+      console.log(groupId);
+      console.log(found);
+      if(found){
+        setIsJoined(true);
+      }
+    });   
+  }, []);
 
   const handleJoinClick = () => {
     const url = 'http://localhost:8000/api/user/'+userId+'/groups/'+groupId;
