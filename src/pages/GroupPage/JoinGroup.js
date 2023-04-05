@@ -1,37 +1,69 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { set } from 'react-hook-form';
 
 function JoinGroup(props) {
   const [isJoined, setIsJoined] = useState(false);
   const groupId = props.groupId;
   const userId = props.userId;
-  const data = {groupId: groupId, userId: userId};
-
-  const handleJoinClick = () => {
-    const url = 'http://localhost:8000/api/user/'+userId+'/groups/'+groupId;
-    console.log(url);
+  const ids = {groupId: groupId, userId: userId};
+  const [listGroups, setListGroups] = useState([]);
+  
+  useEffect(() => {
+    const url = 'http://localhost:8000/api/user/'+userId+'/groups/';
     fetch(url, {
-      method:'POST',
+      method:'GET',
       headers:{
-        'Content-Type': 'application/json'
+      'Content-Type': 'application/json'
       },
-      body: JSON.stringify(data)
     })
     .then((response) =>{
       if(!response.ok){
-        console.log(data);
-        throw new Error("Something went wrong");
+        throw new Error("Something went wrong");  
       }
       return response.json();
     })
     .then((data) => {
-      console.log('Successful');
-    });
+      setListGroups(data.groups);
+      console.log(data.groups);
+    });   
+  }, []);
+
+  console.log(listGroups);
+  const found = (listGroups != null) && (listGroups.some(g => g.id === groupId));
+  console.log(found);
+  if(found){
+    setIsJoined(true);
   }
 
+  const handleJoinClick = () => {
+      const url = 'http://localhost:8000/api/user/'+userId+'/groups/'+groupId;
+      console.log(url);
+      fetch(url, {
+        method:'POST',
+        headers:{
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(ids)
+      })
+      .then((response) =>{
+        if(!response.ok){
+          console.log(ids);
+          throw new Error("Something went wrong");
+        }
+        return response.json();
+      })
+      .then((ids) => {
+        console.log('Successful');
+      });
+  }
+  
+  
   return (
+    <>
     <button style={{width: '50%', background: 'blue'}} onClick={handleJoinClick} className="m-2 px-4 py-1 text-sm text-white font-semibold border border-blue-200 hover:text-white hover:bg-blue-600 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2">
       {isJoined ? 'Joined!' : 'Join Group'}
     </button>
+    </>
   );
 }
 

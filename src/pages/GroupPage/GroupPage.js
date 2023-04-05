@@ -37,7 +37,7 @@ export default function GroupPage () {
         console.log(group);
         setCategories(data.group.categories);
       })
-  });
+  }, []);
 
   const userId = localStorage.getItem('currentUser');
 
