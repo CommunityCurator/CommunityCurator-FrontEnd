@@ -14,14 +14,70 @@ import CategoryCard from '../../components/CategoryCard/CatgegoryCard';
 import AddGroup from '../../components/AddGroup';
 import SearchByCity from './SearchByCity';
 import { Link } from 'react-router-dom';
-
-
+import RecommendGroupCard from '../../components/RecommendGroupCard/RecommendGroupCard';
+import LinearProgress from '@mui/material/LinearProgress';
 
 
 export default function ShowPage () {
 
   const [alertError, setAlertError] = useState(false)
   const [userInfo, setUserInfo] = useState(null)
+  const [groups, setGroups] = useState(null)
+  const [loadGroups, setLoadGroups] = useState(false)
+
+  useEffect(() => {
+    const userId = parseInt(localStorage.getItem('currentUser'))
+		fetch(`http://127.0.0.1:8000/api/user/${userId}`)
+		.then(response => {
+			if(response.status >= 400) {
+			 setAlertError(true)  
+			 return;
+			}
+			return response.json();
+		})
+		.then(data => {
+      setUserInfo(data.user)
+		})
+	},[])
+
+  useEffect(() => {
+    setLoadGroups(true)
+		fetch('http://127.0.0.1:8000/api/groups/')
+		.then(response => {
+			if(response.status > 400) {
+			 setAlertError(true)
+			 return;
+			}
+			return response.json();
+		})
+		.then(data => {
+			const tempArray = []
+			let counter = 0
+			if(localStorage.getItem('location')) {
+				for(let i = 0; i < data.groups.length; i++) {
+					if(localStorage.getItem('location') === data.groups[i].city) {
+						tempArray.push(data.groups[i])
+						counter++
+					}
+	
+					if(counter === 3) {
+						setGroups(tempArray)
+            setLoadGroups(false)
+						return
+					}
+	
+				}
+			} else {
+				for(let i = 0; i < 4; i++) {
+					tempArray.push(data.groups[i])
+				}
+			}
+			
+      setGroups(tempArray)
+      setLoadGroups(false)
+		
+		})
+	},[groups])
 
   useEffect(() => {
     const userId = parseInt(localStorage.getItem('currentUser'))
@@ -81,16 +137,17 @@ export default function ShowPage () {
 			    </Snackbar>
             <div className="showpage">
               {userInfo ? (
-                <>
-                  <div className="welcome-header">
-                  <Typography variant="h4" gutterBottom>
-                    Welcome {userInfo.first_name} {userInfo.last_name}!
-                  </Typography>
-                </div>
-
-                <div style={{height: '3em'}}></div>
                 <Grid style={{marginLeft: '2em'}} container spacing={2}>
                   <Grid item xs={3}>
+
+                  <div className="welcome-header">
+                    <Typography variant="h4" gutterBottom>
+                      Welcome {userInfo.first_name} {userInfo.last_name}!
+                    </Typography>
+                  </div>
+
+                  <div style={{height: '3em'}}></div>
+
                     <Typography variant="h7" gutterBottom>
                       Have an idea for a new group? Add it here!
                     </Typography>
@@ -138,11 +195,39 @@ export default function ShowPage () {
                     </div>
                     
                   </Grid>
-                  <Grid item xs={9}>
-                   
+                  <Grid item xs={2}></Grid>
+                  <Grid item xs={7}>
+                  <div style={{height: '50px'}}></div>  
+                    <Typography variant="h5" gutterBottom style={{marginBottom: '.8em'}}>
+                      Recommend Groups in the area
+                    </Typography>  
+                    
+                    {loadGroups && !groups ? (
+                      <>
+                        <div style={{height: '50px'}}></div> 
+                        <LinearProgress color="secondary" />
+                      </>
+                      
+                    ): "" }
+                    
+                    <Grid style={{width: '100%', paddingRight: '5em'}} container spacing={1}>
+                      {groups ? (
+                        groups.map(group => {
+                          debugger
+                          return (
+                            <Grid item xs={4}>
+                              <Link to={"/groups/" + group.id}>
+                              <RecommendGroupCard group={group}></RecommendGroupCard>
+                              </Link>
+                            </Grid>
+                            )
+                        })
+                      ): ''}
+                      
+					          </Grid>
                   </Grid>
                 </Grid>
-                </>
+                
               ): ''}
             </div>
         </>
