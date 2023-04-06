@@ -21,22 +21,22 @@ const UserCategoryCard = (props) => {
     .then(data => {
         for(var key in data.categories) {
             if(data.categories[key].name == props.name) {
-                console.log(data.categories[key].id)
                 url += "/" + data.categories[key].id
-                console.log(url)
+                return url
             }
         }
     })
-
-    fetch(url, {
+    .then(url => {
+      fetch(url, {
         method: "DELETE",
         headers : {      
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         }
-    })
-    .then((response) => {
-        console.log(url)
+      })
+      .then((response) => {
+          console.log(url)
+      })
     })
   }
 
