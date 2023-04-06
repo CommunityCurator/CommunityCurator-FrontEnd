@@ -14,16 +14,20 @@ const UserCategoryCard = (props) => {
     <>
       <Card variant="outlined" style={{marginTop: '1em'}}>
       <CardContent>
+        {isHover == false && (        
         <Typography style={{textAlign: 'center'}} sx={{ fontSize: 18 }} color="text.secondary" gutterBottom
                 onMouseEnter={() => setIsHover(true)}
                 onMouseLeave={() => setIsHover(false)}>
             {props.name}
-        </Typography>
+        </Typography>)}
+
         {isHover && (
-        <div>
-          Remove Interest
-        </div>
-        )}
+        <Typography style={{textAlign: 'center'}} sx={{ fontSize: 18 }} color="text.secondary" gutterBottom
+            onMouseEnter={() => setIsHover(true)}
+            onMouseLeave={() => setIsHover(false)}>
+            Remove Interest
+        </Typography>)
+        }
         {/* <Typography variant="h5" component="div">
           
         </Typography>
