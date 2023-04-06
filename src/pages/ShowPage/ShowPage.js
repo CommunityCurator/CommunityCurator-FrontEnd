@@ -17,6 +17,7 @@ import { Link } from 'react-router-dom';
 import RecommendGroupCard from '../../components/RecommendGroupCard/RecommendGroupCard';
 import LinearProgress from '@mui/material/LinearProgress';
 import EventCard from '../../components/EventCard/EventCard';
+import UserCategoryCard from '../../components/CategoryCard/UserCategoryCard';
 
 
 export default function ShowPage () {
@@ -196,7 +197,7 @@ export default function ShowPage () {
                       userInfo.categories.map(category => {
                         return (
                          
-                            <CategoryCard name={category.name} />
+                            <UserCategoryCard name={category.name} />
                       
                         )
                       })) : ''}

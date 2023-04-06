@@ -10,6 +10,23 @@ import Typography from '@mui/material/Typography';
 const UserCategoryCard = (props) => {
   const [isHover, setIsHover] = React.useState(false)
 
+  function removeInterest() {
+    const userId = parseInt(localStorage.getItem('currentUser'))
+    const url = `http://127.0.0.1:8000/api/user/${userId}/categories`;
+
+    fetch(url)
+    .then((response) => {
+        return response.json
+    })
+    .then(data => {
+        console.log(props.name)
+    })
+    
+    // Append category id to URL
+    // Call the DELETE view
+    // Remove from user
+  }
+
   return (
     <>
       <Card variant="outlined" style={{marginTop: '1em'}}>
@@ -25,7 +42,9 @@ const UserCategoryCard = (props) => {
         <Typography style={{textAlign: 'center'}} sx={{ fontSize: 18 }} color="text.secondary" gutterBottom
             onMouseEnter={() => setIsHover(true)}
             onMouseLeave={() => setIsHover(false)}>
-            Remove Interest
+            <button onClick={removeInterest}>
+                Remove Interest
+            </button>
         </Typography>)
         }
         {/* <Typography variant="h5" component="div">
