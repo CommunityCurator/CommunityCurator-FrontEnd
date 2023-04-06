@@ -5,7 +5,6 @@ function JoinGroup(props) {
   const groupId = props.groupId;
   const userId = props.userId;
   const data = {groupId: groupId, userId: userId};
-  const [listGroups, setListGroups] = useState();
 
   useEffect(() => {
     const url = 'http://localhost:8000/api/user/'+userId+'/groups/';
@@ -22,11 +21,7 @@ function JoinGroup(props) {
       return response.json();
     })
     .then((data) => {
-      setListGroups(data.groups);
-      console.log(data.groups);
       const found = (data.groups.some(g => String(g.id) === String(groupId)));
-      console.log(groupId);
-      console.log(found);
       if(found){
         setIsJoined(true);
       }
