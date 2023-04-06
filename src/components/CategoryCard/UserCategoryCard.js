@@ -16,10 +16,14 @@ const UserCategoryCard = (props) => {
 
     fetch(url)
     .then((response) => {
-        return response.json
+        return response.json()
     })
     .then(data => {
-        console.log(props.name)
+        for(var key in data.categories) {
+            if(data.categories[key].name == props.name) {
+                console.log(data.categories[key].id)
+            }
+        }
     })
     
     // Append category id to URL
