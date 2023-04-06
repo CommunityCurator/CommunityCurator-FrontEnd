@@ -12,6 +12,7 @@ function SearchByCity() {
 
   const handleCityChange = event => {
     setCity(event.target.value);
+    console.log(city);
   };
 
   const handleCloseModal = () => {
@@ -19,10 +20,10 @@ function SearchByCity() {
   };
 
   const handleSearch = () => {
-    fetch('http://localhost:8000/api/groups/'+city)
+    fetch('http://localhost:8000/api/search/'+city)
       .then(response => response.json())
       .then(data => {
-        setGroupResults(data.group_city);
+        setGroupResults(data.group_search);
         console.log(data);
         setModalOpen(true);
       })
