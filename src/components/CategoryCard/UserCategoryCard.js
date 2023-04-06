@@ -12,7 +12,7 @@ const UserCategoryCard = (props) => {
 
   function removeInterest() {
     const userId = parseInt(localStorage.getItem('currentUser'))
-    const url = `http://127.0.0.1:8000/api/user/${userId}/categories`;
+    let url = `http://127.0.0.1:8000/api/user/${userId}/categories`;
 
     fetch(url)
     .then((response) => {
@@ -22,13 +22,22 @@ const UserCategoryCard = (props) => {
         for(var key in data.categories) {
             if(data.categories[key].name == props.name) {
                 console.log(data.categories[key].id)
+                url += "/" + data.categories[key].id
+                console.log(url)
             }
         }
     })
-    
-    // Append category id to URL
-    // Call the DELETE view
-    // Remove from user
+
+    fetch(url, {
+        method: "DELETE",
+        headers : {      
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+    })
+    .then((response) => {
+        console.log(url)
+    })
   }
 
   return (
