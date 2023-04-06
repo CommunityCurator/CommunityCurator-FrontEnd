@@ -28,31 +28,54 @@ function JoinGroup(props) {
     });   
   }, []);
 
-  const handleJoinClick = () => {
+  const handleJoinClick = (isJoined) => {
     const url = 'http://localhost:8000/api/user/'+userId+'/groups/'+groupId;
-    console.log(url);
-    fetch(url, {
-      method:'POST',
-      headers:{
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    })
-    .then((response) =>{
-      if(!response.ok){
-        console.log(data);
-        throw new Error("Something went wrong");
-      }
-      return response.json();
-    })
-    .then((data) => {
-      console.log('Successful');
-    });
+    if(isJoined){
+      console.log(url);
+      fetch(url, {
+        method:'DELETE',
+        headers:{
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+      .then((response) =>{
+        if(!response.ok){
+          console.log(data);
+          throw new Error("Something went wrong");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log('Successful');
+      });
+    }
+    else{
+      console.log(url);
+      fetch(url, {
+        method:'POST',
+        headers:{
+          'Content-Type': 'application/json'
+        },
+      })
+      .then((response) =>{
+        if(!response.ok){
+          console.log(data);
+          throw new Error("Something went wrong");
+        }
+        return response.json();
+      })
+      .catch((e) => {
+        console.log(e);
+        console.log('Deleted');
+      });
+    }
+    window.location.reload();
   }
 
   return (
-    <button style={{width: '50%', background: 'blue'}} onClick={handleJoinClick} className="m-2 px-4 py-1 text-sm text-white font-semibold border border-blue-200 hover:text-white hover:bg-blue-600 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2">
-      {isJoined ? 'Joined!' : 'Join Group'}
+    <button style={{width: '50%', background: 'blue'}} onClick={() => handleJoinClick(isJoined)} className="m-2 px-4 py-1 text-sm text-white font-semibold border border-blue-200 hover:text-white hover:bg-blue-600 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2">
+      {isJoined ? 'Leave!' : 'Join Group'}
     </button>
   );
 }
