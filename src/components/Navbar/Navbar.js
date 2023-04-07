@@ -149,6 +149,13 @@ function Navbar() {
                         Home
                     </Link>
                 </li>
+                {isUser ? (
+                  <li className='nav-item'>
+                    <Link to={`/user/${parseInt(localStorage.getItem('currentUser'))}`} className='nav-links' onClick={closeMobileMenu}>
+                        Profile
+                    </Link>
+                  </li>
+                ): ''}
                 <li className='nav-item'>
                     <Link to='/groups' className='nav-links' onClick={closeMobileMenu}>
                         Groups

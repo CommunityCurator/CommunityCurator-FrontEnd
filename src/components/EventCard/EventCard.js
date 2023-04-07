@@ -8,28 +8,25 @@ import CardActions from '@mui/material/CardActions';
 import Typography from '@mui/material/Typography';
 
 
-const GroupCard = (props) => {
-
-  const {city, group_name, description, image} = props.group
- 
+const EventCard = (props) => {
   return (
-    <Card sx={{ maxWidth: 280, height: 350 }}>
+    <Card sx={{ maxWidth: 250, height: 350 }}>
       <CardMedia
         component="img"
-        height="100"
-        image={image}
+        style={{height: '140px'}}
+        image={props.event.images[0].url}
       />
        <CardHeader
-        title={group_name}
-        subheader={city}
+        title={props.event.name}
+        // subheader={city}
       />
       <CardContent>
         <Typography variant="body2" color="text.secondary">
-         {description}
+         {/* {description} */}
         </Typography>
       </CardContent>
     </Card>
   )
 }
 
-export default GroupCard;
+export default EventCard;

@@ -12,6 +12,7 @@ function SearchByCity() {
 
   const handleCityChange = event => {
     setCity(event.target.value);
+    console.log(city);
   };
 
   const handleCloseModal = () => {
@@ -19,10 +20,10 @@ function SearchByCity() {
   };
 
   const handleSearch = () => {
-    fetch('http://localhost:8000/api/groups/'+city)
+    fetch('http://localhost:8000/api/search/'+city)
       .then(response => response.json())
       .then(data => {
-        setGroupResults(data.group_city);
+        setGroupResults(data.group_search);
         console.log(data);
         setModalOpen(true);
       })
@@ -45,16 +46,17 @@ function SearchByCity() {
       <button onClick={handleSearch}>Search</button>
       <Modal open={modalOpen} onClose={handleCloseModal}>
         <div style={{ backgroundColor: 'white', padding: '1rem' }}>
-        <h5>Groups found in {city}</h5>
         <Grid style={{width: '80%', margin: '0px auto'}} container spacing={2}>
-          {groupResults ? groupResults.map((group) => {
+          {groupResults.length >0 ? groupResults.map((group) => {
             return (
+            <>
             <Grid item xs={3} >
                 <Link to={"/groups/" + group.id}>
                 <Cards groupName={group.group_name} city={group.city} state={group.state}
                         image={group.image}/>
                 </Link>
-            </Grid>)
+            </Grid>
+            </>)
             }) : (
             <p>No groups found in {city}</p>
           )}

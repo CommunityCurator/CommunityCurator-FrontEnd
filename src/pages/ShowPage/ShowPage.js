@@ -14,14 +14,20 @@ import CategoryCard from '../../components/CategoryCard/CatgegoryCard';
 import AddGroup from '../../components/AddGroup';
 import SearchByCity from './SearchByCity';
 import { Link } from 'react-router-dom';
-
-
+import RecommendGroupCard from '../../components/RecommendGroupCard/RecommendGroupCard';
+import LinearProgress from '@mui/material/LinearProgress';
+import EventCard from '../../components/EventCard/EventCard';
+import UserCategoryCard from '../../components/CategoryCard/UserCategoryCard';
 
 
 export default function ShowPage () {
 
   const [alertError, setAlertError] = useState(false)
   const [userInfo, setUserInfo] = useState(null)
+  const [groups, setGroups] = useState(null)
+  const [loadGroups, setLoadGroups] = useState(false)
+  const [loadEvents, setLoadEvents] = useState(false)
+  const [events, setEvents] = useState([])
 
   useEffect(() => {
     const userId = parseInt(localStorage.getItem('currentUser'))
@@ -37,6 +43,65 @@ export default function ShowPage () {
       setUserInfo(data.user)
 		})
 	},[])
+
+  useEffect(() => {
+    setLoadGroups(true)
+    const userId = parseInt(localStorage.getItem('currentUser'))
+    const location = localStorage.getItem('location')
+		fetch(`http://127.0.0.1:8000/api/groups/${location}/${userId}`)
+		.then(response => {
+			if(response.status > 400) {
+			 setAlertError(true)
+			 return;
+			}
+			return response.json();
+		})
+		.then(data => {
+      const arr = data.group_city_user.slice(0,4);
+      setGroups(arr)
+          setLoadGroups(false)
+		})
+	},[groups])
+
+  useEffect(() => {
+    const userId = parseInt(localStorage.getItem('currentUser'))
+		fetch(`http://127.0.0.1:8000/api/user/${userId}`)
+		.then(response => {
+			if(response.status >= 400) {
+			 setAlertError(true)  
+			 return;
+			}
+			return response.json();
+		})
+		.then(data => {
+      setUserInfo(data.user)
+		})
+	},[])
+
+  useEffect(() => {
+    let pixel = ""
+    setLoadEvents(true)
+    if(localStorage.getItem('location') === 'Hialeah') {
+      pixel = `https://app.ticketmaster.com/discovery/v2/events.json?apikey=CX2QnrsxnXQY1zGYN1qkIi980HOGy5LI&city=Miami&`
+    } else {
+      pixel = `https://app.ticketmaster.com/discovery/v2/events.json?apikey=CX2QnrsxnXQY1zGYN1qkIi980HOGy5LI&city=${localStorage.getItem('location')}&size=1`
+    }
+    
+    fetch(pixel).then(response => {
+      if(response.status >= 400) {
+        setAlertError(true)  
+        return;
+       }
+       return response.json();
+    }).then(data => {
+      let arr = data._embedded.events
+      arr = [...new Map(arr.map(item =>
+        [item['name'], item])).values()]
+
+      arr = arr.reverse().slice(0,5);
+      setEvents(arr)
+    })
+  },[])
 
   function newGroup(name, city, state, description){
     const url = 'http://localhost:8000/api/groups/';
@@ -79,72 +144,133 @@ export default function ShowPage () {
               </Alert>
             </Stack>
 			    </Snackbar>
-            <div className="showpage">
-              {userInfo ? (
-                <>
-                  <div className="welcome-header">
+          <div className="showpage">
+            {userInfo ? (
+              <Grid style={{marginLeft: '2em'}} container spacing={2}>
+                <Grid item xs={3}>
+
+                <div className="welcome-header">
                   <Typography variant="h4" gutterBottom>
                     Welcome {userInfo.first_name} {userInfo.last_name}!
                   </Typography>
                 </div>
 
                 <div style={{height: '3em'}}></div>
-                <Grid style={{marginLeft: '2em'}} container spacing={2}>
-                  <Grid item xs={3}>
-                    <Typography variant="h7" gutterBottom>
-                      Have an idea for a new group? Add it here!
-                    </Typography>
+                  
+                  <div style={{height: '1.5em'}}></div>
+                  <SearchByCity/>
+                  <div style={{height: '1.5em'}}></div>
+
+                  <Typography variant="h7" gutterBottom>
+                    Have an idea for a new group? Add it here!
+                  </Typography>
+                  <div style={{height: '.5em'}}></div>
+                  <div>
+                    <AddGroup newGroup={newGroup}/>
+                  </div> 
+
+                  <div style={{height: '1.5em'}}></div>  
+                  <Typography variant="h5" gutterBottom>
+                    Your Groups
+                  </Typography>  
+                  <div style={{height: '1.5em'}}></div> 
+                  <div style={{display: 'flex', flexDirection: 'column'}}>
+                    {userInfo.groups.length > 0 ? (
+                      userInfo.groups.map(group => {
+                        return (
+                          <Grid >
+                            <Link to={"/groups/" + group.id}>
+                              <MyGroupCard group={group}></MyGroupCard>
+                            </Link>
+                          </Grid>
+                        )
+                      })) : ''}
+                  </div>
+
+                  <div style={{height: '1.5em'}}></div>  
+                  <Typography variant="h5" gutterBottom>
+                    Your Interests
+                  </Typography>  
+                  <div style={{height: '1.5em'}}></div> 
+                  <div style={{display: 'flex', flexDirection: 'column'}}>
+                    {userInfo.categories.length > 0 ? (
+                      userInfo.categories.map(category => {
+                        return (
+                         
+                            <UserCategoryCard name={category.name} />
+                      
+                        )
+                      })) : ''}
+                  </div>
+                  
+                </Grid>
+                <Grid item xs={1}></Grid>
+                <Grid item xs={8}>
+                  <div style={{height: '50px'}}></div>  
+                  <Typography variant="h5" gutterBottom style={{marginBottom: '.8em'}}>
+                    Recommend groups in your area
+                  </Typography>  
+                  
+                  {loadGroups && !groups ? (
+                    <>
+                      <div style={{height: '50px'}}></div> 
+                      <LinearProgress color="secondary" />
+                    </>
                     
-                    <div style={{height: '1.5em'}}></div>
-                    <SearchByCity/>
-                    <div style={{height: '1.5em'}}></div>
+                  ): "" }
+                  
+                  <Grid style={{width: '100%', paddingRight: '5em'}} container spacing={1}>
+                    {groups ? (
+                      groups.map(group => {  
+                        return (
+                          <Grid item xs={3}>
+                            <Link to={"/groups/" + group.id}>
+                            <RecommendGroupCard group={group}></RecommendGroupCard>
+                            </Link>
+                          </Grid>
+                          )
+                      })
+                    ): ''}
+                    
+                  </Grid>
+                  
+                  <div style={{height: '50px'}}></div>  
+                  <Typography variant="h5" gutterBottom style={{marginBottom: '.8em'}}>
+                    Recommend events in your area.
+                  </Typography>  
 
-                    <div>
-                      <AddGroup newGroup={newGroup}/>
-                    </div> 
-
-                    <div style={{height: '1.5em'}}></div>  
-                    <Typography variant="h5" gutterBottom>
-                      Your Groups
-                    </Typography>  
-                    <div style={{height: '1.5em'}}></div> 
-                    <div style={{display: 'flex', flexDirection: 'column'}}>
-                      {userInfo.groups.length > 0 ? (
-                        userInfo.groups.map(group => {
+                  {loadEvents && !events ? (
+                    <>
+                      <div style={{height: '50px'}}></div> 
+                      <LinearProgress color="secondary" />
+                    </>
+                    
+                  ): "" }
+                  
+                  <Grid style={{width: '100%', paddingRight: '5em'}} container spacing={1}>
+                  {events ? (
+                      events.map((event, index) => {  
+                        if(index !== 3) {
                           return (
-                            <Grid >
-                              <Link to={"/groups/" + group.id}>
-                                <MyGroupCard group={group}></MyGroupCard>
-                              </Link>
+                            <Grid item xs={3} style={{cursor: 'pointer'}}>
+                              <a target="_blank" href={`${event.url}`}>
+                              <EventCard event={event}></EventCard>
+                              </a>
                             </Grid>
                           )
-                        })) : ''}
-                    </div>
-
-                    <div style={{height: '1.5em'}}></div>  
-                    <Typography variant="h5" gutterBottom>
-                      Your Interests
-                    </Typography>  
-                    <div style={{height: '1.5em'}}></div> 
-                    <div style={{display: 'flex', flexDirection: 'column'}}>
-                      {userInfo.categories.length > 0 ? (
-                        userInfo.categories.map(category => {
-                          return (
-                            <Grid item xs={7}>
-										          <CategoryCard name={category.name} />
-									          </Grid>
-                          )
-                        })) : ''}
-                    </div>
-                    
-                  </Grid>
-                  <Grid item xs={9}>
-                   
+                        } else {
+                          return
+                        }
+                      })
+                    ): ''}
+                      
+                        
                   </Grid>
                 </Grid>
-                </>
-              ): ''}
-            </div>
+              </Grid>
+              
+            ): ''}
+          </div>
         </>
     )
 }

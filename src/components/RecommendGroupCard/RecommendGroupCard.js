@@ -8,15 +8,15 @@ import CardActions from '@mui/material/CardActions';
 import Typography from '@mui/material/Typography';
 
 
-const GroupCard = (props) => {
+const RecommendGroupCard = (props) => {
 
   const {city, group_name, description, image} = props.group
  
   return (
-    <Card sx={{ maxWidth: 280, height: 350 }}>
+    <Card sx={{ maxWidth: 250, height: 330 }}>
       <CardMedia
         component="img"
-        height="100"
+        style={{height: '140px'}}
         image={image}
       />
        <CardHeader
@@ -32,4 +32,4 @@ const GroupCard = (props) => {
   )
 }
 
-export default GroupCard;
+export default RecommendGroupCard;
