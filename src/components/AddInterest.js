@@ -1,18 +1,37 @@
 import { Button } from "react-bootstrap/Button"
 import Modal from 'react-bootstrap/Modal'
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import CategoryCard from "./CategoryCard/CatgegoryCard";
+import { ThemeContext } from "@emotion/react";
 
 export default function AddInterest(){
     const [show, setShow] = useState(false);
+    const [list, setList] = useState();
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    
+    function getCategories() {
+        const url = "http://127.0.0.1:8000/api/categories";
+
+        fetch(url)
+        .then((response) => {
+            return response.json()
+        })
+        .then((data) => {
+            console.log(data)
+            setList(data)
+        })
+    }
+
+    function clicked() {
+        setShow(true)
+        getCategories();
+    }
 
     return(
         <>
-        <button style={{width: '100%', background: 'purple'}} onClick={handleShow} className="m-2 px-4 py-1 text-lg text-white font-semibold border border-purple-200 hover:text-white hover:bg-purple-600 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-offset-2">
+        <button style={{width: '100%', background: 'purple'}} onClick={clicked} className="m-2 px-4 py-1 text-lg text-white font-semibold border border-purple-200 hover:text-white hover:bg-purple-600 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-offset-2">
             + Add New Interest
         </button>
 
