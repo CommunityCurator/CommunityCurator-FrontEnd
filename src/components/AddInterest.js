@@ -6,7 +6,7 @@ import { ThemeContext } from "@emotion/react";
 
 export default function AddInterest(){
     const [show, setShow] = useState(false);
-    const [list, setList] = useState();
+    const [list, setList] = useState([]);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -20,7 +20,14 @@ export default function AddInterest(){
         })
         .then((data) => {
             console.log(data)
-            setList(data)
+
+            var array = []
+            for (var key in data.categories) {
+                console.log(data.categories[key])
+                array.push(data.categories[key])            
+            }
+
+            setList(array)
         })
     }
 
@@ -42,9 +49,12 @@ export default function AddInterest(){
             keyboard={false}
         >
             <Modal.Header closeButton>
+                <Modal.Title>Add New Interest</Modal.Title>
             </Modal.Header>
                 <Modal.Body>
-
+                    {list.map(cat => {
+                        return <CategoryCard name={cat.name} />
+                    })}
                 </Modal.Body>
             <Modal.Footer>
                 <button className="shadow bg-slate-400 hover:bg-slate-300 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded" 
