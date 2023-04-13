@@ -27,6 +27,9 @@ export default function ShowPage () {
   const [loadEvents, setLoadEvents] = useState(false)
   const [events, setEvents] = useState([])
 
+  const [recGroups, setRecGroups] = useState([])
+  const [loadRec, setloadRec] = useState(false)
+
   useEffect(() => {
     const userId = parseInt(localStorage.getItem('currentUser'))
 		fetch(`http://127.0.0.1:8000/api/user/${userId}`)
@@ -99,6 +102,24 @@ export default function ShowPage () {
       arr = arr.reverse().slice(0,5);
       setEvents(arr)
     })
+  },[])
+
+  useEffect(() => {
+    setloadRec(true);
+    const userId = parseInt(localStorage.getItem('currentUser'))
+		fetch(`http://127.0.0.1:8000/api/suggest/${userId}`)
+		.then(response => {
+			if(response.status > 400) {
+			 setAlertError(true)
+			 return;
+			}
+			return response.json();
+		})
+		.then(data => {
+      const arr = data.groups.slice(0,4);
+      setRecGroups(arr);
+      loadRec(false);
+		})
   },[])
 
   const userId = localStorage.getItem('currentUser');
@@ -232,6 +253,34 @@ export default function ShowPage () {
                   <Grid style={{width: '100%', paddingRight: '5em'}} container spacing={1}>
                     {groups ? (
                       groups.map(group => {  
+                        return (
+                          <Grid item xs={3}>
+                            <Link to={"/groups/" + group.id}>
+                            <RecommendGroupCard group={group}></RecommendGroupCard>
+                            </Link>
+                          </Grid>
+                          )
+                      })
+                    ): ''}
+                    
+                  </Grid>
+
+                  <div style={{height: '50px'}}></div>  
+                  <Typography variant="h5" gutterBottom style={{marginBottom: '.8em'}}>
+                    Recommend groups based on interests
+                  </Typography>  
+                  
+                  {loadRec && !recGroups ? (
+                    <>
+                      <div style={{height: '50px'}}></div> 
+                      <LinearProgress color="secondary" />
+                    </>
+                    
+                  ): "" }
+                  
+                  <Grid style={{width: '100%', paddingRight: '5em'}} container spacing={1}>
+                    {recGroups ? (
+                      recGroups.map(group => {  
                         return (
                           <Grid item xs={3}>
                             <Link to={"/groups/" + group.id}>
