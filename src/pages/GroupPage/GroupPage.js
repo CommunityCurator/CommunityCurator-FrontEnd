@@ -15,6 +15,11 @@ import { useParams, Link } from 'react-router-dom';
 import CategoryCard from '../../components/CategoryCard/CatgegoryCard'
 import JoinGroupButton from './JoinGroup';
 import SearchByCity from '../ShowPage/SearchByCity';
+import Comments from "../../components/comments/Comments";
+import Icon_Thumbdown from '../../Icon_thumbdown';
+import Icon_Thumbup from '../../Icon_thumbup';
+
+
 
 export default function GroupPage () {
 
@@ -51,6 +56,8 @@ export default function GroupPage () {
             <div className="welcome-header">
               <Typography variant="h4" gutterBottom>
                 Welcome {group.group_name} group!
+                
+
                 <div>
                 <JoinGroupButton userId={userId} groupId={id}/>
                 </div>
@@ -84,6 +91,10 @@ export default function GroupPage () {
               <div style={{height: '50px'}}></div>  
               <Typography variant="h5" gutterBottom style={{marginBottom: '.8em'}}>
                 <img src={group.image} alt=""></img>
+                <div className='Feedback'>
+                  <Icon_Thumbup />
+                  <Icon_Thumbdown />
+                </div>
               </Typography>  
               
               <Grid style={{width: '100%', paddingRight: '5em'}} container spacing={1}>
@@ -94,7 +105,12 @@ export default function GroupPage () {
               <Typography variant="h5" gutterBottom style={{marginBottom: '.8em'}}>
                 Posts
               </Typography>  
+              <Comments
+                commentsUrl="http://localhost:3004/comments"
+                currentUserId="1"
+              />
 
+      
               
               <Grid style={{width: '100%', paddingRight: '5em'}} container spacing={1}>
                   

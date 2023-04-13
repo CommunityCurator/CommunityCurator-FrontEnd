@@ -14,7 +14,7 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import SearchByCity from './ShowPage/SearchByCity';
-
+import Comments from "../components/comments/Comments";
 
 export default function Groups(){
   const [list, setList] = useState();

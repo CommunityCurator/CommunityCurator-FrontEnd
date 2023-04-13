@@ -14,7 +14,6 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
 
-
 function Cards(props) {
   return (
     <Card variant="outlined">

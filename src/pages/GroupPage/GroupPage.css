@@ -2,3 +2,9 @@
   display: grid;
   grid-template-rows: auto;
   grid-template-columns: repeat(4, 25%); }
+
+  .Feedback {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+  align-items: center;}
