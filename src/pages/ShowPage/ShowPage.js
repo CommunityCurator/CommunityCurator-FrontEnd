@@ -7,10 +7,8 @@ import Typography from '@mui/material/Typography';
 import './ShowPage.css'
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import MyGroupCard from '../../components/MyGroupCard/MyGroupCard';
-import CategoryCard from '../../components/CategoryCard/CatgegoryCard';
 import AddGroup from '../../components/AddGroup';
 import SearchByCity from './SearchByCity';
 import { Link } from 'react-router-dom';
@@ -61,7 +59,7 @@ export default function ShowPage () {
       setGroups(arr)
           setLoadGroups(false)
 		})
-	},[groups])
+	},[])
 
   useEffect(() => {
     const userId = parseInt(localStorage.getItem('currentUser'))
@@ -102,6 +100,9 @@ export default function ShowPage () {
       setEvents(arr)
     })
   },[])
+
+  const userId = localStorage.getItem('currentUser');
+  const int_url = `/user/${userId}/interests`;
 
   function newGroup(name, city, state, description){
     const url = 'http://localhost:8000/api/groups/';
@@ -202,7 +203,16 @@ export default function ShowPage () {
                         )
                       })) : ''}
                   </div>
-                  
+                  <div>
+                  <Box mt={2} textAlign="center">
+                    <Button 
+                      variant='contained' 
+                      onClick={() => window.location.href = int_url}
+                      >
+                      Add new interests
+                    </Button>
+                  </Box>
+                  </div>
                 </Grid>
                 <Grid item xs={1}></Grid>
                 <Grid item xs={8}>

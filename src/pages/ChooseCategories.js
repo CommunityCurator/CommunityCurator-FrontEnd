@@ -9,8 +9,8 @@ import { Box } from '@material-ui/core';
 export default function ChooseCategories(){
 
     const [list, setList] = useState();
-    const url = 'http://localhost:8000/api/categories/';
     const userID = localStorage.getItem('currentUser');
+    const url = 'http://localhost:8000/api/categories/notjoined/'+userID;
     const home_url = '/user/'+userID;
   
     useEffect(() => {
@@ -24,7 +24,6 @@ export default function ChooseCategories(){
         })
   
     }, []);
-
   
     return(
       <>
@@ -54,7 +53,7 @@ export default function ChooseCategories(){
               >
               Continue to Home
             </Button>
-          </Box>
+      </Box>
       </>
     );
 }

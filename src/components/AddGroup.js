@@ -1,6 +1,6 @@
-import { Button } from "react-bootstrap/Button"
 import Modal from 'react-bootstrap/Modal'
 import { useState } from "react"
+import Button from '@mui/material/Button';
 
 export default function AddGroup(props){
     const [name, setName] = useState(props.name);
@@ -17,9 +17,12 @@ export default function AddGroup(props){
 
     return(
         <>
-        <button style={{width: '100%', background: 'purple'}} onClick={handleShow} className="m-2 px-4 py-1 text-lg text-white font-semibold border border-purple-200 hover:text-white hover:bg-purple-600 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-offset-2">
+        <Button 
+             className="m-2 px-4 py-1 text-lg text-white font-semibold border border-blue-200 hover:text-white hover:bg-blue-200 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-200 focus:ring-offset-2"
+            variant='contained' 
+            onClick={handleShow}>
             + Create new group 
-        </button>
+        </Button>
 
         <Modal
             show={show}
