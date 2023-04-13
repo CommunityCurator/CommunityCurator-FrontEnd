@@ -218,7 +218,7 @@ function Navbar() {
                 name="passwordValue"
                 control={control}
                 render={({ field: { onChange, value} }) => (
-                  <TextField onChange={onChange} value={value} required fullWidth id="filled-basic" label="Password" variant="filled" />
+                  <TextField onChange={onChange} value={value} type="password" required fullWidth id="filled-basic" label="Password" variant="filled" />
                 )}
               />
             </form>

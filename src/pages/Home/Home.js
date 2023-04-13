@@ -103,7 +103,7 @@ const Home = () => {
 			}
 		
 		})
-	},[groups])
+	},[])
 
 	useEffect(() => {
 		fetch('http://127.0.0.1:8000/api/categories/')
@@ -121,7 +121,7 @@ const Home = () => {
 			}
 			setCategories(tempArray)
 		})
-	},[categories])
+	},[])
 
 	useEffect(() => {
 		if(categories && groups) {
