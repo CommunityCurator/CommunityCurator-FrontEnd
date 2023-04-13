@@ -48,7 +48,7 @@ const AddCategoryCard = (props) => {
 
   return (
     <>
-      <Card variant="outlined" style={{marginTop: '1em'}}>
+      <Card variant="outlined" style={{margin: '1em'}}>
       <CardContent>
         {isHover == false && (        
         <Typography style={{textAlign: 'center'}} sx={{ fontSize: 18 }} color="text.secondary" gutterBottom
