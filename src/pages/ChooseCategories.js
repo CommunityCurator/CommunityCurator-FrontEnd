@@ -3,6 +3,8 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import SearchByCity from './ShowPage/SearchByCity';
 import AddCategoryCard from '../components/CategoryCard/AddCategoryCard';
+import { Button } from '@mui/material';
+import { Box } from '@material-ui/core';
 
 export default function ChooseCategories(){
 
@@ -45,6 +47,14 @@ export default function ChooseCategories(){
           )
         }) : null}
       </Grid>
+      <Box mt={2} textAlign="center">
+            <Button 
+              variant='contained' 
+              onClick={() => window.location.href = home_url}
+              >
+              Continue to Home
+            </Button>
+          </Box>
       </>
     );
 }
