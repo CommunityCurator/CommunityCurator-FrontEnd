@@ -16,7 +16,7 @@ import RecommendGroupCard from '../../components/RecommendGroupCard/RecommendGro
 import LinearProgress from '@mui/material/LinearProgress';
 import EventCard from '../../components/EventCard/EventCard';
 import UserCategoryCard from '../../components/CategoryCard/UserCategoryCard';
-
+import AddInterest from '../../components/AddInterest';
 
 export default function ShowPage () {
 
@@ -223,17 +223,10 @@ export default function ShowPage () {
                       
                         )
                       })) : ''}
-                  </div>
                   <div>
-                  <Box mt={2} textAlign="center">
-                    <Button 
-                      variant='contained' 
-                      onClick={() => window.location.href = int_url}
-                      >
-                      Add new interests
-                    </Button>
-                  </Box>
-                  </div>
+                    <AddInterest/>
+                  </div>                   
+                </div>  
                 </Grid>
                 <Grid item xs={1}></Grid>
                 <Grid item xs={8}>
