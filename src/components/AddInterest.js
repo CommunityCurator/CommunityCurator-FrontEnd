@@ -13,22 +13,34 @@ export default function AddInterest(){
 
     function getCategories() {
         const url = "http://127.0.0.1:8000/api/categories";
+        const userId = parseInt(localStorage.getItem('currentUser'))
+        let uUrl = `http://127.0.0.1:8000/api/user/${userId}/categories`;
 
         fetch(url)
         .then((response) => {
             return response.json()
         })
         .then((data) => {
-            console.log(data)
-
-            var array = []
+            var array = [];
             for (var key in data.categories) {
-                console.log(data.categories[key])
                 array.push(data.categories[key])            
             }
 
-            setList(array)
-        })
+            fetch(uUrl)
+            .then((response) => {
+                return response.json()
+            })
+            .then((data) => {
+                for(var key in data.categories) {
+                    for (let index = 0; index < array.length; index++) {
+                        if(array[index].id == data.categories[key].id) {
+                            array.splice(index, 1)
+                        }
+                    }
+                }
+                setList(array)
+            })
+        })         
     }
 
     function clicked() {
