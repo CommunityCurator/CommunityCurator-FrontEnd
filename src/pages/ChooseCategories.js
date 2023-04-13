@@ -3,6 +3,7 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import SearchByCity from './ShowPage/SearchByCity';
 import AddCategoryCard from '../components/CategoryCard/AddCategoryCard';
+import { Button } from '@mui/material';
 
 export default function ChooseCategories(){
 
@@ -45,6 +46,14 @@ export default function ChooseCategories(){
           )
         }) : null}
       </Grid>
+      <Typography style={{textAlign: 'center'}} sx={{ fontSize: 18 }} color="text.secondary" gutterBottom>
+            <Button 
+              variant='contained' 
+              onClick={() => window.location.href = home_url}
+              >
+              Continue to Home
+            </Button>
+        </Typography>
       </>
     );
 }
