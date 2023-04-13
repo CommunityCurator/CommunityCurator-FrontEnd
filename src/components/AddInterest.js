@@ -1,8 +1,9 @@
-import { Button } from "react-bootstrap/Button"
 import Modal from 'react-bootstrap/Modal'
 import { useEffect, useState } from "react"
 import CategoryCard from "./CategoryCard/CatgegoryCard";
 import { ThemeContext } from "@emotion/react";
+import Button from '@mui/material/Button';
+import AddCategoryCard from "./CategoryCard/AddCategoryCard";
 
 export default function AddInterest(){
     const [show, setShow] = useState(false);
@@ -50,9 +51,12 @@ export default function AddInterest(){
 
     return(
         <>
-        <button style={{width: '100%', background: 'purple'}} onClick={clicked} className="m-2 px-4 py-1 text-lg text-white font-semibold border border-purple-200 hover:text-white hover:bg-purple-600 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-offset-2">
+        <Button 
+             className="m-2 px-4 py-1 text-lg text-white font-semibold border border-blue-200 hover:text-white hover:bg-blue-200 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-200 focus:ring-offset-2"
+            variant='contained' 
+            onClick={clicked}>
             + Add New Interest
-        </button>
+        </Button>
 
         <Modal
             show={show}
@@ -65,7 +69,7 @@ export default function AddInterest(){
             </Modal.Header>
                 <Modal.Body>
                     {list.map(cat => {
-                        return <CategoryCard name={cat.name} />
+                        return <AddCategoryCard name={cat.name} />
                     })}
                 </Modal.Body>
             <Modal.Footer>
