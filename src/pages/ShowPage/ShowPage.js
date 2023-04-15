@@ -257,34 +257,6 @@ export default function ShowPage () {
                     ): ''}
                     
                   </Grid>
-
-                  <div style={{height: '50px'}}></div>  
-                  <Typography variant="h5" gutterBottom style={{marginBottom: '.8em'}}>
-                    Recommend groups based on interests
-                  </Typography>  
-                  
-                  {loadRec && !recGroups ? (
-                    <>
-                      <div style={{height: '50px'}}></div> 
-                      <LinearProgress color="secondary" />
-                    </>
-                    
-                  ): "" }
-                  
-                  <Grid style={{width: '100%', paddingRight: '5em'}} container spacing={1}>
-                    {recGroups ? (
-                      recGroups.map(group => {  
-                        return (
-                          <Grid item xs={3}>
-                            <Link to={"/groups/" + group.id}>
-                            <RecommendGroupCard group={group}></RecommendGroupCard>
-                            </Link>
-                          </Grid>
-                          )
-                      })
-                    ): ''}
-                    
-                  </Grid>
                   
                   <div style={{height: '50px'}}></div>  
                   <Typography variant="h5" gutterBottom style={{marginBottom: '.8em'}}>
@@ -318,6 +290,35 @@ export default function ShowPage () {
                       
                         
                   </Grid>
+                  
+                  <div style={{height: '50px'}}></div>  
+                  <Typography variant="h5" gutterBottom style={{marginBottom: '.8em'}}>
+                    Recommend groups based on interests
+                  </Typography>  
+                  
+                  {loadRec && !recGroups ? (
+                    <>
+                      <div style={{height: '50px'}}></div> 
+                      <LinearProgress color="secondary" />
+                    </>
+                    
+                  ): "" }
+                  
+                  <Grid style={{width: '100%', paddingRight: '5em'}} container spacing={1}>
+                    {recGroups ? (
+                      recGroups.map(group => {  
+                        return (
+                          <Grid item xs={3}>
+                            <Link to={"/groups/" + group.id}>
+                            <RecommendGroupCard group={group}></RecommendGroupCard>
+                            </Link>
+                          </Grid>
+                          )
+                      })
+                    ): ''}
+                    
+                  </Grid>
+
                 </Grid>
               </Grid>
               
