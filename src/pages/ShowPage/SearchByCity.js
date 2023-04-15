@@ -4,6 +4,9 @@ import Modal from '@material-ui/core/Modal';
 import Grid from '@mui/material/Grid';
 import Cards from '../../components/Cards/Cards';
 import { Link } from 'react-router-dom';
+import InputAdornment from '@mui/material/InputAdornment';
+import SearchIcon from '@mui/icons-material/Search';
+
 
 function SearchByCity() {
   const [city, setCity] = useState('');
@@ -33,7 +36,7 @@ function SearchByCity() {
   };
 
   return (
-    <div>
+    <div style={{display: 'flex'}}>
       <TextField
         type="search"
         style={{ width: '100%' }}
@@ -42,8 +45,14 @@ function SearchByCity() {
         variant="outlined"
         value={city}
         onChange={handleCityChange}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <SearchIcon style={{cursor: 'pointer'}} onClick={handleSearch}/>
+            </InputAdornment>
+          ),
+        }}
       />
-      <button onClick={handleSearch}>Search</button>
       <Modal open={modalOpen} onClose={handleCloseModal}>
         <div style={{ backgroundColor: 'white', padding: '1rem' }}>
         <Grid style={{width: '80%', margin: '0px auto'}} container spacing={2}>

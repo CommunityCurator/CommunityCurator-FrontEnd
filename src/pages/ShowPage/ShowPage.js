@@ -177,9 +177,8 @@ export default function ShowPage () {
                   </Typography>
                 </div>
 
-                <div style={{height: '3em'}}></div>
+                  <div style={{height: '2em'}}></div>
                   
-                  <div style={{height: '1.5em'}}></div>
                   <SearchByCity/>
                   <div style={{height: '1.5em'}}></div>
 
