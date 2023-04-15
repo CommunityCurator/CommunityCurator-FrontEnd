@@ -8,7 +8,6 @@ import Typography from '@mui/material/Typography';
 
 
 const UserCategoryCard = (props) => {
-  const [isHover, setIsHover] = React.useState(false)
 
   function removeInterest() {
     const userId = parseInt(localStorage.getItem('currentUser'))
@@ -42,37 +41,15 @@ const UserCategoryCard = (props) => {
 
   return (
     <>
-      <Card variant="outlined" style={{marginTop: '1em'}}>
-      <CardContent>
-        {isHover == false && (        
-        <Typography style={{textAlign: 'center'}} sx={{ fontSize: 18 }} color="text.secondary" gutterBottom
-                onMouseEnter={() => setIsHover(true)}
-                onMouseLeave={() => setIsHover(false)}>
-            {props.name}
-        </Typography>)}
-
-        {isHover && (
-        <Typography style={{textAlign: 'center'}} sx={{ fontSize: 18 }} color="text.secondary" gutterBottom
-            onMouseEnter={() => setIsHover(true)}
-            onMouseLeave={() => setIsHover(false)}>
-            <button onClick={removeInterest}>
-                Remove Interest
-            </button>
-        </Typography>)
-        }
-        {/* <Typography variant="h5" component="div">
-          
-        </Typography>
-        <Typography sx={{ mb: 1.5 }} color="text.secondary">
-          
-        </Typography>
-        <Typography variant="body2">
-        
-        </Typography> */}
-      </CardContent>
-      {/* <CardActions>
-        <Button size="small">Learn More</Button>
-      </CardActions> */}
+      <Card variant="outlined" style={{marginTop: '0.5em'}}>
+        <CardContent>
+          <div style={{display: 'flex', justifyContent: 'space-between'}}>
+            <Typography sx={{ fontSize: 18 }} color="text.secondary" gutterBottom>
+                {props.name}
+            </Typography>
+            <Button onClick={removeInterest} size="small" variant="outlined">Remove</Button>
+          </div>
+        </CardContent>
       </Card>
     </>
   )
