@@ -23,6 +23,7 @@ export default function ShowPage () {
   const [alertError, setAlertError] = useState(false)
   const [userInfo, setUserInfo] = useState(null)
   const [groups, setGroups] = useState(null)
+  const [categories, setCategories] = useState([])
   const [loadGroups, setLoadGroups] = useState(false)
   const [loadEvents, setLoadEvents] = useState(false)
   const [events, setEvents] = useState([])
@@ -41,6 +42,7 @@ export default function ShowPage () {
 			return response.json();
 		})
 		.then(data => {
+      setCategories(data.user.categories)
       setUserInfo(data.user)
 		})
 	},[])
@@ -60,7 +62,7 @@ export default function ShowPage () {
 		.then(data => {
       const arr = data.group_city_user.slice(0,4);
       setGroups(arr)
-          setLoadGroups(false)
+      setLoadGroups(false)
 		})
 	},[])
 
@@ -123,7 +125,6 @@ export default function ShowPage () {
   },[])
 
   const userId = localStorage.getItem('currentUser');
-  const int_url = `/user/${userId}/interests`;
 
   function newGroup(name, city, state, description){
     const url = 'http://localhost:8000/api/groups/';
@@ -151,6 +152,32 @@ export default function ShowPage () {
       console.log(e);
     });
   }
+
+  const handleDeleteCategory = (id) => {
+    const userId = parseInt(localStorage.getItem('currentUser'))
+    fetch(`http://127.0.0.1:8000/api/user/${userId}/categories/${id}`, {
+      method: "DELETE",
+        headers : {      
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+      return response.json();
+    })
+    .then(data => {
+      let cloneCategories = [...categories]
+      cloneCategories = cloneCategories.filter(category => {
+        if(category.id !== id) {
+          return category
+        }
+      })
+      
+      setCategories(cloneCategories)
+
+    })
+  }
+
     return (
         <>
           <Snackbar
@@ -214,12 +241,10 @@ export default function ShowPage () {
                   </Typography>  
                   <div style={{height: '1.5em'}}></div> 
                   <div style={{display: 'flex', flexDirection: 'column'}}>
-                    {userInfo.categories.length > 0 ? (
-                      userInfo.categories.map(category => {
+                    {categories.length > 0 ? (
+                      categories.map((category, index) => {
                         return (
-                         
-                            <UserCategoryCard name={category.name} />
-                      
+                          <UserCategoryCard key={`${category}${index}`} handleDeleteCategory={handleDeleteCategory} category={category} />
                         )
                       })) : ''}
                   <div>
