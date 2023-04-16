@@ -25,10 +25,10 @@ export default function ShowPage () {
   const [type, setType] = useState('')
   const [userInfo, setUserInfo] = useState(null)
   const [groups, setGroups] = useState(null)
+  const [events, setEvents] = useState(null)
   const [categories, setCategories] = useState([])
   const [loadGroups, setLoadGroups] = useState(false)
   const [loadEvents, setLoadEvents] = useState(false)
-  const [events, setEvents] = useState([])
 
   const [recGroups, setRecGroups] = useState([])
   const [loadRec, setloadRec] = useState(false)
@@ -55,16 +55,18 @@ export default function ShowPage () {
     const location = localStorage.getItem('location')
 		fetch(`http://127.0.0.1:8000/api/groups/${location}/${userId}`)
 		.then(response => {
-			if(response.status > 400) {
+			if(response.status >= 400) {
         setLoadGroups(false)
 			  return;
 			}
 			return response.json();
 		})
 		.then(data => {
-      const arr = data.group_city_user.slice(0,4);
-      setGroups(arr)
-      setLoadGroups(false)
+      setTimeout(() => {
+        const arr = data.group_city_user.slice(0,4);
+        setGroups(arr)
+        setLoadGroups(false)
+      }, 1000)  
 		})
 	},[])
 
@@ -86,8 +88,11 @@ export default function ShowPage () {
           [item['name'], item])).values()]
   
         arr = arr.reverse().slice(0,5);
-        setLoadEvents(false)
-        setEvents(arr)
+
+        setTimeout(() => {
+          setLoadEvents(false)
+          setEvents(arr)
+        }, 1000)
       })
     }
    
@@ -270,9 +275,11 @@ export default function ShowPage () {
                           )
                       })
                     ): (
-                      <Typography style={{display: 'flex', justifyContent: 'center', width: '100%'}} variant="h6" gutterBottom>
+                      !loadGroups ? (
+                        <Typography style={{display: 'flex', justifyContent: 'center', width: '100%'}} variant="h6" gutterBottom>
                         Error: No groups found
                       </Typography>
+                      ) : ''
                     )}  
                   </Grid>
                   
@@ -305,9 +312,11 @@ export default function ShowPage () {
                       }
                     })
                     ): (
-                      <Typography style={{display: 'flex', justifyContent: 'center', width: '100%'}} variant="h6" gutterBottom>
+                      !loadEvents ? (
+                        <Typography style={{display: 'flex', justifyContent: 'center', width: '100%'}} variant="h6" gutterBottom>
                         Error: No Events found in your area
                       </Typography>
+                      ) : '' 
                     )
                   } 
                   </Grid>
