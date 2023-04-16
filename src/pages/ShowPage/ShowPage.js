@@ -20,7 +20,7 @@ import AddInterest from '../../components/AddInterest';
 
 export default function ShowPage () {
 
-  const [alertError, setAlertError] = useState(false)
+  const [alert, setAlert] = useState(false)
   const [message, setMessage] = useState([])
   const [type, setType] = useState('')
   const [userInfo, setUserInfo] = useState(null)
@@ -157,13 +157,14 @@ export default function ShowPage () {
       })
       
       setCategories(cloneCategories)
+      displayAlert('success', 'Interest has been removed')
 
     })
   }
 
   const displayAlert = (type, userMessage) => {
     if(type && userMessage) {
-      setAlertError(true)
+      setAlert(true)
       setType(type)
       setMessage(userMessage)
     } 
@@ -173,12 +174,12 @@ export default function ShowPage () {
         <>
         <Snackbar
           anchorOrigin={{'horizontal' : 'center', 'vertical' : 'top'}}
-          open={alertError}
+          open={alert}
           autoHideDuration={5000}
-          onClose={() => setAlertError(false)}
+          onClose={() => setAlert(false)}
         >
           <Stack sx={{ width: '100%' }} spacing={2}>
-            <Alert svariant="filled" onClose={() => setAlertError(false)} severity={type}>
+            <Alert svariant="filled" onClose={() => setAlert(false)} severity={type}>
               {message}
             </Alert>
           </Stack>
