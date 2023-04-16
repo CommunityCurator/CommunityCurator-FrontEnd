@@ -52,7 +52,7 @@ export default function ShowPage () {
 
   useEffect(() => {
     setLoadGroups(true)
-    const location = localStorage.getItem('location')
+    const location = userInfo.city
 		fetch(`http://127.0.0.1:8000/api/groups/${location}/${userId}`)
 		.then(response => {
 			if(response.status >= 400) {
