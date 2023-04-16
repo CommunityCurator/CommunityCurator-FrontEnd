@@ -252,7 +252,7 @@ export default function ShowPage () {
                 <Grid item xs={8}>
                   <div style={{height: '50px'}}></div>  
                   <Typography variant="h5" gutterBottom style={{marginBottom: '.8em'}}>
-                    Recommend groups in your area
+                    Recommended Groups in Your Area
                   </Typography>  
                   
                   {loadGroups && !groups ? (
@@ -285,7 +285,7 @@ export default function ShowPage () {
                   
                   <div style={{height: '50px'}}></div>  
                   <Typography variant="h5" gutterBottom style={{marginBottom: '.8em'}}>
-                    Recommend events in your area.
+                    Recommended Events in Your Area
                   </Typography>  
 
                   {loadEvents && !events ? (
@@ -323,7 +323,7 @@ export default function ShowPage () {
                   
                   <div style={{height: '50px'}}></div>  
                   <Typography variant="h5" gutterBottom style={{marginBottom: '.8em'}}>
-                    Recommend groups based on interests
+                    Recommended Groups Based on Your Interests
                   </Typography>  
                   
                   {loadRec && !recGroups ? (
