@@ -21,6 +21,8 @@ import AddInterest from '../../components/AddInterest';
 export default function ShowPage () {
 
   const [alertError, setAlertError] = useState(false)
+  const [message, setMessage] = useState([])
+  const [type, setType] = useState('')
   const [userInfo, setUserInfo] = useState(null)
   const [groups, setGroups] = useState(null)
   const [categories, setCategories] = useState([])
@@ -31,12 +33,13 @@ export default function ShowPage () {
   const [recGroups, setRecGroups] = useState([])
   const [loadRec, setloadRec] = useState(false)
 
+  const userId = parseInt(localStorage.getItem('currentUser'))
+
   useEffect(() => {
-    const userId = parseInt(localStorage.getItem('currentUser'))
 		fetch(`http://127.0.0.1:8000/api/user/${userId}`)
 		.then(response => {
 			if(response.status >= 400) {
-			 setAlertError(true)  
+        displayAlert('error', 'User not found')
 			 return;
 			}
 			return response.json();
@@ -49,13 +52,12 @@ export default function ShowPage () {
 
   useEffect(() => {
     setLoadGroups(true)
-    const userId = parseInt(localStorage.getItem('currentUser'))
     const location = localStorage.getItem('location')
 		fetch(`http://127.0.0.1:8000/api/groups/${location}/${userId}`)
 		.then(response => {
 			if(response.status > 400) {
-			 setAlertError(true)
-			 return;
+        setLoadGroups(false)
+			  return;
 			}
 			return response.json();
 		})
@@ -67,52 +69,36 @@ export default function ShowPage () {
 	},[])
 
   useEffect(() => {
-    const userId = parseInt(localStorage.getItem('currentUser'))
-		fetch(`http://127.0.0.1:8000/api/user/${userId}`)
-		.then(response => {
-			if(response.status >= 400) {
-			 setAlertError(true)  
-			 return;
-			}
-			return response.json();
-		})
-		.then(data => {
-      setUserInfo(data.user)
-		})
-	},[])
-
-  useEffect(() => {
-    let pixel = ""
-    setLoadEvents(true)
-    if(localStorage.getItem('location') === 'Hialeah') {
-      pixel = `https://app.ticketmaster.com/discovery/v2/events.json?apikey=CX2QnrsxnXQY1zGYN1qkIi980HOGy5LI&city=Miami&`
-    } else {
-      pixel = `https://app.ticketmaster.com/discovery/v2/events.json?apikey=CX2QnrsxnXQY1zGYN1qkIi980HOGy5LI&city=${localStorage.getItem('location')}&size=1`
+    if(userInfo) {
+      let pixel = ""
+      setLoadEvents(true)
+      pixel = `https://app.ticketmaster.com/discovery/v2/events.json?apikey=CX2QnrsxnXQY1zGYN1qkIi980HOGy5LI&city=${userInfo.city}`
+      
+      fetch(pixel).then(response => {
+        if(response.status >= 400) {
+          setLoadEvents(false)
+          return;
+         }
+         return response.json();
+      }).then(data => {
+        let arr = data._embedded.events
+        arr = [...new Map(arr.map(item =>
+          [item['name'], item])).values()]
+  
+        arr = arr.reverse().slice(0,5);
+        setLoadEvents(false)
+        setEvents(arr)
+      })
     }
-    
-    fetch(pixel).then(response => {
-      if(response.status >= 400) {
-        setAlertError(true)  
-        return;
-       }
-       return response.json();
-    }).then(data => {
-      let arr = data._embedded.events
-      arr = [...new Map(arr.map(item =>
-        [item['name'], item])).values()]
-
-      arr = arr.reverse().slice(0,5);
-      setEvents(arr)
-    })
-  },[])
+   
+  },[userInfo])
 
   useEffect(() => {
     setloadRec(true);
-    const userId = parseInt(localStorage.getItem('currentUser'))
 		fetch(`http://127.0.0.1:8000/api/recommended/${userId}`)
 		.then(response => {
 			if(response.status > 400) {
-			 setAlertError(true)
+      setloadRec(false);
 			 return;
 			}
 			return response.json();
@@ -120,11 +106,9 @@ export default function ShowPage () {
 		.then(data => {
       const arr = data.groups.slice(0,8);
       setRecGroups(arr);
-      loadRec(false);
+      setloadRec(false);
 		})
   },[])
-
-  const userId = localStorage.getItem('currentUser');
 
   function newGroup(name, city, state, description){
     const url = 'http://localhost:8000/api/groups/';
@@ -154,7 +138,6 @@ export default function ShowPage () {
   }
 
   const handleDeleteCategory = (id) => {
-    const userId = parseInt(localStorage.getItem('currentUser'))
     fetch(`http://127.0.0.1:8000/api/user/${userId}/categories/${id}`, {
       method: "DELETE",
         headers : {      
@@ -178,21 +161,28 @@ export default function ShowPage () {
     })
   }
 
+  const displayAlert = (type, userMessage) => {
+    if(type && userMessage) {
+      setAlertError(true)
+      setType(type)
+      setMessage(userMessage)
+    } 
+  }
+
     return (
         <>
-          <Snackbar
-            anchorOrigin={{'horizontal' : 'center', 'vertical' : 'top'}}
-            open={alertError}
-            autoHideDuration={5000}
-            onClose={() => setAlertError(false)}
-          >
-            <Stack sx={{ width: '100%' }} spacing={2}>
-              <Alert svariant="filled" onClose={() => setAlertError(false)} severity="error">
-                <AlertTitle>Error</AlertTitle>
-                  Invalid Email and Password Combination
-              </Alert>
-            </Stack>
-			    </Snackbar>
+        <Snackbar
+          anchorOrigin={{'horizontal' : 'center', 'vertical' : 'top'}}
+          open={alertError}
+          autoHideDuration={5000}
+          onClose={() => setAlertError(false)}
+        >
+          <Stack sx={{ width: '100%' }} spacing={2}>
+            <Alert svariant="filled" onClose={() => setAlertError(false)} severity={type}>
+              {message}
+            </Alert>
+          </Stack>
+        </Snackbar>
           <div className="showpage">
             {userInfo ? (
               <Grid style={{marginLeft: '2em'}} container spacing={2}>
@@ -268,7 +258,7 @@ export default function ShowPage () {
                   ): "" }
                   
                   <Grid style={{width: '100%', paddingRight: '5em'}} container spacing={1}>
-                    {groups ? (
+                    {groups && !loadGroups ? (
                       groups.map(group => {  
                         return (
                           <Grid item xs={3}>
@@ -278,8 +268,11 @@ export default function ShowPage () {
                           </Grid>
                           )
                       })
-                    ): ''}
-                    
+                    ): (
+                      <Typography style={{display: 'flex', justifyContent: 'center', width: '100%'}} variant="h6" gutterBottom>
+                        Error: No groups found
+                      </Typography>
+                    )}  
                   </Grid>
                   
                   <div style={{height: '50px'}}></div>  
@@ -296,23 +289,26 @@ export default function ShowPage () {
                   ): "" }
                   
                   <Grid style={{width: '100%', paddingRight: '5em'}} container spacing={1}>
-                  {events ? (
-                      events.map((event, index) => {  
-                        if(index !== 3) {
-                          return (
-                            <Grid item xs={3} style={{cursor: 'pointer'}}>
-                              <a target="_blank" href={`${event.url}`}>
-                              <EventCard event={event}></EventCard>
-                              </a>
-                            </Grid>
-                          )
-                        } else {
-                          return
-                        }
-                      })
-                    ): ''}
-                      
-                        
+                  {events && !loadEvents ? (
+                    events.map((event, index) => {  
+                      if(index !== 3) {
+                        return (
+                          <Grid item xs={3} style={{cursor: 'pointer'}}>
+                            <a target="_blank" href={`${event.url}`}>
+                            <EventCard event={event}></EventCard>
+                            </a>
+                          </Grid>
+                        )
+                      } else {
+                        return
+                      }
+                    })
+                    ): (
+                      <Typography style={{display: 'flex', justifyContent: 'center', width: '100%'}} variant="h6" gutterBottom>
+                        Error: No Events found in your area
+                      </Typography>
+                    )
+                  } 
                   </Grid>
                   
                   <div style={{height: '50px'}}></div>  
@@ -329,7 +325,7 @@ export default function ShowPage () {
                   ): "" }
                   
                   <Grid style={{width: '100%', paddingRight: '5em'}} container spacing={1}>
-                    {recGroups ? (
+                    {recGroups.length > 0 && !loadRec ? (
                       recGroups.map(group => {  
                         return (
                           <Grid item xs={3}>
@@ -339,7 +335,11 @@ export default function ShowPage () {
                           </Grid>
                           )
                       })
-                    ): ''}
+                    ): (
+                      <Typography style={{display: 'flex', justifyContent: 'center', width: '100%'}} variant="h6" gutterBottom>
+                        Error: No recommended groups
+                    </Typography>
+                    )}
                     
                   </Grid>
 
