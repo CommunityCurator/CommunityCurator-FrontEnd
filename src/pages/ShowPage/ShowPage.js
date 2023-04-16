@@ -109,7 +109,7 @@ export default function ShowPage () {
   useEffect(() => {
     setloadRec(true);
     const userId = parseInt(localStorage.getItem('currentUser'))
-		fetch(`http://127.0.0.1:8000/api/suggest/${userId}`)
+		fetch(`http://127.0.0.1:8000/api/recommended/${userId}`)
 		.then(response => {
 			if(response.status > 400) {
 			 setAlertError(true)
@@ -118,7 +118,7 @@ export default function ShowPage () {
 			return response.json();
 		})
 		.then(data => {
-      const arr = data.groups.slice(0,4);
+      const arr = data.groups.slice(0,8);
       setRecGroups(arr);
       loadRec(false);
 		})
