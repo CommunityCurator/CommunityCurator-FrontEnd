@@ -21,7 +21,7 @@ import AddInterest from '../../components/AddInterest';
 export default function ShowPage () {
 
   const [alert, setAlert] = useState(false)
-  const [message, setMessage] = useState([])
+  const [message, setMessage] = useState('')
   const [type, setType] = useState('')
   const [userInfo, setUserInfo] = useState(null)
   const [groups, setGroups] = useState(null)
@@ -109,38 +109,14 @@ export default function ShowPage () {
 			return response.json();
 		})
 		.then(data => {
-      const arr = data.groups.slice(0,8);
-      setRecGroups(arr);
-      setloadRec(false);
+      const arr = data.groups.slice(0,4);
+      setTimeout(() => {
+        setRecGroups(arr);
+        setloadRec(false);
+      }, 1000)
 		})
   },[])
 
-  function newGroup(name, city, state, description){
-    const url = 'http://localhost:8000/api/groups/';
-    const data = {group_name: name, city: city, state: state, description: description};
-    //need to figure out how to add categories and user
-    fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    })
-    .then((response) => {
-      if(!response.ok){
-        console.log(data);
-        throw new Error("Something went wrong");
-        
-      }
-      return response.json();
-    })
-    .then((data) => {
-      //assume the add was succesful
-    })
-    .catch((e) => {
-      console.log(e);
-    });
-  }
 
   const handleDeleteCategory = (id) => {
     fetch(`http://127.0.0.1:8000/api/user/${userId}/categories/${id}`, {
@@ -165,6 +141,30 @@ export default function ShowPage () {
       displayAlert('success', 'Interest has been removed')
 
     })
+  }
+
+  const addNewGroup = (formData) => {
+    let {categoryValue, cityValue, descriptionValue, nameValue, stateValue} = formData
+    const url = 'http://localhost:8000/api/groups/';
+    const data = {group_name: nameValue, city: cityValue, state: stateValue, description: descriptionValue, categories: categoryValue};
+
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+    .then((response) => {
+      if(!response.ok){
+        displayAlert('error', 'Error when adding group')
+      }
+      return response.json();
+    })
+    .then((data) => {
+      displayAlert('success', 'Group has been created')
+    })
+
   }
 
   const displayAlert = (type, userMessage) => {
@@ -210,7 +210,7 @@ export default function ShowPage () {
                   </Typography>
                   <div style={{height: '.5em'}}></div>
                   <div>
-                    <AddGroup newGroup={newGroup}/>
+                    <AddGroup addNewGroup={(data) => addNewGroup(data)} />
                   </div> 
 
                   <div style={{height: '1.5em'}}></div>  
@@ -326,7 +326,7 @@ export default function ShowPage () {
                     Recommended Groups Based on Your Interests
                   </Typography>  
                   
-                  {loadRec && !recGroups ? (
+                  {loadRec && !recGroups.length > 0 ? (
                     <>
                       <div style={{height: '50px'}}></div> 
                       <LinearProgress color="secondary" />
@@ -346,9 +346,11 @@ export default function ShowPage () {
                           )
                       })
                     ): (
-                      <Typography style={{display: 'flex', justifyContent: 'center', width: '100%'}} variant="h6" gutterBottom>
-                        Error: No recommended groups
-                    </Typography>
+                      !loadRec ? (
+                        <Typography style={{display: 'flex', justifyContent: 'center', width: '100%'}} variant="h6" gutterBottom>
+                        Error: No recommend groups based on interests found
+                      </Typography>
+                      ) : '' 
                     )}
                     
                   </Grid>
