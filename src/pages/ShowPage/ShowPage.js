@@ -109,7 +109,7 @@ export default function ShowPage () {
 			return response.json();
 		})
 		.then(data => {
-      const arr = data.groups.slice(0,8);
+      const arr = data.groups.slice(0,4);
       setRecGroups(arr);
       setloadRec(false);
 		})
@@ -285,7 +285,7 @@ export default function ShowPage () {
                   
                   <div style={{height: '50px'}}></div>  
                   <Typography variant="h5" gutterBottom style={{marginBottom: '.8em'}}>
-                    Recommend events in your area.
+                    Recommend events in your city.
                   </Typography>  
 
                   {loadEvents && !events ? (
