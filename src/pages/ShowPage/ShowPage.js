@@ -110,8 +110,10 @@ export default function ShowPage () {
 		})
 		.then(data => {
       const arr = data.groups.slice(0,4);
-      setRecGroups(arr);
-      setloadRec(false);
+      setTimeout(() => {
+        setRecGroups(arr);
+        setloadRec(false);
+      }, 1000)
 		})
   },[])
 
@@ -324,7 +326,7 @@ export default function ShowPage () {
                     Recommend groups based on interests
                   </Typography>  
                   
-                  {loadRec && !recGroups ? (
+                  {loadRec && !recGroups.length > 0 ? (
                     <>
                       <div style={{height: '50px'}}></div> 
                       <LinearProgress color="secondary" />
@@ -344,9 +346,11 @@ export default function ShowPage () {
                           )
                       })
                     ): (
-                      <Typography style={{display: 'flex', justifyContent: 'center', width: '100%'}} variant="h6" gutterBottom>
-                        Error: No recommended groups
-                    </Typography>
+                      !loadRec ? (
+                        <Typography style={{display: 'flex', justifyContent: 'center', width: '100%'}} variant="h6" gutterBottom>
+                        Error: No recommend groups based on interests found
+                      </Typography>
+                      ) : '' 
                     )}
                     
                   </Grid>
