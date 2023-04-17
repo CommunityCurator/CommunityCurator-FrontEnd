@@ -52,7 +52,7 @@ export default function ShowPage () {
 
   useEffect(() => {
     setLoadGroups(true)
-    const location = userInfo.city
+    const location = localStorage.getItem('location')
 		fetch(`http://127.0.0.1:8000/api/groups/${location}/${userId}`)
 		.then(response => {
 			if(response.status >= 400) {
@@ -252,10 +252,10 @@ export default function ShowPage () {
                 <Grid item xs={8}>
                   <div style={{height: '50px'}}></div>  
                   <Typography variant="h5" gutterBottom style={{marginBottom: '.8em'}}>
-                    Recommended Groups in Your Area
+                    Recommended Groups Based on Your Interests
                   </Typography>  
                   
-                  {loadGroups && !groups ? (
+                  {loadRec && !recGroups.length > 0 ? (
                     <>
                       <div style={{height: '50px'}}></div> 
                       <LinearProgress color="secondary" />
@@ -264,8 +264,8 @@ export default function ShowPage () {
                   ): "" }
                   
                   <Grid style={{width: '100%', paddingRight: '5em'}} container spacing={1}>
-                    {groups && !loadGroups ? (
-                      groups.map(group => {  
+                    {recGroups.length > 0 && !loadRec ? (
+                      recGroups.map(group => {  
                         return (
                           <Grid item xs={3}>
                             <Link to={"/groups/" + group.id}>
@@ -275,17 +275,18 @@ export default function ShowPage () {
                           )
                       })
                     ): (
-                      !loadGroups ? (
+                      !loadRec ? (
                         <Typography style={{display: 'flex', justifyContent: 'center', width: '100%'}} variant="h6" gutterBottom>
-                        Error: No groups found
+                        Error: No recommended groups found based on interests
                       </Typography>
-                      ) : ''
-                    )}  
+                      ) : '' 
+                    )}
+                    
                   </Grid>
                   
                   <div style={{height: '50px'}}></div>  
                   <Typography variant="h5" gutterBottom style={{marginBottom: '.8em'}}>
-                    Recommended Events in Your Area
+                    Recommended Events in Your City
                   </Typography>  
 
                   {loadEvents && !events ? (
@@ -320,13 +321,12 @@ export default function ShowPage () {
                     )
                   } 
                   </Grid>
-                  
                   <div style={{height: '50px'}}></div>  
                   <Typography variant="h5" gutterBottom style={{marginBottom: '.8em'}}>
-                    Recommended Groups Based on Your Interests
+                    Groups Found in Your Current Area
                   </Typography>  
                   
-                  {loadRec && !recGroups.length > 0 ? (
+                  {loadGroups && !groups ? (
                     <>
                       <div style={{height: '50px'}}></div> 
                       <LinearProgress color="secondary" />
@@ -335,8 +335,8 @@ export default function ShowPage () {
                   ): "" }
                   
                   <Grid style={{width: '100%', paddingRight: '5em'}} container spacing={1}>
-                    {recGroups.length > 0 && !loadRec ? (
-                      recGroups.map(group => {  
+                    {groups && !loadGroups ? (
+                      groups.map(group => {  
                         return (
                           <Grid item xs={3}>
                             <Link to={"/groups/" + group.id}>
@@ -346,14 +346,14 @@ export default function ShowPage () {
                           )
                       })
                     ): (
-                      !loadRec ? (
+                      !loadGroups ? (
                         <Typography style={{display: 'flex', justifyContent: 'center', width: '100%'}} variant="h6" gutterBottom>
-                        Error: No recommend groups based on interests found
+                        Error: No groups found
                       </Typography>
-                      ) : '' 
-                    )}
-                    
+                      ) : ''
+                    )}  
                   </Grid>
+                  
 
                 </Grid>
               </Grid>
