@@ -21,7 +21,7 @@ import AddInterest from '../../components/AddInterest';
 export default function ShowPage () {
 
   const [alert, setAlert] = useState(false)
-  const [message, setMessage] = useState([])
+  const [message, setMessage] = useState('')
   const [type, setType] = useState('')
   const [userInfo, setUserInfo] = useState(null)
   const [groups, setGroups] = useState(null)
@@ -115,32 +115,6 @@ export default function ShowPage () {
 		})
   },[])
 
-  function newGroup(name, city, state, description){
-    const url = 'http://localhost:8000/api/groups/';
-    const data = {group_name: name, city: city, state: state, description: description};
-    //need to figure out how to add categories and user
-    fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    })
-    .then((response) => {
-      if(!response.ok){
-        console.log(data);
-        throw new Error("Something went wrong");
-        
-      }
-      return response.json();
-    })
-    .then((data) => {
-      //assume the add was succesful
-    })
-    .catch((e) => {
-      console.log(e);
-    });
-  }
 
   const handleDeleteCategory = (id) => {
     fetch(`http://127.0.0.1:8000/api/user/${userId}/categories/${id}`, {
@@ -165,6 +139,30 @@ export default function ShowPage () {
       displayAlert('success', 'Interest has been removed')
 
     })
+  }
+
+  const addNewGroup = (formData) => {
+    let {categoryValue, cityValue, descriptionValue, nameValue, stateValue} = formData
+    const url = 'http://localhost:8000/api/groups/';
+    const data = {group_name: nameValue, city: cityValue, state: stateValue, description: descriptionValue, categories: categoryValue};
+
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+    .then((response) => {
+      if(!response.ok){
+        displayAlert('error', 'Error when adding group')
+      }
+      return response.json();
+    })
+    .then((data) => {
+      displayAlert('success', 'Group has been created')
+    })
+
   }
 
   const displayAlert = (type, userMessage) => {
@@ -210,7 +208,7 @@ export default function ShowPage () {
                   </Typography>
                   <div style={{height: '.5em'}}></div>
                   <div>
-                    <AddGroup newGroup={newGroup}/>
+                    <AddGroup addNewGroup={(data) => addNewGroup(data)} />
                   </div> 
 
                   <div style={{height: '1.5em'}}></div>  
