@@ -1,60 +1,81 @@
 import { useState, useEffect } from "react";
 import CommentsForm from "./CommentsForm";
 import Comment from "./Comment";
-import {
-  getComments as getCommentsApi,
-  createComment as createCommentApi,
-  updateComment as updateCommentApi,
-  deleteComment as deleteCommentApi,
-} from "./API_Comments";
 
-const Comments = ({ commentsUrl, currentUserId }) => {
+
+const Comments = ({ commentsUrl, currentUserId, groupId }) => {
   const [backendComments, setBackendComments] = useState([]);
   const [activeComment, setActiveComment] = useState(null);
-  const rootComments = backendComments.filter(
-    (backendComment) => backendComment.parentId === null
-  );
+  const [rootComments, setRootComments] = useState([]);  
+
   const getReplies = (commentId) =>
     backendComments
-      .filter((backendComment) => backendComment.parentId === commentId)
+      .filter((backendComment) => backendComment.parent_id === commentId)
       .sort(
         (a, b) =>
-          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+          new Date(a.createdAt).getTime() - new Date(b.created_at).getTime()
       );
+
+
   const addComment = (text, parentId) => {
-    createCommentApi(text, parentId).then((comment) => {
-      setBackendComments([comment, ...backendComments]);
-      setActiveComment(null);
-    });
+      console.log('About to add a comment...');
+      console.log('text', text);
+      console.log('parentId', parentId);
+
+
+
+      if(parentId === undefined){parentId = 0;}
+        
+      //var raw = '{"content":"hi", "created_at": "1681789209109", "group_id": 18, "user_id":1,"parent_id":0}'
+      var raw = '{"content":"' + text + '", "created_at": "' + Date.now() + '", "group_id":' + groupId + ', "user_id":' + currentUserId + ',"parent_id":' + parentId + '}';
+      console.log('Post Body:', raw);
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+      var requestOptions = {
+        method: 'POST',
+        headers: myHeaders ,
+        body: raw ,
+        redirect: 'follow'
+      };
+      
+      fetch("http://127.0.0.1:8000/api/message/", requestOptions)
+        .then(response => response.text())
+        .then(result => console.log(result))
+        .catch(error => console.log('error', error));
+
+
+        GetComments();
+
   };
 
-  const updateComment = (text, commentId) => {
-    updateCommentApi(text).then(() => {
-      const updatedBackendComments = backendComments.map((backendComment) => {
-        if (backendComment.id === commentId) {
-          return { ...backendComment, body: text };
-        }
-        return backendComment;
-      });
-      setBackendComments(updatedBackendComments);
-      setActiveComment(null);
-    });
-  };
-  const deleteComment = (commentId) => {
-    if (window.confirm("Are you sure you want to remove comment?")) {
-      deleteCommentApi().then(() => {
-        const updatedBackendComments = backendComments.filter(
-          (backendComment) => backendComment.id !== commentId
-        );
-        setBackendComments(updatedBackendComments);
-      });
-    }
-  };
+
+
+  const GetComments =()=>{
+   
+
+    var requestOptions = {
+      method: 'GET',
+      redirect: 'follow'
+    };
+    
+    fetch("http://127.0.0.1:8000/api/message/", requestOptions)
+      .then(response => response.text())
+      .then(result => {
+       
+        let JSONData = JSON.parse(result);
+        
+        setBackendComments(JSONData.messages);
+        setRootComments( JSONData.messages.filter(
+          (backendComment) => backendComment.parent_id === 0
+        ));
+      })
+      .catch(error => console.log('error', error));
+
+  }
 
   useEffect(() => {
-    getCommentsApi().then((data) => {
-      setBackendComments(data);
-    });
+
+    GetComments();
   }, []);
 
   return (
@@ -71,8 +92,6 @@ const Comments = ({ commentsUrl, currentUserId }) => {
             activeComment={activeComment}
             setActiveComment={setActiveComment}
             addComment={addComment}
-            deleteComment={deleteComment}
-            updateComment={updateComment}
             currentUserId={currentUserId}
           />
         ))}

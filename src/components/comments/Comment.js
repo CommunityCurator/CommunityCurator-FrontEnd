@@ -27,7 +27,7 @@ const Comment = ({
   const canReply = Boolean(currentUserId);
   const canEdit = currentUserId === comment.userId && !timePassed;
   const replyId = parentId ? parentId : comment.id;
-  const createdAt = new Date(comment.createdAt).toLocaleDateString();
+  const createdAt = new Date(comment.created_at).toLocaleDateString();
   return (
     <div key={comment.id} className="comment">
       <div className="comment-image-container">
@@ -38,12 +38,12 @@ const Comment = ({
           <div className="comment-author">{comment.username}</div>
           <div>{createdAt}</div>
         </div>
-        {!isEditing && <div className="comment-text">{comment.body}</div>}
+        {!isEditing && <div className="comment-text">{comment.content}</div>}
         {isEditing && (
           <CommentsForm
             submitLabel="Update"
             hasCancelButton
-            initialText={comment.body}
+            initialText={comment.content}
             handleSubmit={(text) => updateComment(text, comment.id)}
             handleCancel={() => {
               setActiveComment(null);

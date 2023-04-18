@@ -6,8 +6,7 @@ import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import Typography from '@mui/material/Typography';
-import Icon_Thumbdown from '../../Icon_thumbdown';
-import Icon_Thumbup from '../../Icon_thumbup';
+
 
 
 
@@ -31,9 +30,7 @@ const GroupCard = (props) => {
       <CardContent>
         <Typography variant="body2" color="text.secondary">
          {description}
-         
-         <Icon_Thumbup />
-        <Icon_Thumbdown />
+
         </Typography>
       </CardContent>
       
