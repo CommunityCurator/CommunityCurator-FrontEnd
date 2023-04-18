@@ -277,7 +277,7 @@ export default function ShowPage () {
                     ): (
                       !loadRec ? (
                         <Typography style={{display: 'flex', justifyContent: 'center', width: '100%'}} variant="h6" gutterBottom>
-                        Error: No recommended groups found based on interests
+                        Error: No groups found
                       </Typography>
                       ) : '' 
                     )}
@@ -321,9 +321,10 @@ export default function ShowPage () {
                     )
                   } 
                   </Grid>
+                  
                   <div style={{height: '50px'}}></div>  
                   <Typography variant="h5" gutterBottom style={{marginBottom: '.8em'}}>
-                    Groups Found in Your Current Area
+                    Recommend groups based on interests
                   </Typography>  
                   
                   {loadGroups && !groups ? (
@@ -353,7 +354,6 @@ export default function ShowPage () {
                       ) : ''
                     )}  
                   </Grid>
-                  
 
                 </Grid>
               </Grid>
