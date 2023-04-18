@@ -6,6 +6,7 @@ export default function NewPost(props){
     const [groupID, setGroupID] = useState(props.groupID);
     const [userID, setUserID] = useState(props.userID);
     const [text, setText] = useState('');
+    const refresh = '/groups/'+groupID;
 
 
     function handleSubmit(e){
@@ -29,6 +30,7 @@ export default function NewPost(props){
           })
           .then((data) => {
             console.log("Success");
+            window.location.href = refresh
 
           });
     }
