@@ -51,9 +51,9 @@ export default function GroupPage () {
             <div className="welcome-header">
               <Typography variant="h4" gutterBottom>
                 Welcome {group.group_name} group!
-                <div>
+                {userId !== null ? (<div>
                 <JoinGroupButton userId={userId} groupId={id}/>
-                </div>
+                </div>) : ''}
               </Typography>
             </div>
 
