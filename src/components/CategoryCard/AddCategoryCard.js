@@ -8,7 +8,6 @@ import Typography from '@mui/material/Typography';
 import { set } from 'react-hook-form';
 
 const AddCategoryCard = (props) => {
-  const [isHover, setIsHover] = useState(false);
   const [isAdded, setIsAdded] = useState(false);
 
   useEffect(() => {
@@ -80,31 +79,12 @@ const AddCategoryCard = (props) => {
     <>
       <Card variant="outlined" style={{ margin: '1em' }}>
         <CardContent>
-          {isHover == false && (
-            <Typography
-              style={{ textAlign: 'center' }}
-              sx={{ fontSize: 18 }}
-              color="text.secondary"
-              gutterBottom
-              onMouseEnter={() => setIsHover(true)}
-              onMouseLeave={() => setIsHover(false)}
-            >
-              {props.name}
+        <div style={{display: 'flex', justifyContent: 'space-between'}}>
+            <Typography sx={{ fontSize: 18 }} color="text.secondary" gutterBottom>
+                {props.name}
             </Typography>
-          )}
-
-          {isHover && (
-            <Typography
-              style={{ textAlign: 'center' }}
-              sx={{ fontSize: 18 }}
-              color="text.secondary"
-              gutterBottom
-              onMouseEnter={() => setIsHover(true)}
-              onMouseLeave={() => setIsHover(false)}
-            >
-              <button onClick={addInterest}>Add Interest</button>
-            </Typography>
-          )}
+            <Button onClick={() => addInterest()} size="small" variant="outlined">Add</Button>
+          </div>
         </CardContent>
       </Card>
     </>
