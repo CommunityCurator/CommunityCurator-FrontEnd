@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import '../../App.css'
 import './Home.css'
 import Footer from '../../components/Footer/Footer'
-import { Button } from '../../components/Button/Button'
+import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
@@ -13,16 +13,56 @@ import CategoryCard from '../../components/CategoryCard/CatgegoryCard'
 import GroupCard from '../../components/GroupCard/GroupCard'
 import Grid from '@mui/material/Grid';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import Modal from '@mui/material/Modal';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import { useForm, Controller } from "react-hook-form";
+import Typography from '@mui/material/Typography';
+import { purple } from '@mui/material/colors';
+import { styled } from '@mui/material/styles';
 
 
 const Home = () => {
 
+	const { control, handleSubmit, watch, reset} = useForm({
+    defaultValues: {
+      emailValue: '',
+      passwordValue: '',
+    }
+  });
+
+  const watchEmail = watch('emailValue')
+  const watchPassword = watch('passwordValue')
+
+	const [loginModal, setLoginModal] = useState(false);
 	const [open, setOpen] = useState(false)
 	const [cityLoading, setCityLoading] = useState(false)
 	const [alertError, setAlertError] = useState(false)
 	const [categories, setCategories] = useState(null)
 	const [groups, setGroups] = useState(null)
 	const [pageLoading, setPageLoading] = useState(false);
+	const navigate = useNavigate();
+	const ColorButton = styled(Button)(({ theme }) => ({
+    color: theme.palette.getContrastText(purple[500]),
+    backgroundColor: purple[500],
+    '&:hover': {
+      backgroundColor: purple[700],
+    },
+  }));
+
+	const style = {
+    position: 'absolute',
+    top: '45%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '40%',
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    textAlign: 'center',
+    p: 4,
+  };
 
 
 	const showPosition = (position) => {
@@ -103,7 +143,7 @@ const Home = () => {
 			}
 		
 		})
-	},[groups])
+	},[])
 
 	useEffect(() => {
 		fetch('http://127.0.0.1:8000/api/categories/')
@@ -121,7 +161,7 @@ const Home = () => {
 			}
 			setCategories(tempArray)
 		})
-	},[categories])
+	},[])
 
 	useEffect(() => {
 		if(categories && groups) {
@@ -130,6 +170,43 @@ const Home = () => {
 			setPageLoading(true)
 		}
 	})
+
+	const handleCreateGroup = () => {
+		const userId = parseInt(localStorage.getItem('currentUser'))
+		if(userId) {
+			navigate(`/user/${userId}`)
+		} else {
+			setLoginModal(true)
+		}
+	}
+
+	const onSubmit = (data) => {
+    fetch(`http://127.0.0.1:8000/login/`, {
+      method:"POST",
+      headers: {
+        "Content-type":"application/json",
+        "Accept":"application/json"
+      },
+      body: JSON.stringify({
+        email: watchEmail,
+        password: watchPassword
+      })
+    }).then(response => {
+			if(response.status >= 400) {
+			 setAlertError(true)
+			 return;
+			}
+			return response.json();
+		}).then(data => {
+      if(data.user.id) {
+        localStorage.setItem('currentUser', data.user.id)
+        let url = `/user/${data.user.id}`
+        setLoginModal(false)
+        navigate(url)
+        reset()
+      }
+    })
+  }
 
 	return (
 		<>
@@ -153,17 +230,18 @@ const Home = () => {
 					<div className='home-container-jumbo-start'>
 						<h1>Meet new people, Enjoy your community</h1>
 						<div className="home-container-jumbo-start-btns">
+						<Link to = '/groups'>
 							<Button
-								className='btns'
-								buttonStyle='btn--outline'
-								buttonSize='btn--large'
-							>
-								Discover
+									variant="contained"
+								>
+									Discover
 							</Button>
+						</Link>
+				
 							<Button
-								className='btns'
-								buttonStyle='btn--outline'
-								buttonSize='btn--large'
+								variant="outlined"
+								style={{color: 'white'}}
+								onClick={handleCreateGroup}
 							>
 								Create a Group
 							</Button>
@@ -242,6 +320,68 @@ const Home = () => {
 				<p style={{fontSize: '2.3em', color: 'white', marginTop: '10px'}}>Loading</p>
 			</div>
 			</Backdrop>
+
+			<Modal
+          open={loginModal}
+          onClose={() => setLoginModal(false)}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+          <Typography style={{marginBottom: '.8em'}} id="modal-modal-title" variant="h4" component="h1">
+            Login
+          </Typography>
+          <hr></hr>
+          <div style={{height: '3em'}}></div>
+          <div className='login-fields'>
+            <form noValidate>
+              <Controller
+                name="emailValue"
+                control={control}
+                render={({ 
+                  field: { onChange, value },
+                  fieldState: {error},
+                }) => (
+                  <TextField onChange={onChange} value={value} error={!!error} helperText={error ? error.message : null} required fullWidth id="filled-basic" label="Email" variant="filled" />
+                )}
+                rules={{
+                  required: 'Email Required',
+                   pattern: {
+                    value:
+                      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                    message: 'Must use a valid email',
+                  },
+                }}
+              />
+              <div style={{height: '2em'}}></div>
+              <Controller
+                name="passwordValue"
+                control={control}
+                render={({ field: { onChange, value}, fieldState: {error} }) => (
+                  <TextField  error={!!error} helperText={error ? error.message : null} onChange={onChange} value={value} type="password" fullWidth id="filled-basic" label="Password" variant="filled" />
+                )}
+                rules={{
+                  required: 'Password required'
+                }}
+              />
+              <div style={{height: '2em'}}></div>
+              <ColorButton 
+                onClick={handleSubmit(onSubmit)} 
+                type="submit"
+                className='login-button' 
+                size="large" 
+                variant="contained"
+              >
+                Login
+              </ColorButton>
+                </form>
+              </div>
+
+            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+              Not a member? <span style={{color: '#0d6efd'}}><a href='/signup'>Signup</a></span>
+            </Typography>
+          </Box>
+        </Modal>
 		</>
 	 );
 }

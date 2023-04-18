@@ -7,7 +7,7 @@ A React.js front-end utilizing Material UI and Tailwind CSS
 
 # Running Commands
 - npm install
-- npm install -D tailwindcss
+- npm install --save react-tinder-card --legacy-peer-deps
 - npm start
 
 # Development Push/Merge Instructions

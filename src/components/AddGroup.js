@@ -1,157 +1,208 @@
-import { Button } from "react-bootstrap/Button"
-import Modal from 'react-bootstrap/Modal'
-import { useState } from "react"
+// import Modal from 'react-bootstrap/Modal'
+import { useState, useEffect } from "react"
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
+import { useForm, Controller } from "react-hook-form";
+import TextField from '@mui/material/TextField';
+import Stack from '@mui/material/Stack';
+import { purple } from '@mui/material/colors';
+import { styled } from '@mui/material/styles';
+import MenuItem from '@material-ui/core/MenuItem';
+import Autocomplete from '@mui/material/Autocomplete';
+import Alert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
 
 export default function AddGroup(props){
-    const [name, setName] = useState(props.name);
-    const [city, setCity] = useState(props.city);
-    const [state, setState] = useState(props.state);
-    const [description, setDescription] = useState(props.description);
-    const [category, setCategory] = useState(props.category);
+    const { control, handleSubmit, watch, reset, getValues} = useForm({
+        defaultValues: {
+          nameValue: '',
+          cityValue: '',
+          stateValue: '',
+          descriptionValue: '',
+          categoryValue: ''
+        }
+      });
+
     const [show, setShow] = useState(false);
+    const [categories, setCategories] = useState(null)
+    const [alert, setAlert] = useState(false)
+    const [message, setMessage] = useState('')
+    const [type, setType] = useState('')
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    
+    const states = ['','Alabama','Alaska','Arizona','Arkansas','California','Colorado','Connecticut','Delaware','Florida','Georgia','Hawaii','Idaho','Illinois','Indiana','Iowa','Kansas','Kentucky','Louisiana','Maine','Maryland','Massachusetts','Michigan','Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire','New Jersey','New Mexico','New York','North Carolina','North Dakota','Ohio','Oklahoma','Oregon','Pennsylvania','Rhode Island','South Carolina','South Dakota','Tennessee','Texas','Utah','Vermont','Virginia','Washington','West Virginia','Wisconsin','Wyoming']
 
-    return(
+    const style = {
+        position: 'absolute',
+        top: '45%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: '40%',
+        bgcolor: 'background.paper',
+        border: '2px solid #000',
+        boxShadow: 24,
+        textAlign: 'center',
+        p: 4,
+      };
+
+    const ColorButton = styled(Button)(({ theme }) => ({
+        color: theme.palette.getContrastText(purple[500]),
+        backgroundColor: purple[500],
+        '&:hover': {
+          backgroundColor: purple[700],
+        },
+      }));
+
+      useEffect(() => {
+		fetch('http://127.0.0.1:8000/api/categories/')
+		.then(response => {
+			if(response.status > 400) {
+			 displayAlert('error', 'Categories not found')
+			 return;
+			}
+			return response.json();
+		})
+		.then(data => {
+            const allCategories = data.categories.map(category => {
+                return category.name
+            })
+			setCategories(allCategories)
+		})
+	},[])
+
+    const displayAlert = (type, userMessage) => {
+        if(type && userMessage) {
+          setAlert(true)
+          setType(type)
+          setMessage(userMessage)
+        } 
+      }
+
+    const onSubmit = () => {
+        const formValues = getValues()
+        props.addNewGroup(formValues)
+        setShow(false)
+    }
+
+    return (
         <>
-        <button style={{width: '100%', background: 'purple'}} onClick={handleShow} className="m-2 px-4 py-1 text-lg text-white font-semibold border border-purple-200 hover:text-white hover:bg-purple-600 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-offset-2">
-            + Create new group 
-        </button>
+            <Snackbar
+                anchorOrigin={{'horizontal' : 'center', 'vertical' : 'top'}}
+                open={alert}
+                autoHideDuration={5000}
+                onClose={() => setAlert(false)}
+            >
+                <Stack sx={{ width: '100%' }} spacing={2}>
+                    <Alert svariant="filled" onClose={() => setAlert(false)} severity={type}>
+                        {message}
+                    </Alert>
+                </Stack>
+            </Snackbar>
+            <Button 
+                variant='contained' 
+                onClick={handleShow}>
+                + Create new group 
+            </Button>
 
-        <Modal
-            show={show}
-            onHide={handleClose}
-            backdrop="static"
-            keyboard={false}
-        >
-            <Modal.Header closeButton>
-            <Modal.Title>Add new group</Modal.Title>
-            </Modal.Header>
-                <Modal.Body>
-                    <form id="addgroup" 
-                          className="m-2 py-8 px-8 w-full max-w-sm" 
-                          onSubmit={(e) => {
-                            e.preventDefault();
-                            setName('');
-                            setCity('');
-                            setState('');
-                            setDescription('');
-                            setCategory('');
-                            props.newGroup(name, city, state, description, category);
-                          }}>
-                        <div className="md:flex md:items-center mb-6">
-                            <div className="md:w-1/3">
-                                <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="name">
-                                    Group name
-                                </label>
-                            </div>
-                            <div className="md:w-2/3">
-                                <input 
-                                    className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500" 
-                                    id="name" 
-                                    type="text" 
-                                    placeholder=""
-                                    value={name}
-                                    onChange={(e) => {
-                                        setName(e.target.value);
-                                }}
-                                />
-                            </div>
-                        </div>
-                        <div className="md:flex md:items-center mb-6">
-                            <div className="md:w-1/3">
-                                <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="city">
-                                    City
-                                </label>
-                            </div>
-                            <div className="md:w-2/3">
-                                <input 
-                                    className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500" 
-                                    id="city" 
-                                    type="text" 
-                                    placeholder=""
-                                    value={city}
-                                    onChange={(e) => {
-                                        setCity(e.target.value);
-                                }}
-                                />
-                            </div>
-                        </div>
-                        <div className="md:flex md:items-center mb-6">
-                            <div className="md:w-1/3">
-                                <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="state">
-                                    State
-                                </label>
-                            </div>
-                            <div className="md:w-2/3">
-                                <input 
-                                    className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500" 
-                                    id="city" 
-                                    type="text" 
-                                    value={state}
-                                    onChange={(e) => {
-                                        setState(e.target.value);
-                                }}
-                                />
-                            </div>
-                        </div>
-                        <div className="md:flex md:items-center mb-6">
-                            <div className="md:w-1/3">
-                                <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="description">
-                                    Description
-                                </label>
-                            </div>
-                            <div className="md:w-2/3">
-                                <input 
-                                    className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500" 
-                                    id="name" 
-                                    type="text" 
-                                    placeholder=""
-                                    value={description}
-                                    onChange={(e) => {
-                                        setDescription(e.target.value);
-                                }}
-                                />
-                            </div>
-                        </div>
-                        <div className="md:flex md:items-center mb-6">
-                            <div className="md:w-1/3">
-                                <label className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="category">
-                                    Category
-                                </label>
-                            </div>
-                            <div className="md:w-2/3">
-                                <input 
-                                    className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500" 
-                                    id="name" 
-                                    type="text" 
-                                    placeholder=""
-                                    value={category}
-                                    onChange={(e) => {
-                                        setCategory(e.target.value);
-                                }}
-                                />
-                            </div>
-                        </div>
-                        
-                    </form>    
-                </Modal.Body>
-            <Modal.Footer>
-                <button className="shadow bg-slate-400 hover:bg-slate-300 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded" 
-                        onClick={handleClose}>
-                            Close
-                </button>
-                <button className="shadow bg-blue-500 hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded" 
-                        onClick={handleClose}
-                        form="addgroup">
-                            Add
-                </button>
-            </Modal.Footer>
-        </Modal>
-    </>
+            <Modal
+                open={show}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+            <Typography style={{marginBottom: '.8em'}} id="modal-modal-title" variant="h5" component="h2">
+                Add New Group
+            </Typography>
+            <hr></hr>
+            <div style={{height: '2em'}}></div>
+            <div className='login-fields'>
+                <form noValidate>
+                <Controller
+                    name="nameValue"
+                    control={control}
+                    render={({ 
+                    field: { onChange, value },
+                    fieldState: {error},
+                    }) => (
+                    <TextField onChange={onChange} value={value} error={!!error} helperText={error ? error.message : null} required fullWidth id="filled-basic" label="Group Name" variant="outlined" />
+                    )}
+                    rules={{
+                    required: 'Group Name Required',
+                    }}
+                />
+                <div style={{height: '1em'}}></div>
+                <Controller
+                    name="cityValue"
+                    control={control}
+                    render={({ field: { onChange, value}, fieldState: {error} }) => (
+                    <TextField required  error={!!error} helperText={error ? error.message : null} onChange={onChange} value={value} fullWidth id="filled-basic" label="City" variant="outlined" />
+                    )}
+                    rules={{
+                    required: 'City required'
+                    }}
+                />
+                <div style={{height: '1em'}}></div>
+                <Controller
+                    name="stateValue"
+                    control={control}
+                    render={({ field: { onChange, value}, fieldState: {error} }) => (
+                    <TextField select required error={!!error} helperText={error ? error.message : null} onChange={onChange} value={value} fullWidth id="filled-basic" label="State" variant="outlined">
+                        {states.map((option) => (
+                            <MenuItem key={option} value={option}>
+                                {option}
+                            </MenuItem>
+                        ))}
+                    </TextField>
+                        )}
+                    rules={{
+                    required: 'State required'
+                    }} />
+                <div style={{height: '1em'}}></div>
+                <Controller
+                    name="descriptionValue"
+                    control={control}
+                    render={({ field: { onChange, value}, fieldState: {error} }) => (
+                    <TextField required  error={!!error} helperText={error ? error.message : null} onChange={onChange} value={value} fullWidth id="filled-basic" label="Description" variant="outlined" />
+                    )}
+                    rules={{
+                    required: 'Description required'
+                    }}
+                />
+                <div style={{height: '1em'}}></div>
+                <Controller
+                    name="categoryValue"
+                    control={control}
+                    render={({ field: { onChange, value}, fieldState: {error} }) => (
+                        <Autocomplete
+                            id="free-solo-demo"
+                            freeSolo
+                            options={categories}
+                            renderInput={(params) => <TextField {...params} required label="Category" variant="outlined"/>}
+                        />
+                
+                    )}
+                    />
+                    
+                <div style={{height: '2em'}}></div>
+                <ColorButton 
+                    onClick={handleSubmit(onSubmit)} 
+                    type="submit"
+                    className='login-button' 
+                    size="large" 
+                    variant="contained"
+                >
+                    Create
+                </ColorButton>
+                    </form>
+                </div>
+            </Box>
+            </Modal>
+        </>
 
     )
 

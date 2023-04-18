@@ -19,11 +19,11 @@ const MyGroupCard = (props) => {
        <div style={{display: 'flex'}}>
         <CardMedia
           component="img"
-          sx={{ width: 151 }}
+          sx={{ width: 100 }}
           image={image}
         />
         <div style={{display: 'flex', alignItems: 'center', marginLeft: '10%'}}>
-          <Typography sx={{ fontSize: 20 }} color="text.secondary" gutterBottom>
+          <Typography sx={{ fontSize: 18 }} color="text.secondary" gutterBottom>
             {group_name}
           </Typography>
         </div>

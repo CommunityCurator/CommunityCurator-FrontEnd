@@ -1,119 +1,147 @@
-
-import MultiStepProgressBar from "../components/RegistrationStepper/MultiStepProgressBar";
-import { Container, Row, Col, Card, Button } from "react-bootstrap";
-import { useState, useEffect } from "react";
-import StepForm from "../components/RegistrationStepper/StepForm";
-import { prompt } from "../components/RegistrationStepper/prompt";
+import React, { useState } from 'react';
+import { TextField, Button } from '@material-ui/core';
 import { useNavigate } from 'react-router-dom';
 
 export default function Signup() {
-    const [index, setIndex] = useState(1);
-    const [submitted, setSubmitted] = useState(false);
-    const totalPagesCount = prompt?.length || 0;
-    // numbered by pages. for exampe { 1: [{"key" : "value"}], 2:["key": "value"], 3: []}
-    const [pagesAnswers, setPagesAnswers] = useState({});
-    const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('');
+  const [first, setFirst] = useState('');
+  const [last, setLast] = useState('');
+  const [city, setCity] = useState('');
+  const [state, setState] = useState('');
+  const [zip, setZip] = useState('');
+  const navigate = useNavigate();
 
-    function newUser(props){
-        const url = 'http://localhost:8000/api/users/';
-        const data = {first_name: props[1].first_name, last_name: props[1].last_name, user_name: props[1].user_name, email: props[1].email, password: props[1].password, city: props[2].city, state: props[2].state, bio:'', image: '', created_at:''};
-        fetch(url, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(data)
-        })
-        .then((response) => {
-          if(!response.ok){
-            throw new Error("Something went wrong");
-          }
-          return response.json();
-        })
-        .then(data => {
-          if(data.user.id) {
-            localStorage.setItem('currentUser', data.user.id)
-            let url = `/user/${data.user.id}`
-            navigate(url)
-          }
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-      }
-  
-    const prevButton = () => {
-      if (index > 1) {
-        setIndex(prevIndex => prevIndex - 1);
-      }
-    }
-  
-    const nextButton = () => {
-      if (index - 3) {
-        setIndex(prevIndex => prevIndex + 1);
-      } else {
-        // clear the form on submit
-        setPagesAnswers({});
-        //setSubmitted(true);
-        console.log(pagesAnswers);
-        newUser(pagesAnswers);
-        setSubmitted(true);
-      }
-    }
-  
-    const onPageAnswerUpdate = (step, answersObj) => {
-      setPagesAnswers({...pagesAnswers, [step]: answersObj});
-    }
-  
-    const handleStart = () => {
-      setIndex(1);
-      setSubmitted(false);
-    }
+  function handleSignup(e) {
+    e.preventDefault();
 
-    
-  
-    return (
-      <div className="App">
-        <Container className="h-100">
-          <Row className="m-5">
-            <Col className="align-self-center">
-              <MultiStepProgressBar
-                step={index}
-                />
-            </Col>
-          </Row>
-          <Row>
-            {
-              submitted ?
-              <Card>
-                <Card.Body>
-                  <p>Registration complete</p>
-                </Card.Body>
-                
-              </Card> :
-            <Card>
-              <Card.Body>
-                <StepForm
-                  list={prompt}
-                  step={index}
-                  onPageUpdate={onPageAnswerUpdate}
-                  pagesAnswers={pagesAnswers}
-                  />
-              </Card.Body>
-              <Card.Footer className="d-flex justify-content-between">
-                <button 
-                    className="shadow bg-blue-500 hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded" 
-                    onClick={prevButton} disabled={index === 1}>Previous
-                </button>
-                <button 
-                    className="shadow bg-blue-500 hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded" 
-                    onClick={nextButton}>{index === totalPagesCount ? 'Submit' : 'Next'}
-                    </button>
-              </Card.Footer>
-            </Card>
-          }
-          </Row>
-        </Container>
-      </div>
-    );
+    const url = 'http://localhost:8000/api/users/';
+    const data = {
+      first_name: first,
+      last_name: last,
+      user_name: username,
+      email: email,
+      password: password,
+      city: city,
+      state: state,
+      zip: zip,
+      bio: '',
+      created_at: '',
+      image: '',
+    };
+
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Something went wrong');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        if (data.user.id) {
+          localStorage.setItem('currentUser', data.user.id);
+          let url = `/user/${data.user.id}/interests`;
+          navigate(url);
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+        console.log('HERE');
+      });
+  }
+
+  return (
+    <div align="center">
+      <form
+        className="m-2 py-8 px-8 w-full max-w-lg"
+        onSubmit={handleSignup}
+      >
+        <TextField
+          fullWidth
+          margin="normal"
+          label="First Name"
+          id="grid-first-name"
+          placeholder="First Name"
+          value={first}
+          onChange={(e) => setFirst(e.target.value)}
+        />
+        <TextField
+          fullWidth
+          margin="normal"
+          label="Last Name"
+          id="grid-last-name"
+          placeholder="Last Name"
+          value={last}
+          onChange={(e) => setLast(e.target.value)}
+        />
+        <TextField
+          fullWidth
+          margin="normal"
+          label="Username"
+          id="grid-user-name"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <TextField
+          fullWidth
+          margin="normal"
+          label="Email"
+          id="grid-email"
+          placeholder="email@domain.com"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <TextField
+          fullWidth
+          margin="normal"
+          label="Password"
+          id="grid-password"
+          type="password"
+          placeholder="******************"
+          value={password}
+          autoComplete='current-password'
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <p className="text-gray-600 text-xs italic md:text-left">
+          At least 8 characters
+        </p>
+        <TextField
+          fullWidth
+          margin="normal"
+          label="City"
+          id="grid-city"
+          value={city}
+          onChange={(e) => setCity(e.target.value)}
+        />
+        <TextField
+          fullWidth
+          margin="normal"
+          label="State"
+          id="grid-state"
+          value={state}
+          onChange={(e) => setState(e.target.value)}
+        />
+        <TextField
+          fullWidth
+          margin="normal"
+          label="Zip"
+          id="grid-zip"
+          value={zip}
+          onChange={(e) => setZip(e.target.value)}
+        />
+      
+        <Button variant="contained" color="primary" type="submit">
+          Sign Up
+        </Button>
+      </form>
+    </div>
+  );
 }

@@ -26,7 +26,7 @@ import AlertTitle from '@mui/material/AlertTitle';
 import './Navbar.css';
 
 function Navbar() {
-  const { control, handleSubmit, watch } = useForm({
+  const { control, handleSubmit, watch, reset} = useForm({
     defaultValues: {
       emailValue: '',
       passwordValue: '',
@@ -86,7 +86,7 @@ function Navbar() {
     },
   }));
 
-  const handleLogin = () => {
+  const onSubmit = (data) => {
     fetch(`http://127.0.0.1:8000/login/`, {
       method:"POST",
       headers: {
@@ -109,6 +109,7 @@ function Navbar() {
         let url = `/user/${data.user.id}`
         setLoginModal(false)
         navigate(url)
+        reset()
       }
     })
   }
@@ -135,7 +136,7 @@ function Navbar() {
 					</Alert>
 				</Stack>
 			</Snackbar>
-     <nav className='navbar'>
+      <nav className='navbar'>
         <div className='navbar-container'>
             <Link to="/" className='navbar-logo' onClick={closeMobileMenu}>
                 CommunityCurator  <i className='fas fa-solid fa-users' />
@@ -205,40 +206,55 @@ function Navbar() {
           <hr></hr>
           <div style={{height: '3em'}}></div>
           <div className='login-fields'>
-            <form>
+            <form noValidate>
               <Controller
                 name="emailValue"
                 control={control}
-                render={({ field: { onChange, value} }) => (
-                  <TextField onChange={onChange} value={value} required fullWidth id="filled-basic" label="Email" variant="filled" />
+                render={({ 
+                  field: { onChange, value },
+                  fieldState: {error},
+                }) => (
+                  <TextField onChange={onChange} value={value} error={!!error} helperText={error ? error.message : null} required fullWidth id="filled-basic" label="Email" variant="filled" />
                 )}
+                rules={{
+                  required: 'Email Required',
+                   pattern: {
+                    value:
+                      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                    message: 'Must use a valid email',
+                  },
+                }}
               />
               <div style={{height: '2em'}}></div>
               <Controller
                 name="passwordValue"
                 control={control}
-                render={({ field: { onChange, value} }) => (
-                  <TextField onChange={onChange} value={value} type="password" required fullWidth id="filled-basic" label="Password" variant="filled" />
+                render={({ field: { onChange, value}, fieldState: {error} }) => (
+                  <TextField  error={!!error} helperText={error ? error.message : null} onChange={onChange} value={value} type="password" fullWidth id="filled-basic" label="Password" variant="filled" />
                 )}
+                rules={{
+                  required: 'Password required'
+                }}
               />
-            </form>
-          </div>
-          <div style={{height: '2em'}}></div>
-          <ColorButton 
-            onClick={handleLogin} 
-            className='login-button' 
-            size="large" 
-            variant="contained"
-          >
-            Login
-          </ColorButton>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Not a member? <span style={{color: '#0d6efd'}}><a href='/signup'>Signup</a></span>
-          </Typography>
-        </Box>
-        </Modal>
-     </nav>
+              <div style={{height: '2em'}}></div>
+              <ColorButton 
+                onClick={handleSubmit(onSubmit)} 
+                type="submit"
+                className='login-button' 
+                size="large" 
+                variant="contained"
+              >
+                Login
+              </ColorButton>
+                </form>
+              </div>
 
+            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+              Not a member? <span style={{color: '#0d6efd'}}><a href='/signup'>Signup</a></span>
+            </Typography>
+          </Box>
+        </Modal>
+      </nav>
     </>
   )
 }

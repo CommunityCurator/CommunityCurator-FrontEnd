@@ -8,7 +8,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react'
 import './App.css'
 import Navbar from './components/Navbar/Navbar'
-import Group from './components/Group'
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 import Home from './pages/Home/Home'
 import Events from './pages/Events'
@@ -18,6 +17,7 @@ import Groups from './pages/Groups'
 import ShowPage from './pages/ShowPage/ShowPage';
 import GroupPage from './pages/GroupPage/GroupPage';
 // import Comments from "./components/Button/comments/Comments";
+import ChooseCategories from './pages/ChooseCategories';
 
 
 
@@ -34,6 +34,7 @@ function App() {
         <Route exact path='/login' element={<Login/>} />
         <Route exact path='/signup' element={<Signup/>} />
         <Route exact path='/user/:id' element={<ShowPage/>} />
+        <Route exact path='/user/:id/interests' element={<ChooseCategories/>} />
       </Routes>
     </Router>
     </>
