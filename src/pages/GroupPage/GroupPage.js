@@ -69,7 +69,9 @@ export default function GroupPage () {
 
             <div className="welcome-header">
               <Typography variant="h4" gutterBottom>
-                {group.group_name}
+                {group.group_name}<br></br></Typography>
+              <Typography variant="h6" gutterBottom>
+                {group.description}
                 {userId !== null ? (<div>
                 <JoinGroupButton userId={userId} groupId={id}/>
                 </div>) : ''}
@@ -102,8 +104,19 @@ export default function GroupPage () {
             <Grid item xs={8}>
               <div style={{height: '50px'}}></div>  
               <Typography variant="h5" gutterBottom style={{marginBottom: '.8em'}}>
-                <div style={{height: '35vh', width: '90%', backgroundImage: `url(${group.image})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundPosition: '100%', position: 'relative'}}>
-                </div>
+                <div
+                  style={{
+                    height: '35vh',
+                    width: '90%',
+                    maxWidth: '600px', // Set the maximum width
+                    maxHeight: '600px', // Set the maximum height
+                    backgroundImage: `url(${group.image})`,
+                    backgroundRepeat: 'no-repeat',
+                    backgroundSize: 'cover',
+                    backgroundPosition: '100%',
+                    position: 'relative',
+                  }}
+                ></div>
               </Typography>  
 
               {userId ? (
