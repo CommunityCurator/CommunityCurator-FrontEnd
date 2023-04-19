@@ -5,7 +5,7 @@ import { ThemeContext } from "@emotion/react";
 import Button from '@mui/material/Button';
 import AddCategoryCard from "./CategoryCard/AddCategoryCard";
 
-export default function AddInterest(){
+export default function AddInterest(props){
     const [show, setShow] = useState(false);
     const [list, setList] = useState([]);
 
@@ -49,6 +49,29 @@ export default function AddInterest(){
         getCategories();
     }
 
+    const updateList = (category) => {
+
+        const userId = parseInt(localStorage.getItem('currentUser'))
+        let url = `http://127.0.0.1:8000/api/user/${userId}/categories/${category.id}`;
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json',
+            },
+        }).then(response => response.json)
+        .then(data => {
+            let listClone = [...list]
+            listClone = list.filter(cat => {
+                if(cat.id !== category.id) {
+                    return cat
+                }
+            })
+            setList(listClone)
+            props.addCategory(category)
+        })
+    }
+
     return(
         <>
         <Button 
@@ -68,19 +91,19 @@ export default function AddInterest(){
                 <Modal.Title>Add New Interest</Modal.Title>
             </Modal.Header>
                 <Modal.Body>
-                    {list.map(cat => {
-                        return <AddCategoryCard name={cat.name} />
-                    })}
+                    <div style={{height: '60vh', overflow: 'scroll'}}>
+                        {list.length > 0 ? (
+                            list.map(category => {
+                                return <AddCategoryCard updateList={updateList} category={category} />
+                            })
+                        ): ''}
+                      
+                    </div>
                 </Modal.Body>
             <Modal.Footer>
                 <button className="shadow bg-slate-400 hover:bg-slate-300 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded" 
                         onClick={handleClose}>
                             Close
-                </button>
-                <button className="shadow bg-blue-500 hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded" 
-                        onClick={handleClose}
-                        form="addgroup">
-                            Add
                 </button>
             </Modal.Footer>
         </Modal>
