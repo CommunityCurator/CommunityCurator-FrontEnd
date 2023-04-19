@@ -18,6 +18,7 @@ import SearchByCity from '../ShowPage/SearchByCity';
 import NewPost from '../../components/Post/NewPost';
 import Post from '../../components/Post/Post';
 import { render } from '@testing-library/react';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 export default function GroupPage () {
 
@@ -27,7 +28,7 @@ export default function GroupPage () {
   const [categories, setCategories] = useState();
   const [post, setPost] = useState();
   const [list, setList] = useState(false)
-  const [user, setUser] = useState();
+  const [isFetching, setUser] = useState();
 
 
   useEffect(() => {
@@ -46,7 +47,7 @@ export default function GroupPage () {
   },[]);
 
   useEffect(() => {
-		fetch(`http://127.0.0.1:8000/api/post`)
+		fetch(`http://127.0.0.1:8000/api/posts/`+id)
     .then((response) => 
       response.json()
     )
@@ -112,7 +113,7 @@ export default function GroupPage () {
               <Typography variant="h5" gutterBottom style={{marginBottom: '.8em'}}>
                 Create new post
               </Typography>  
-              <NewPost userID={userId} groupID={id} />
+              <NewPost userID={userId} groupID={id}/>
               
               <Grid item xs={1}></Grid>
                 <Grid item xs={8}>
