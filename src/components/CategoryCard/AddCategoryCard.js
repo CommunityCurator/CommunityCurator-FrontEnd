@@ -8,71 +8,9 @@ import Typography from '@mui/material/Typography';
 import { set } from 'react-hook-form';
 
 const AddCategoryCard = (props) => {
-  const [isAdded, setIsAdded] = useState(false);
 
-  useEffect(() => {
-    const userId = parseInt(localStorage.getItem('currentUser'));
-    const url1 = 'http://localhost:8000/api/categories';
-    let url2 = `http://127.0.0.1:8000/api/user/${userId}/categories`;
-
-    fetch(url1)
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        for (var key in data.categories) {
-          if (data.categories[key].name === props.name) {
-            const id = props.id;
-            url2 += '/' + data.categories[key].id;
-            fetch(url2, {
-              method: 'GET',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            })
-              .then((response) => {
-                return response.json();
-              })
-              .then((data) => {
-                if (data.length > 0) {
-                  setIsAdded(true);
-                }
-              });
-          }
-        }
-      });
-  }, []);
-
-  function addInterest() {
-    const userId = parseInt(localStorage.getItem('currentUser'));
-    const url1 = 'http://localhost:8000/api/categories';
-    let url2 = `http://127.0.0.1:8000/api/user/${userId}/categories`;
-
-    fetch(url1)
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        for (var key in data.categories) {
-          if (data.categories[key].name === props.name) {
-            const id = props.id;
-            url2 += '/' + data.categories[key].id;
-            fetch(url2, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            })
-              .then((response) => {
-                setIsAdded(true);
-              });
-          }
-        }
-      });
-  }
-
-  if (isAdded) {
-    return null;
+  function addInterest(id) {
+    props.updateList(id)
   }
 
   return (
@@ -81,9 +19,9 @@ const AddCategoryCard = (props) => {
         <CardContent>
         <div style={{display: 'flex', justifyContent: 'space-between'}}>
             <Typography sx={{ fontSize: 18 }} color="text.secondary" gutterBottom>
-                {props.name}
+                {props.category.name}
             </Typography>
-            <Button onClick={() => addInterest()} size="small" variant="outlined">Add</Button>
+            <Button onClick={() => addInterest(props.category)} size="small" variant="outlined">Add</Button>
           </div>
         </CardContent>
       </Card>
