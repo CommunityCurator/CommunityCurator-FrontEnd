@@ -15,6 +15,9 @@ import { useParams, Link } from 'react-router-dom';
 import CategoryCard from '../../components/CategoryCard/CatgegoryCard'
 import JoinGroupButton from './JoinGroup';
 import SearchByCity from '../ShowPage/SearchByCity';
+import NewPost from '../../components/Post/NewPost';
+import Post from '../../components/Post/Post';
+import { render } from '@testing-library/react';
 
 export default function GroupPage () {
 
@@ -22,6 +25,9 @@ export default function GroupPage () {
   const [notFound, setNotFound] = useState();
   const {id} = useParams();
   const [categories, setCategories] = useState();
+  const [post, setPost] = useState();
+  const [list, setList] = useState(false)
+  const [user, setUser] = useState();
 
 
   useEffect(() => {
@@ -39,7 +45,19 @@ export default function GroupPage () {
       })
   },[]);
 
+  useEffect(() => {
+		fetch(`http://127.0.0.1:8000/api/post`)
+    .then((response) => 
+      response.json()
+    )
+    .then((data) => {
+      console.log(data);
+      setList(data.posts);
+    })
+  },[])
+
   const userId = localStorage.getItem('currentUser');
+
 
   return (
     <>
@@ -92,13 +110,35 @@ export default function GroupPage () {
               
               <div style={{height: '50px'}}></div>  
               <Typography variant="h5" gutterBottom style={{marginBottom: '.8em'}}>
-                Posts
+                Create new post
               </Typography>  
-
+              <NewPost userID={userId} groupID={id} />
               
-              <Grid style={{width: '100%', paddingRight: '5em'}} container spacing={1}>
-                  
-                    
+              <Grid item xs={1}></Grid>
+                <Grid item xs={8}>
+                  <div style={{height: '50px'}}></div>  
+                  <Typography variant="h5" gutterBottom style={{ marginBottom: '.8em' }}>
+                    Posts
+                  </Typography>
+
+                  <Grid container spacing={1}>
+                    {list.length > 0 ? (
+                      list.map((post) => {
+                        return (
+                          <Grid item xs={12}>
+                              <Post key={post.id}
+                                user_name={post.user.user_name}
+                                content={post.content}
+                                created_at={post.created_at}
+                              ></Post>
+                          </Grid>
+                        );
+                      })
+                    ) : (
+                      'No posts yet'
+                    )}
+                  </Grid>
+
               </Grid>
             </Grid>
           </Grid>
