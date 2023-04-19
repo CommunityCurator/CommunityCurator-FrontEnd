@@ -175,6 +175,13 @@ export default function ShowPage () {
     } 
   }
 
+  const addCategory = (category) => {
+    let cloneCategories = [...categories]
+    cloneCategories.push(category)
+    setCategories(cloneCategories)
+    displayAlert('success', 'Category added')
+  }
+
     return (
         <>
         <Snackbar
@@ -244,7 +251,7 @@ export default function ShowPage () {
                         )
                       })) : ''}
                   <div>
-                    <AddInterest/>
+                    <AddInterest addCategory={addCategory}/>
                   </div>                   
                 </div>  
                 </Grid>
