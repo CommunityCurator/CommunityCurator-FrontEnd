@@ -69,14 +69,14 @@ export default function GroupPage () {
 
             <div className="welcome-header">
               <Typography variant="h4" gutterBottom>
-                Welcome {group.group_name} group!
+                {group.group_name}
                 {userId !== null ? (<div>
                 <JoinGroupButton userId={userId} groupId={id}/>
                 </div>) : ''}
               </Typography>
             </div>
 
-            <div style={{height: '3em'}}></div>
+            <div style={{height: '2em'}}></div>
               
               <div style={{height: '1.5em'}}></div>
               <SearchByCity/>
@@ -102,22 +102,23 @@ export default function GroupPage () {
             <Grid item xs={8}>
               <div style={{height: '50px'}}></div>  
               <Typography variant="h5" gutterBottom style={{marginBottom: '.8em'}}>
-                <img src={group.image} alt=""></img>
+                <div style={{height: '35vh', width: '90%', backgroundImage: `url(${group.image})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundPosition: '100%', position: 'relative'}}>
+                </div>
               </Typography>  
-              
-              <Grid style={{width: '100%', paddingRight: '5em'}} container spacing={1}>
-                
-              </Grid>
-              
-              <div style={{height: '50px'}}></div>  
+
+              {userId ? (
+                <>
+                  <div style={{height: '20px'}}></div>  
               <Typography variant="h5" gutterBottom style={{marginBottom: '.8em'}}>
                 Create new post
-              </Typography>  
-              <NewPost userID={userId} groupID={id}/>
+              </Typography> 
+              <div style={{width: '90%'}}>
+                <NewPost userID={userId} groupID={id}/>
+              </div>
               
               <Grid item xs={1}></Grid>
                 <Grid item xs={8}>
-                  <div style={{height: '50px'}}></div>  
+                  <div style={{height: '30px'}}></div>  
                   <Typography variant="h5" gutterBottom style={{ marginBottom: '.8em' }}>
                     Posts
                   </Typography>
@@ -141,6 +142,16 @@ export default function GroupPage () {
                   </Grid>
 
               </Grid>
+                </>
+              ) : (
+                <div style={{display: 'flex', justifyContent: 'center', marginTop: '10%'}}>
+                  <Alert style={{fontSize: '1.5em'}} variant="filled" severity="warning">
+                    Login Required To View Group
+                  </Alert>
+                </div>
+              )}
+              
+              
             </Grid>
           </Grid>
           
