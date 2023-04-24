@@ -16,8 +16,8 @@ import CategoryCard from '../../components/CategoryCard/CatgegoryCard'
 import JoinGroupButton from './JoinGroup';
 import SearchByCity from '../ShowPage/SearchByCity';
 import Comments from "../../components/comments/Comments";
-
-
+import Icon_Thumbup from '../../icons/Icon_thumbup';
+import Icon_Thumbdown from '../../icons/Icon_thumbdown';
 
 
 export default function GroupPage () {
@@ -26,6 +26,30 @@ export default function GroupPage () {
   const [notFound, setNotFound] = useState();
   const {id} = useParams();
   const [categories, setCategories] = useState();
+  const [Likes, setLikes] = useState();
+  const [Dislikes, setDislikes] = useState();
+  const userId = localStorage.getItem('currentUser');
+
+  function AddFeedback(feedbackType){
+    console.log('id', id);
+    var raw = JSON.stringify(`{"like": "${feedbackType === 'like'? 1 : 0}", "dislike":"${feedbackType === 'dislike'? 1 : 0}", "report":"0", "details":"","created_at":"${new Date()}", "group":"${id}", "user":"${userId}"}`);
+    console.log('body', raw);
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: JSON.parse(raw)
+    }
+
+    fetch("http://localhost:8000/api/feedback/", requestOptions)
+    .then(response => response.text())
+    .then(result => console.log(result))
+    .catch(error => console.log('error', error));
+
+  }
+
 
 
   useEffect(() => {
@@ -41,9 +65,27 @@ export default function GroupPage () {
         setGroup(data.group);
         setCategories(data.group.categories);
       })
+
+
+      
+    fetch('http://localhost:8000/api/feedback/')
+    .then((res) => 
+    res.json()
+    )
+    .then((d) => {
+      console.log(d)
+      setLikes(d.feedbacks.filter(feedback => feedback.like === true && feedback.group.id ==id).length);
+      setDislikes(d.feedbacks.filter(feedback => feedback.dislike === true && feedback.group.id ==id).length);
+
+    })
+
+
+      
   },[]);
 
-  const userId = localStorage.getItem('currentUser');
+
+
+
 
   return (
     <>
@@ -92,6 +134,14 @@ export default function GroupPage () {
                 <img src={group.image} alt=""></img>
 
               </Typography>  
+
+              <div className="feedback">
+                <div className='thumbsup' onClick={()=> AddFeedback('like')} ><Icon_Thumbup size={25} />
+                <h4>{Likes}</h4>
+                </div>
+                
+                <div className='thumbsdown' onClick={()=> AddFeedback('dislike')} > <Icon_Thumbdown size={25} /><h4>{Dislikes}</h4></div>
+              </div>
               
               <Grid style={{width: '100%', paddingRight: '5em'}} container spacing={1}>
                 

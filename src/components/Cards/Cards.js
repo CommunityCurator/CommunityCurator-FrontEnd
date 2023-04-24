@@ -13,8 +13,13 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
+import Icon_Thumbup from '../../icons/Icon_thumbup';
+import Icon_Thumbdown from '../../icons/Icon_thumbdown';
+import './Cards.css'
 
 function Cards(props) {
+
+
   return (
     <Card variant="outlined">
       <CardContent>
@@ -26,6 +31,13 @@ function Cards(props) {
         <Typography sx={{ fontSize: 18 }} color="text.secondary" gutterBottom>
           {props.groupName}
         </Typography>
+
+        <div className="feedback">
+          <Icon_Thumbup size={25} />
+          <h4>{props.Likes}</h4>
+          <Icon_Thumbdown size={25} />
+          <h4>{props.Dislikes}</h4>
+        </div>
       
         <Typography sx={{ mb: 1.5 }} color="text.secondary">
         {props.city}, {props.state}

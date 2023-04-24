@@ -3,8 +3,30 @@
   grid-template-rows: auto;
   grid-template-columns: repeat(4, 25%); }
 
-  .Feedback {
+  .feedback {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
-  align-items: center;}
+    align-items: center;
+    width: 100%;
+  }
+
+  .feedback div {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+  
+  }
+
+  .feedback .thumbsup svg:hover {
+    cursor: pointer;
+    color:green;
+
+  }
+
+  .feedback .thumbsdown svg:hover {
+    cursor: pointer;
+    color:red;
+
+  }

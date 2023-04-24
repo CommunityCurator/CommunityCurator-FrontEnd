@@ -18,6 +18,8 @@ import Comments from "../components/comments/Comments";
 
 export default function Groups(){
   const [list, setList] = useState();
+  const [groupLikes, setGroupLikes] = useState();
+
   const url = 'http://localhost:8000/api/groups/';
 
   useEffect(() => {
@@ -30,8 +32,17 @@ export default function Groups(){
         setList(data.groups);
       })
 
-  }, []);
+      fetch('http://localhost:8000/api/feedback/')
+      .then((res) => 
+      res.json()
+      )
+      .then((d) => {
+        console.log('group likes:',d);
+        setGroupLikes(d);
+      })
 
+  }, []);
+ console.log('groupLikes', groupLikes);
   return(
     <>
     <div style={{height: '0.5em'}}></div>
@@ -50,8 +61,14 @@ export default function Groups(){
         return (
           <Grid item xs={3}>
               <Link to={"/groups/" + group.id}>
-                <Cards groupName={group.group_name} city={group.city} state={group.state}
-                      image={group.image}/>
+                <Cards groupId={group.id} groupName={group.group_name} city={group.city} state={group.state}
+                      image={group.image} 
+                      Likes={groupLikes !== undefined && groupLikes.feedbacks.filter(feedback => feedback.like === true &&  feedback.group.id==group.id).length} 
+                      Dislikes={groupLikes !== undefined && groupLikes.feedbacks.filter(feedback => feedback.dislike === true &&  feedback.group.id==group.id).length}/>
+
+
+                {/* <Cards groupId={group.id} groupName={group.group_name} city={group.city} state={group.state}
+                      image={group.image} /> */}
               </Link>
           </Grid>
         )
