@@ -206,8 +206,13 @@ export default function ShowPage () {
                     Welcome {userInfo.first_name} {userInfo.last_name}!
                   </Typography>
                 </div>
+                <div style={{height: '1em'}}></div>
+                <Typography variant="h6" gutterBottom>
+                   City: {userInfo.city}
+                  </Typography>
 
                   <div style={{height: '2em'}}></div>
+
                   
                   <SearchByCity/>
                   <div style={{height: '1.5em'}}></div>
