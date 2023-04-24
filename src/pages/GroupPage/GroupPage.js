@@ -19,6 +19,9 @@ import NewPost from '../../components/Post/NewPost';
 import Post from '../../components/Post/Post';
 import { render } from '@testing-library/react';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Icon_Thumbup from '../../icons/Icon_thumbup';
+import Icon_Thumbdown from '../../icons/Icon_thumbdown';
+
 
 export default function GroupPage () {
 
@@ -29,6 +32,43 @@ export default function GroupPage () {
   const [post, setPost] = useState();
   const [list, setList] = useState(false)
   const [isFetching, setUser] = useState();
+  const [Likes, setLikes] = useState();
+  const [Dislikes, setDislikes] = useState();
+  const userId = localStorage.getItem('currentUser');
+
+  function AddFeedback(isLike) {
+    const url_like = 'http://localhost:8000/api/new_like/';
+    const url_dislike = 'http://localhost:8000/api/new_dislike/';
+
+    const data_like = {group: id, user: userId, like: true, dislike: false};
+    const data_dislike = {group: id, user: userId, like: false, dislike: true};
+
+    const url = isLike ? url_like : url_dislike;
+    const data = isLike ? data_like : data_dislike;
+
+    return fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+    .then((response) => {
+      if (!response.ok) {
+        console.log('Error adding feedback');
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log('Feedback is added');
+      console.log(data);
+      return data;
+    })
+    .catch((error) => {
+      console.error('Error adding feedback:', error);
+    });
+  }
 
 
   useEffect(() => {
@@ -44,7 +84,9 @@ export default function GroupPage () {
         setGroup(data.group);
         setCategories(data.group.categories);
       })
+
   },[]);
+
 
   useEffect(() => {
 		fetch(`http://127.0.0.1:8000/api/posts/`+id)
@@ -57,9 +99,6 @@ export default function GroupPage () {
     })
   },[])
 
-  const userId = localStorage.getItem('currentUser');
-
-
   return (
     <>
       <div className="showpage">
@@ -69,10 +108,12 @@ export default function GroupPage () {
 
             <div className="welcome-header">
               <Typography variant="h4" gutterBottom>
+
                 {group.group_name}<br></br></Typography>
               <Typography variant="h6" gutterBottom>
                 {group.description}
                 {userId !== null ? (<div>
+                Welcome {group.group_name} group!
                 <JoinGroupButton userId={userId} groupId={id}/>
                 </div>) : ''}
               </Typography>
@@ -100,6 +141,7 @@ export default function GroupPage () {
                   })) : ''}
               </div>  
             </Grid>
+              
             <Grid item xs={1}></Grid>
             <Grid item xs={8}>
               <div style={{height: '50px'}}></div>  
@@ -118,6 +160,14 @@ export default function GroupPage () {
                   }}
                 ></div>
               </Typography>  
+              <div className="feedback">
+                <div className='thumbsup' onClick={()=> AddFeedback(true)} ><Icon_Thumbup size={25} />
+                <h4>{Likes}</h4>
+                </div>
+                
+                <div className='thumbsdown' onClick={()=> AddFeedback(false)} > <Icon_Thumbdown size={25} /><h4>{Dislikes}</h4></div>
+
+              </div>
 
               {userId ? (
                 <>
