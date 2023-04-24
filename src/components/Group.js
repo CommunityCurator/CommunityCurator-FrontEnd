@@ -10,6 +10,10 @@ function Group(){
     const {id} = useParams();
     const [categories, setCategories] = useState();
 
+    
+
+    
+
 
     useEffect(() => {
         const url = 'http://localhost:8000/api/group/' + id;
@@ -42,6 +46,7 @@ function Group(){
                 </div>                    
                     
                     : null }
+            
             <Link to="/groups">Go back</Link>
         </>
     );

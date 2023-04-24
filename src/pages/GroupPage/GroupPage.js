@@ -19,6 +19,9 @@ import NewPost from '../../components/Post/NewPost';
 import Post from '../../components/Post/Post';
 import { render } from '@testing-library/react';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Icon_Thumbup from '../../icons/Icon_thumbup';
+import Icon_Thumbdown from '../../icons/Icon_thumbdown';
+
 
 export default function GroupPage () {
 
@@ -29,6 +32,30 @@ export default function GroupPage () {
   const [post, setPost] = useState();
   const [list, setList] = useState(false)
   const [isFetching, setUser] = useState();
+  const [Likes, setLikes] = useState();
+  const [Dislikes, setDislikes] = useState();
+  const userId = localStorage.getItem('currentUser');
+
+  function AddFeedback(feedbackType){
+    console.log('id', id);
+    var raw = JSON.stringify(`{"like": "${feedbackType === 'like'? 1 : 0}", "dislike":"${feedbackType === 'dislike'? 1 : 0}", "report":"0", "details":"","created_at":"${new Date()}", "group":"${id}", "user":"${userId}"}`);
+    console.log('body', raw);
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: JSON.parse(raw)
+    }
+
+    fetch("http://localhost:8000/api/feedback/", requestOptions)
+    .then(response => response.text())
+    .then(result => console.log(result))
+    .catch(error => console.log('error', error));
+
+  }
+
 
 
   useEffect(() => {
@@ -44,7 +71,24 @@ export default function GroupPage () {
         setGroup(data.group);
         setCategories(data.group.categories);
       })
+
+
+      
+    fetch('http://localhost:8000/api/feedback/')
+    .then((res) => 
+    res.json()
+    )
+    .then((d) => {
+      console.log(d)
+      setLikes(d.feedbacks.filter(feedback => feedback.like === true && feedback.group.id ==id).length);
+      setDislikes(d.feedbacks.filter(feedback => feedback.dislike === true && feedback.group.id ==id).length);
+
+    })
+
+
+      
   },[]);
+
 
   useEffect(() => {
 		fetch(`http://127.0.0.1:8000/api/posts/`+id)
@@ -69,10 +113,16 @@ export default function GroupPage () {
 
             <div className="welcome-header">
               <Typography variant="h4" gutterBottom>
+
                 {group.group_name}<br></br></Typography>
               <Typography variant="h6" gutterBottom>
                 {group.description}
                 {userId !== null ? (<div>
+                Welcome {group.group_name} group!
+                
+
+                <div>
+
                 <JoinGroupButton userId={userId} groupId={id}/>
                 </div>) : ''}
               </Typography>
@@ -127,6 +177,17 @@ export default function GroupPage () {
               </Typography> 
               <div style={{width: '90%'}}>
                 <NewPost userID={userId} groupID={id}/>
+                <img src={group.image} alt=""></img>
+
+              </Typography>  
+
+              <div className="feedback">
+                <div className='thumbsup' onClick={()=> AddFeedback('like')} ><Icon_Thumbup size={25} />
+                <h4>{Likes}</h4>
+                </div>
+                
+                <div className='thumbsdown' onClick={()=> AddFeedback('dislike')} > <Icon_Thumbdown size={25} /><h4>{Dislikes}</h4></div>
+
               </div>
               
               <Grid item xs={1}></Grid>
@@ -163,7 +224,6 @@ export default function GroupPage () {
                   </Alert>
                 </div>
               )}
-              
               
             </Grid>
           </Grid>
