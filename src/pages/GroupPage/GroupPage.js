@@ -15,17 +15,13 @@ import { useParams, Link } from 'react-router-dom';
 import CategoryCard from '../../components/CategoryCard/CatgegoryCard'
 import JoinGroupButton from './JoinGroup';
 import SearchByCity from '../ShowPage/SearchByCity';
-<<<<<<< HEAD
-import Comments from "../../components/comments/Comments";
-import Icon_Thumbup from '../../icons/Icon_thumbup';
-import Icon_Thumbdown from '../../icons/Icon_thumbdown';
-
-=======
 import NewPost from '../../components/Post/NewPost';
 import Post from '../../components/Post/Post';
 import { render } from '@testing-library/react';
 import CircularProgress from '@material-ui/core/CircularProgress';
->>>>>>> 8e1d4e7f7e4ca1ab5bce811fd7ba0beda071f8d1
+import Icon_Thumbup from '../../icons/Icon_thumbup';
+import Icon_Thumbdown from '../../icons/Icon_thumbdown';
+
 
 export default function GroupPage () {
 
@@ -33,7 +29,9 @@ export default function GroupPage () {
   const [notFound, setNotFound] = useState();
   const {id} = useParams();
   const [categories, setCategories] = useState();
-<<<<<<< HEAD
+  const [post, setPost] = useState();
+  const [list, setList] = useState(false)
+  const [isFetching, setUser] = useState();
   const [Likes, setLikes] = useState();
   const [Dislikes, setDislikes] = useState();
   const userId = localStorage.getItem('currentUser');
@@ -58,11 +56,6 @@ export default function GroupPage () {
 
   }
 
-=======
-  const [post, setPost] = useState();
-  const [list, setList] = useState(false)
-  const [isFetching, setUser] = useState();
->>>>>>> 8e1d4e7f7e4ca1ab5bce811fd7ba0beda071f8d1
 
 
   useEffect(() => {
@@ -96,11 +89,7 @@ export default function GroupPage () {
       
   },[]);
 
-<<<<<<< HEAD
 
-
-
-=======
   useEffect(() => {
 		fetch(`http://127.0.0.1:8000/api/posts/`+id)
     .then((response) => 
@@ -113,7 +102,6 @@ export default function GroupPage () {
   },[])
 
   const userId = localStorage.getItem('currentUser');
->>>>>>> 8e1d4e7f7e4ca1ab5bce811fd7ba0beda071f8d1
 
 
   return (
@@ -125,17 +113,16 @@ export default function GroupPage () {
 
             <div className="welcome-header">
               <Typography variant="h4" gutterBottom>
-<<<<<<< HEAD
-                Welcome {group.group_name} group!
-                
 
-                <div>
-=======
                 {group.group_name}<br></br></Typography>
               <Typography variant="h6" gutterBottom>
                 {group.description}
                 {userId !== null ? (<div>
->>>>>>> 8e1d4e7f7e4ca1ab5bce811fd7ba0beda071f8d1
+                Welcome {group.group_name} group!
+                
+
+                <div>
+
                 <JoinGroupButton userId={userId} groupId={id}/>
                 </div>) : ''}
               </Typography>
@@ -167,18 +154,6 @@ export default function GroupPage () {
             <Grid item xs={8}>
               <div style={{height: '50px'}}></div>  
               <Typography variant="h5" gutterBottom style={{marginBottom: '.8em'}}>
-<<<<<<< HEAD
-                <img src={group.image} alt=""></img>
-
-              </Typography>  
-
-              <div className="feedback">
-                <div className='thumbsup' onClick={()=> AddFeedback('like')} ><Icon_Thumbup size={25} />
-                <h4>{Likes}</h4>
-                </div>
-                
-                <div className='thumbsdown' onClick={()=> AddFeedback('dislike')} > <Icon_Thumbdown size={25} /><h4>{Dislikes}</h4></div>
-=======
                 <div
                   style={{
                     height: '35vh',
@@ -202,7 +177,17 @@ export default function GroupPage () {
               </Typography> 
               <div style={{width: '90%'}}>
                 <NewPost userID={userId} groupID={id}/>
->>>>>>> 8e1d4e7f7e4ca1ab5bce811fd7ba0beda071f8d1
+                <img src={group.image} alt=""></img>
+
+              </Typography>  
+
+              <div className="feedback">
+                <div className='thumbsup' onClick={()=> AddFeedback('like')} ><Icon_Thumbup size={25} />
+                <h4>{Likes}</h4>
+                </div>
+                
+                <div className='thumbsdown' onClick={()=> AddFeedback('dislike')} > <Icon_Thumbdown size={25} /><h4>{Dislikes}</h4></div>
+
               </div>
               
               <Grid item xs={1}></Grid>
@@ -239,21 +224,6 @@ export default function GroupPage () {
                   </Alert>
                 </div>
               )}
-              
-<<<<<<< HEAD
-              <div style={{height: '50px'}}></div>  
-              <Typography variant="h5" gutterBottom style={{marginBottom: '.8em'}}>
-              
-              </Typography>  
-              <Comments
-                commentsUrl="http://localhost:3004/comments"
-                currentUserId="1"
-                groupId = {id}
-              />
-
-      
-=======
->>>>>>> 8e1d4e7f7e4ca1ab5bce811fd7ba0beda071f8d1
               
             </Grid>
           </Grid>
