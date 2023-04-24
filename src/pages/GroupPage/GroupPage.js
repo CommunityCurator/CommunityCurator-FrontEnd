@@ -15,7 +15,10 @@ import { useParams, Link } from 'react-router-dom';
 import CategoryCard from '../../components/CategoryCard/CatgegoryCard'
 import JoinGroupButton from './JoinGroup';
 import SearchByCity from '../ShowPage/SearchByCity';
-import Comments from "../../components/comments/Comments";
+import NewPost from '../../components/Post/NewPost';
+import Post from '../../components/Post/Post';
+import { render } from '@testing-library/react';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Icon_Thumbup from '../../icons/Icon_thumbup';
 import Icon_Thumbdown from '../../icons/Icon_thumbdown';
 
@@ -26,6 +29,9 @@ export default function GroupPage () {
   const [notFound, setNotFound] = useState();
   const {id} = useParams();
   const [categories, setCategories] = useState();
+  const [post, setPost] = useState();
+  const [list, setList] = useState(false)
+  const [isFetching, setUser] = useState();
   const [Likes, setLikes] = useState();
   const [Dislikes, setDislikes] = useState();
   const userId = localStorage.getItem('currentUser');
@@ -84,7 +90,18 @@ export default function GroupPage () {
   },[]);
 
 
+  useEffect(() => {
+		fetch(`http://127.0.0.1:8000/api/posts/`+id)
+    .then((response) => 
+      response.json()
+    )
+    .then((data) => {
+      console.log(data);
+      setList(data.posts);
+    })
+  },[])
 
+  const userId = localStorage.getItem('currentUser');
 
 
   return (
@@ -96,16 +113,22 @@ export default function GroupPage () {
 
             <div className="welcome-header">
               <Typography variant="h4" gutterBottom>
+
+                {group.group_name}<br></br></Typography>
+              <Typography variant="h6" gutterBottom>
+                {group.description}
+                {userId !== null ? (<div>
                 Welcome {group.group_name} group!
                 
 
                 <div>
+
                 <JoinGroupButton userId={userId} groupId={id}/>
-                </div>
+                </div>) : ''}
               </Typography>
             </div>
 
-            <div style={{height: '3em'}}></div>
+            <div style={{height: '2em'}}></div>
               
               <div style={{height: '1.5em'}}></div>
               <SearchByCity/>
@@ -131,6 +154,29 @@ export default function GroupPage () {
             <Grid item xs={8}>
               <div style={{height: '50px'}}></div>  
               <Typography variant="h5" gutterBottom style={{marginBottom: '.8em'}}>
+                <div
+                  style={{
+                    height: '35vh',
+                    width: '90%',
+                    maxWidth: '600px', // Set the maximum width
+                    maxHeight: '600px', // Set the maximum height
+                    backgroundImage: `url(${group.image})`,
+                    backgroundRepeat: 'no-repeat',
+                    backgroundSize: 'cover',
+                    backgroundPosition: '100%',
+                    position: 'relative',
+                  }}
+                ></div>
+              </Typography>  
+
+              {userId ? (
+                <>
+                  <div style={{height: '20px'}}></div>  
+              <Typography variant="h5" gutterBottom style={{marginBottom: '.8em'}}>
+                Create new post
+              </Typography> 
+              <div style={{width: '90%'}}>
+                <NewPost userID={userId} groupID={id}/>
                 <img src={group.image} alt=""></img>
 
               </Typography>  
@@ -141,28 +187,44 @@ export default function GroupPage () {
                 </div>
                 
                 <div className='thumbsdown' onClick={()=> AddFeedback('dislike')} > <Icon_Thumbdown size={25} /><h4>{Dislikes}</h4></div>
+
               </div>
               
-              <Grid style={{width: '100%', paddingRight: '5em'}} container spacing={1}>
-                
-              </Grid>
-              
-              <div style={{height: '50px'}}></div>  
-              <Typography variant="h5" gutterBottom style={{marginBottom: '.8em'}}>
-              
-              </Typography>  
-              <Comments
-                commentsUrl="http://localhost:3004/comments"
-                currentUserId="1"
-                groupId = {id}
-              />
+              <Grid item xs={1}></Grid>
+                <Grid item xs={8}>
+                  <div style={{height: '30px'}}></div>  
+                  <Typography variant="h5" gutterBottom style={{ marginBottom: '.8em' }}>
+                    Posts
+                  </Typography>
 
-      
-              
-              <Grid style={{width: '100%', paddingRight: '5em'}} container spacing={1}>
-                  
-                    
+                  <Grid container spacing={1}>
+                    {list.length > 0 ? (
+                      list.map((post) => {
+                        return (
+                          <Grid item xs={12}>
+                              <Post key={post.id}
+                                user_name={post.user.user_name}
+                                content={post.content}
+                                created_at={post.created_at}
+                              ></Post>
+                          </Grid>
+                        );
+                      })
+                    ) : (
+                      'No posts yet'
+                    )}
+                  </Grid>
+
               </Grid>
+                </>
+              ) : (
+                <div style={{display: 'flex', justifyContent: 'center', marginTop: '10%'}}>
+                  <Alert style={{fontSize: '1.5em'}} variant="filled" severity="warning">
+                    Login Required To View Group
+                  </Alert>
+                </div>
+              )}
+              
             </Grid>
           </Grid>
           

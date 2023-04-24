@@ -269,7 +269,7 @@ const Home = () => {
 				<>
 					<div className="home-container-category-title">
 						{localStorage.getItem('location') ? (
-							<p>Interest categories in the area</p>
+							<p>Find groups based on interests like</p>
 						): (<p>Interest categories</p>)}
 						
 					</div>
