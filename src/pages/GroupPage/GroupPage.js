@@ -15,10 +15,17 @@ import { useParams, Link } from 'react-router-dom';
 import CategoryCard from '../../components/CategoryCard/CatgegoryCard'
 import JoinGroupButton from './JoinGroup';
 import SearchByCity from '../ShowPage/SearchByCity';
+<<<<<<< HEAD
 import Comments from "../../components/comments/Comments";
 import Icon_Thumbup from '../../icons/Icon_thumbup';
 import Icon_Thumbdown from '../../icons/Icon_thumbdown';
 
+=======
+import NewPost from '../../components/Post/NewPost';
+import Post from '../../components/Post/Post';
+import { render } from '@testing-library/react';
+import CircularProgress from '@material-ui/core/CircularProgress';
+>>>>>>> 8e1d4e7f7e4ca1ab5bce811fd7ba0beda071f8d1
 
 export default function GroupPage () {
 
@@ -26,6 +33,7 @@ export default function GroupPage () {
   const [notFound, setNotFound] = useState();
   const {id} = useParams();
   const [categories, setCategories] = useState();
+<<<<<<< HEAD
   const [Likes, setLikes] = useState();
   const [Dislikes, setDislikes] = useState();
   const userId = localStorage.getItem('currentUser');
@@ -50,6 +58,11 @@ export default function GroupPage () {
 
   }
 
+=======
+  const [post, setPost] = useState();
+  const [list, setList] = useState(false)
+  const [isFetching, setUser] = useState();
+>>>>>>> 8e1d4e7f7e4ca1ab5bce811fd7ba0beda071f8d1
 
 
   useEffect(() => {
@@ -83,8 +96,24 @@ export default function GroupPage () {
       
   },[]);
 
+<<<<<<< HEAD
 
 
+
+=======
+  useEffect(() => {
+		fetch(`http://127.0.0.1:8000/api/posts/`+id)
+    .then((response) => 
+      response.json()
+    )
+    .then((data) => {
+      console.log(data);
+      setList(data.posts);
+    })
+  },[])
+
+  const userId = localStorage.getItem('currentUser');
+>>>>>>> 8e1d4e7f7e4ca1ab5bce811fd7ba0beda071f8d1
 
 
   return (
@@ -96,16 +125,23 @@ export default function GroupPage () {
 
             <div className="welcome-header">
               <Typography variant="h4" gutterBottom>
+<<<<<<< HEAD
                 Welcome {group.group_name} group!
                 
 
                 <div>
+=======
+                {group.group_name}<br></br></Typography>
+              <Typography variant="h6" gutterBottom>
+                {group.description}
+                {userId !== null ? (<div>
+>>>>>>> 8e1d4e7f7e4ca1ab5bce811fd7ba0beda071f8d1
                 <JoinGroupButton userId={userId} groupId={id}/>
-                </div>
+                </div>) : ''}
               </Typography>
             </div>
 
-            <div style={{height: '3em'}}></div>
+            <div style={{height: '2em'}}></div>
               
               <div style={{height: '1.5em'}}></div>
               <SearchByCity/>
@@ -131,6 +167,7 @@ export default function GroupPage () {
             <Grid item xs={8}>
               <div style={{height: '50px'}}></div>  
               <Typography variant="h5" gutterBottom style={{marginBottom: '.8em'}}>
+<<<<<<< HEAD
                 <img src={group.image} alt=""></img>
 
               </Typography>  
@@ -141,12 +178,69 @@ export default function GroupPage () {
                 </div>
                 
                 <div className='thumbsdown' onClick={()=> AddFeedback('dislike')} > <Icon_Thumbdown size={25} /><h4>{Dislikes}</h4></div>
+=======
+                <div
+                  style={{
+                    height: '35vh',
+                    width: '90%',
+                    maxWidth: '600px', // Set the maximum width
+                    maxHeight: '600px', // Set the maximum height
+                    backgroundImage: `url(${group.image})`,
+                    backgroundRepeat: 'no-repeat',
+                    backgroundSize: 'cover',
+                    backgroundPosition: '100%',
+                    position: 'relative',
+                  }}
+                ></div>
+              </Typography>  
+
+              {userId ? (
+                <>
+                  <div style={{height: '20px'}}></div>  
+              <Typography variant="h5" gutterBottom style={{marginBottom: '.8em'}}>
+                Create new post
+              </Typography> 
+              <div style={{width: '90%'}}>
+                <NewPost userID={userId} groupID={id}/>
+>>>>>>> 8e1d4e7f7e4ca1ab5bce811fd7ba0beda071f8d1
               </div>
               
-              <Grid style={{width: '100%', paddingRight: '5em'}} container spacing={1}>
-                
+              <Grid item xs={1}></Grid>
+                <Grid item xs={8}>
+                  <div style={{height: '30px'}}></div>  
+                  <Typography variant="h5" gutterBottom style={{ marginBottom: '.8em' }}>
+                    Posts
+                  </Typography>
+
+                  <Grid container spacing={1}>
+                    {list.length > 0 ? (
+                      list.map((post) => {
+                        return (
+                          <Grid item xs={12}>
+                              <Post key={post.id}
+                                user_name={post.user.user_name}
+                                content={post.content}
+                                created_at={post.created_at}
+                              ></Post>
+                          </Grid>
+                        );
+                      })
+                    ) : (
+                      'No posts yet'
+                    )}
+                  </Grid>
+
               </Grid>
+                </>
+              ) : (
+                <div style={{display: 'flex', justifyContent: 'center', marginTop: '10%'}}>
+                  <Alert style={{fontSize: '1.5em'}} variant="filled" severity="warning">
+                    Login Required To View Group
+                  </Alert>
+                </div>
+              )}
               
+<<<<<<< HEAD
               <div style={{height: '50px'}}></div>  
               <Typography variant="h5" gutterBottom style={{marginBottom: '.8em'}}>
               
@@ -158,11 +252,9 @@ export default function GroupPage () {
               />
 
       
+=======
+>>>>>>> 8e1d4e7f7e4ca1ab5bce811fd7ba0beda071f8d1
               
-              <Grid style={{width: '100%', paddingRight: '5em'}} container spacing={1}>
-                  
-                    
-              </Grid>
             </Grid>
           </Grid>
           
