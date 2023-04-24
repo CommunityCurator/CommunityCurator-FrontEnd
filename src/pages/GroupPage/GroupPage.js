@@ -36,26 +36,39 @@ export default function GroupPage () {
   const [Dislikes, setDislikes] = useState();
   const userId = localStorage.getItem('currentUser');
 
-  function AddFeedback(feedbackType){
-    console.log('id', id);
-    var raw = JSON.stringify(`{"like": "${feedbackType === 'like'? 1 : 0}", "dislike":"${feedbackType === 'dislike'? 1 : 0}", "report":"0", "details":"","created_at":"${new Date()}", "group":"${id}", "user":"${userId}"}`);
-    console.log('body', raw);
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    
-    var requestOptions = {
+  function AddFeedback(isLike) {
+    const url_like = 'http://localhost:8000/api/new_like/';
+    const url_dislike = 'http://localhost:8000/api/new_dislike/';
+
+    const data_like = {group: id, user: userId, like: true, dislike: false};
+    const data_dislike = {group: id, user: userId, like: false, dislike: true};
+
+    const url = isLike ? url_like : url_dislike;
+    const data = isLike ? data_like : data_dislike;
+
+    return fetch(url, {
       method: 'POST',
-      headers: myHeaders,
-      body: JSON.parse(raw)
-    }
-
-    fetch("http://localhost:8000/api/feedback/", requestOptions)
-    .then(response => response.text())
-    .then(result => console.log(result))
-    .catch(error => console.log('error', error));
-
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+    .then((response) => {
+      if (!response.ok) {
+        console.log('Error adding feedback');
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log('Feedback is added');
+      console.log(data);
+      return data;
+    })
+    .catch((error) => {
+      console.error('Error adding feedback:', error);
+    });
   }
-
 
 
   useEffect(() => {
@@ -72,21 +85,6 @@ export default function GroupPage () {
         setCategories(data.group.categories);
       })
 
-
-      
-    fetch('http://localhost:8000/api/feedback/')
-    .then((res) => 
-    res.json()
-    )
-    .then((d) => {
-      console.log(d)
-      setLikes(d.feedbacks.filter(feedback => feedback.like === true && feedback.group.id ==id).length);
-      setDislikes(d.feedbacks.filter(feedback => feedback.dislike === true && feedback.group.id ==id).length);
-
-    })
-
-
-      
   },[]);
 
 
@@ -100,9 +98,6 @@ export default function GroupPage () {
       setList(data.posts);
     })
   },[])
-
-  const userId = localStorage.getItem('currentUser');
-
 
   return (
     <>
@@ -119,10 +114,6 @@ export default function GroupPage () {
                 {group.description}
                 {userId !== null ? (<div>
                 Welcome {group.group_name} group!
-                
-
-                <div>
-
                 <JoinGroupButton userId={userId} groupId={id}/>
                 </div>) : ''}
               </Typography>
@@ -150,6 +141,7 @@ export default function GroupPage () {
                   })) : ''}
               </div>  
             </Grid>
+              
             <Grid item xs={1}></Grid>
             <Grid item xs={8}>
               <div style={{height: '50px'}}></div>  
@@ -168,6 +160,14 @@ export default function GroupPage () {
                   }}
                 ></div>
               </Typography>  
+              <div className="feedback">
+                <div className='thumbsup' onClick={()=> AddFeedback(true)} ><Icon_Thumbup size={25} />
+                <h4>{Likes}</h4>
+                </div>
+                
+                <div className='thumbsdown' onClick={()=> AddFeedback(false)} > <Icon_Thumbdown size={25} /><h4>{Dislikes}</h4></div>
+
+              </div>
 
               {userId ? (
                 <>
@@ -177,17 +177,6 @@ export default function GroupPage () {
               </Typography> 
               <div style={{width: '90%'}}>
                 <NewPost userID={userId} groupID={id}/>
-                <img src={group.image} alt=""></img>
-
-              </Typography>  
-
-              <div className="feedback">
-                <div className='thumbsup' onClick={()=> AddFeedback('like')} ><Icon_Thumbup size={25} />
-                <h4>{Likes}</h4>
-                </div>
-                
-                <div className='thumbsdown' onClick={()=> AddFeedback('dislike')} > <Icon_Thumbdown size={25} /><h4>{Dislikes}</h4></div>
-
               </div>
               
               <Grid item xs={1}></Grid>
@@ -224,6 +213,7 @@ export default function GroupPage () {
                   </Alert>
                 </div>
               )}
+              
               
             </Grid>
           </Grid>
