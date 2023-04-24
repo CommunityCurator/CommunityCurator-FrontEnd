@@ -113,7 +113,7 @@ export default function GroupPage () {
               <Typography variant="h6" gutterBottom>
                 {group.description}
                 {userId !== null ? (<div>
-                Welcome {group.group_name} group!
+               
                 <JoinGroupButton userId={userId} groupId={id}/>
                 </div>) : ''}
               </Typography>
