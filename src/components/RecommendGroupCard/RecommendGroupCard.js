@@ -13,7 +13,7 @@ const RecommendGroupCard = (props) => {
   const {city, group_name, description, image} = props.group
  
   return (
-    <Card sx={{ maxWidth: 250, height: 330 }}>
+    <Card sx={{ maxWidth: 250, height: 310 }}>
       <CardMedia
         component="img"
         style={{height: '140px'}}

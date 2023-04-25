@@ -17,6 +17,8 @@ import LinearProgress from '@mui/material/LinearProgress';
 import EventCard from '../../components/EventCard/EventCard';
 import UserCategoryCard from '../../components/CategoryCard/UserCategoryCard';
 import AddInterest from '../../components/AddInterest';
+import Carousel from 'react-multi-carousel';
+import 'react-multi-carousel/lib/styles.css';
 
 export default function ShowPage () {
 
@@ -63,7 +65,7 @@ export default function ShowPage () {
 		})
 		.then(data => {
       setTimeout(() => {
-        const arr = data.group_city_user.slice(0,4);
+        const arr = data.group_city_user;
         setGroups(arr)
         setLoadGroups(false)
       }, 1000)  
@@ -87,7 +89,7 @@ export default function ShowPage () {
         arr = [...new Map(arr.map(item =>
           [item['name'], item])).values()]
   
-        arr = arr.reverse().slice(0,5);
+        arr = arr.reverse();
 
         setTimeout(() => {
           setLoadEvents(false)
@@ -109,7 +111,7 @@ export default function ShowPage () {
 			return response.json();
 		})
 		.then(data => {
-      const arr = data.groups.slice(0,4);
+      const arr = data.groups;
       setTimeout(() => {
         setRecGroups(arr);
         setloadRec(false);
@@ -181,6 +183,24 @@ export default function ShowPage () {
     setCategories(cloneCategories)
     displayAlert('success', 'Category added')
   }
+
+  const responsive = {
+    desktop: {
+      breakpoint: { max: 3000, min: 1024 },
+      items: 4,
+      paritialVisibilityGutter: 60
+    },
+    tablet: {
+      breakpoint: { max: 1024, min: 464 },
+      items: 2,
+      paritialVisibilityGutter: 50
+    },
+    mobile: {
+      breakpoint: { max: 464, min: 0 },
+      items: 1,
+      paritialVisibilityGutter: 30
+    }
+  };
 
     return (
         <>
@@ -275,17 +295,19 @@ export default function ShowPage () {
                     
                   ): "" }
                   
-                  <Grid style={{width: '100%', paddingRight: '5em'}} container spacing={1}>
+                  <div style={{width: '93%'}}>
                     {recGroups.length > 0 && !loadRec ? (
-                      recGroups.map(group => {  
-                        return (
-                          <Grid item xs={3}>
-                            <Link to={"/groups/" + group.id}>
-                            <RecommendGroupCard group={group}></RecommendGroupCard>
-                            </Link>
-                          </Grid>
-                          )
-                      })
+                      <Carousel 
+                        ssr
+                        responsive={responsive}>
+                          {recGroups.map(group => {  
+                            return (
+                              <Link to={"/groups/" + group.id}>
+                                <RecommendGroupCard group={group}></RecommendGroupCard>
+                              </Link>
+                            )
+                          })}
+                      </Carousel>
                     ): (
                       !loadRec ? (
                         <Typography style={{display: 'flex', justifyContent: 'center', width: '100%'}} variant="h6" gutterBottom>
@@ -293,10 +315,9 @@ export default function ShowPage () {
                       </Typography>
                       ) : '' 
                     )}
-                    
-                  </Grid>
+                  </div>
                   
-                  <div style={{height: '50px'}}></div>  
+                  <div style={{height: '20px'}}></div>  
                   <Typography variant="h5" gutterBottom style={{marginBottom: '.8em'}}>
                     Recommended Events in Your City
                   </Typography>  
@@ -309,33 +330,31 @@ export default function ShowPage () {
                     
                   ): "" }
                   
-                  <Grid style={{width: '100%', paddingRight: '5em'}} container spacing={1}>
-                  {events && !loadEvents ? (
-                    events.map((event, index) => {  
-                      if(index !== 3) {
-                        return (
-                          <Grid item xs={3} style={{cursor: 'pointer'}}>
-                            <a target="_blank" href={`${event.url}`}>
-                            <EventCard event={event}></EventCard>
-                            </a>
-                          </Grid>
-                        )
-                      } else {
-                        return
-                      }
-                    })
-                    ): (
-                      !loadEvents ? (
-                        <Typography style={{display: 'flex', justifyContent: 'center', width: '100%'}} variant="h6" gutterBottom>
-                        Error: No Events found in your area
-                      </Typography>
-                      ) : '' 
-                    )
-                  } 
-                  </Grid>
+                  <div style={{width: '93%'}}>
+                    {events && !loadEvents ? (
+                      <Carousel 
+                        ssr
+                        responsive={responsive}>
+                          {events.map((event, index) => {  
+                            return (
+                              <a target="_blank" href={`${event.url}`}>
+                                <EventCard event={event}></EventCard>
+                              </a>
+                            )
+                          })}
+                      </Carousel>
+                      ): (
+                        !loadEvents ? (
+                          <Typography style={{display: 'flex', justifyContent: 'center', width: '100%'}} variant="h6" gutterBottom>
+                          Error: No Events found in your area
+                        </Typography>
+                        ) : '' 
+                      )
+                    } 
+                  </div>
                   
                   
-                  <div style={{height: '50px'}}></div>  
+                  <div style={{height: '20px'}}></div>  
                   <Typography variant="h5" gutterBottom style={{marginBottom: '.8em'}}>
                     Explore Groups Found in Your Current Area
                   </Typography>  
@@ -348,17 +367,19 @@ export default function ShowPage () {
                     
                   ): "" }
                   
-                  <Grid style={{width: '100%', paddingRight: '5em'}} container spacing={1}>
+                  <div style={{width: '93%'}}>
                     {groups && !loadGroups ? (
-                      groups.map(group => {  
-                        return (
-                          <Grid item xs={3}>
+                      <Carousel 
+                        ssr
+                        responsive={responsive}>
+                        {groups.map(group => {  
+                          return (
                             <Link to={"/groups/" + group.id}>
-                            <RecommendGroupCard group={group}></RecommendGroupCard>
+                              <RecommendGroupCard group={group}></RecommendGroupCard>
                             </Link>
-                          </Grid>
-                          )
-                      })
+                            )
+                        })}
+                      </Carousel>
                     ): (
                       !loadGroups ? (
                         <Typography style={{display: 'flex', justifyContent: 'center', width: '100%'}} variant="h6" gutterBottom>
@@ -366,7 +387,7 @@ export default function ShowPage () {
                       </Typography>
                       ) : ''
                     )}  
-                  </Grid>
+                  </div>
                 </Grid>
               </Grid>
               

@@ -10,7 +10,7 @@ import Typography from '@mui/material/Typography';
 
 const EventCard = (props) => {
   return (
-    <Card sx={{ maxWidth: 250, height: 350 }}>
+    <Card sx={{ maxWidth: 250, height: 290 }}>
       <CardMedia
         component="img"
         style={{height: '140px'}}
